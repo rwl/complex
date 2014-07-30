@@ -1,4 +1,4 @@
-library complex.math;
+library fastmath;
 
 import 'dart:math' as math;
 
