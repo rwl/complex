@@ -1,7 +1,7 @@
 name: complex
-version: 0.0.2
+version: 0.1.0
 author: Richard Lincoln <r.w.lincoln@gmail.com>
 description: A representation of a complex number, i.e. a number which has both a real and imaginary part.
 homepage: https://github.com/rwl/complex
 dependencies:
-  unittest: any
+  unittest: '>=0.11.0+3 <0.12.0'
