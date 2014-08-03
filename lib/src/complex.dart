@@ -63,7 +63,7 @@ class Complex {
    */
   Complex(num real, [num imaginary = 0]) {
     _real = real.toDouble();
-    _imaginary.toDouble();
+    _imaginary = imaginary.toDouble();
   }
 
   /**
@@ -291,9 +291,9 @@ class Complex {
    * </ul>
    */
   bool operator ==(Object other) {
-    if (this == other) {
+    /*if (this == other) {
       return true;
-    }
+    }*/
     if (other is Complex) {
       Complex c = other;
       if (c.isNaN) {
@@ -423,7 +423,7 @@ class Complex {
     if (isNaN) {
       return NAN;
     }
-    return this + (this.sqrt1z() * I).log() * -I;
+    return (this + (this.sqrt1z() * I)).log() * (-I);
   }
 
   /**
@@ -447,7 +447,7 @@ class Complex {
       return NAN;
     }
 
-    return sqrt1z() + (this * I).log() * -I;
+    return (sqrt1z() + (this * I)).log() * -I;
   }
 
   /**
@@ -471,7 +471,7 @@ class Complex {
       return NAN;
     }
 
-    return (this + I) / (I - this).log() * (I / complex(2.0, 0.0));
+    return ((this + I) / (I - this)).log() * (I / complex(2.0, 0.0));
   }
 
   /**
