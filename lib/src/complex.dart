@@ -20,22 +20,22 @@ import 'dart:math' as math;
 import 'fastmath.dart' as fastmath;
 
 /**
- * Representation of a Complex number, i.e. a number which has both a
+ * Representation of a complex number, i.e. a number which has both a
  * real and imaginary part.
  *
- * Implementations of arithmetic operations handle {@code NaN} and
- * infinite values according to the rules for {@link double}, i.e.
- * {@link #equals} is an equivalence relation for all instances that have
- * a {@code NaN} in either real or imaginary part, e.g. the following are
+ * Implementations of arithmetic operations handle `NaN` and
+ * infinite values according to the rules for [double], i.e.
+ * [==] is an equivalence relation for all instances that have
+ * a `NaN` in either real or imaginary part, e.g. the following are
  * considered equal:
- * <ul>
- *  <li>{@code 1 + NaNi}</li>
- *  <li>{@code NaN + i}</li>
- *  <li>{@code NaN + NaNi}</li>
- * </ul>
+ *
+ * * `1 + NaNi`
+ * * `NaN + i`
+ * * `NaN + NaNi`
+ *
  * Note that this is in contradiction with the IEEE-754 standard for floating
- * point numbers (according to which the test {@code x == x} must fail if
- * {@code x} is {@code NaN}).
+ * point numbers (according to which the test `x == x` must fail if
+ * `x` is `NaN`).
  */
 class Complex {
 
@@ -59,7 +59,8 @@ class Complex {
   double get real => _real;
 
   /**
-   * Create a complex number given the real part and optionally the imaginary part.
+   * Create a complex number given the real part and optionally the imaginary
+   * part.
    */
   Complex(num real, [num imaginary = 0]) {
     _real = real.toDouble();
@@ -72,22 +73,22 @@ class Complex {
   bool get isFinite => !isNaN && _real.isFinite && _imaginary.isFinite;
 
   /**
-   * True if the real and imaginary parts are positive infinity or negative infinity; otherwise, false.
+   * True if the real and imaginary parts are positive infinity or negative
+   * infinity; otherwise, false.
    */
   bool get isInfinite => !isNaN && (_real.isInfinite || _imaginary.isInfinite);
 
   /**
-   * True if the real and imaginary parts are the double Not-a-Number value; otherwise, false.
+   * True if the real and imaginary parts are the double Not-a-Number value;
+   * otherwise, false.
    */
   bool get isNaN => _real.isNaN || _imaginary.isNaN;
 
   /**
    * Return the absolute value of this complex number.
-   * Returns {@code NaN} if either real or imaginary part is {@code NaN}
-   * and {@code double.INFINITY} if neither part is {@code NaN},
+   * Returns `NaN` if either real or imaginary part is `NaN`
+   * and `double.INFINITY` if neither part is `NaN`,
    * but at least one part is infinite.
-   *
-   * @return the absolute value.
    */
   double abs() {
     if (isNaN) {
@@ -112,19 +113,16 @@ class Complex {
   }
 
   /**
-   * Returns a {@code Complex} whose value is
-   * {@code (this + addend)}.
+   * Returns a `Complex` whose value is
+   * `(this + addend)`.
    * Uses the definitional formula
-   * <pre>
-   *  <code>
-   *   (a + bi) + (c + di) = (a+c) + (b+d)i
-   *  </code>
-   * </pre>
-   * <br/>
-   * If either {@code this} or {@code addend} has a {@code NaN} value in
-   * either part, {@link #NaN} is returned; otherwise {@code Infinite}
-   * and {@code NaN} values are returned in the parts of the result
-   * according to the rules for {@link double} arithmetic.
+   *
+   *     (a + bi) + (c + di) = (a+c) + (b+d)i
+   *
+   * If either `this` or [addend] has a `NaN` value in
+   * either part, [NaN] is returned; otherwise `Infinite`
+   * and `NaN` values are returned in the parts of the result
+   * according to the rules for [double] arithmetic.
    */
   Complex operator +(Object addend) {
     if (addend is Complex) {
@@ -145,17 +143,15 @@ class Complex {
 
   /**
    * Return the conjugate of this complex number.
-   * The conjugate of {@code a + bi} is {@code a - bi}.
-   * <br/>
-   * {@link #NaN} is returned if either the real or imaginary
-   * part of this Complex number equals {@code double.NAN}.
-   * <br/>
-   * If the imaginary part is infinite, and the real part is not
-   * {@code NaN}, the returned value has infinite imaginary part
-   * of the opposite sign, e.g. the conjugate of
-   * {@code 1 + INFINITY i} is {@code 1 - NEGATIVE_INFINITY i}.
+   * The conjugate of `a + bi` is `a - bi`.
    *
-   * @return the conjugate of this Complex object.
+   * [NaN] is returned if either the real or imaginary
+   * part of this Complex number equals `double.NAN`.
+   *
+   * If the imaginary part is infinite, and the real part is not
+   * `NaN`, the returned value has infinite imaginary part
+   * of the opposite sign, e.g. the conjugate of
+   * `1 + INFINITY i is `1 - NEGATIVE_INFINITY i`.
    */
   Complex conjugate() {
     if (isNaN) {
@@ -165,42 +161,32 @@ class Complex {
   }
 
   /**
-   * Returns a {@code Complex} whose value is
-   * {@code (this / divisor)}.
+   * Returns a `Complex` whose value is
+   * `(this / divisor)`.
    * Implements the definitional formula
-   * <pre>
-   *  <code>
-   *    a + bi          ac + bd + (bc - ad)i
-   *    ----------- = -------------------------
-   *    c + di         c<sup>2</sup> + d<sup>2</sup>
-   *  </code>
-   * </pre>
-   * but uses
-   * <a href="http://doi.acm.org/10.1145/1039813.1039814">
-   * prescaling of operands</a> to limit the effects of overflows and
-   * underflows in the computation.
-   * <br/>
-   * {@code Infinite} and {@code NaN} values are handled according to the
+   *
+   *     a + bi          ac + bd + (bc - ad)i
+   *     ----------- = -------------------------
+   *     c + di         c<sup>2</sup> + d<sup>2</sup>
+   *
+   * but uses [prescaling of operands](http://doi.acm.org/10.1145/1039813.1039814)
+   * to limit the effects of overflows and underflows in the computation.
+   *
+   * `Infinite` and `NaN` values are handled according to the
    * following rules, applied in the order presented:
-   * <ul>
-   *  <li>If either {@code this} or {@code divisor} has a {@code NaN} value
-   *   in either part, {@link #NaN} is returned.
-   *  </li>
-   *  <li>If {@code divisor} equals {@link #ZERO}, {@link #NaN} is returned.
-   *  </li>
-   *  <li>If {@code this} and {@code divisor} are both infinite,
-   *   {@link #NaN} is returned.
-   *  </li>
-   *  <li>If {@code this} is finite (i.e., has no {@code Infinite} or
-   *   {@code NaN} parts) and {@code divisor} is infinite (one or both parts
-   *   infinite), {@link #ZERO} is returned.
-   *  </li>
-   *  <li>If {@code this} is infinite and {@code divisor} is finite,
-   *   {@code NaN} values are returned in the parts of the result if the
-   *   {@link java.lang.Double} rules applied to the definitional formula
-   *   force {@code NaN} results.
-   *  </li>
-   * </ul>
+   *
+   * * If either `this` or `divisor` has a `NaN` value
+   *   in either part, [NAN] is returned.
+   * * If `divisor` equals [ZERO], [NAN] is returned.
+   * * If `this` and `divisor` are both infinite,
+   *   [NAN] is returned.
+   * * If `this` is finite (i.e., has no `Infinite` or
+   *   `NAN` parts) and `divisor` is infinite (one or both parts
+   *   infinite), [ZERO] is returned.
+   * * If `this` is infinite and `divisor` is finite,
+   *   `NAN` values are returned in the parts of the result if the
+   *   [double] rules applied to the definitional formula
+   *   force `NaN` results.
    */
   Complex operator /(Object divisor) {
     if (divisor is Complex) {
@@ -245,7 +231,7 @@ class Complex {
   }
 
   /**
-   * Returns the multiplicative inverse of {@code this} element.
+   * Returns the multiplicative inverse of `this` element.
    */
   Complex reciprocal() {
     if (isNaN) {
@@ -273,22 +259,17 @@ class Complex {
 
   /**
    * Test for equality with another object.
+   *
    * If both the real and imaginary parts of two complex numbers
-   * are exactly the same, and neither is {@code Double.NaN}, the two
+   * are exactly the same, and neither is `double.NaN`, the two
    * Complex objects are considered to be equal.
-   * The behavior is the same as for JDK's {@link Double#equals(Object)
-   * Double}:
-   * <ul>
-   *  <li>All {@code NaN} values are considered to be equal,
+   *
+   * * All `NaN` values are considered to be equal,
    *   i.e, if either (or both) real and imaginary parts of the complex
-   *   number are equal to {@code Double.NaN}, the complex number is equal
-   *   to {@code NaN}.
-   *  </li>
-   *  <li>
-   *   Instances constructed with different representations of zero (i.e.
-   *   either "0" or "-0") are <em>not</em> considered to be equal.
-   *  </li>
-   * </ul>
+   *   number are equal to `double.NaN`, the complex number is equal
+   *   to `NaN`.
+   * * Instances constructed with different representations of zero (i.e.
+   *   either "0" or "-0") are *not* considered to be equal.
    */
   bool operator ==(Object other) {
     /*if (this == other) {
@@ -307,28 +288,22 @@ class Complex {
 
 
   /**
-   * Returns a {@code Complex} whose value is {@code this * factor}.
-   * Implements preliminary checks for {@code NaN} and infinity followed by
+   * Returns a `Complex` whose value is `this * factor`.
+   * Implements preliminary checks for `NaN` and infinity followed by
    * the definitional formula:
-   * <pre>
-   *  <code>
-   *   (a + bi)(c + di) = (ac - bd) + (ad + bc)i
-   *  </code>
-   * </pre>
-   * Returns {@link #NaN} if either {@code this} or {@code factor} has one or
-   * more {@code NaN} parts.
-   * <br/>
-   * Returns {@link #INF} if neither {@code this} nor {@code factor} has one
-   * or more {@code NaN} parts and if either {@code this} or {@code factor}
+   *
+   *     (a + bi)(c + di) = (ac - bd) + (ad + bc)i
+   *
+   * Returns [NAN] if either `this` or `factor` has one or
+   * more `NaN` parts.
+   *
+   * Returns [INFINITY] if neither `this` nor `factor` has one
+   * or more `NaN` parts and if either `this` or `factor`
    * has one or more infinite parts (same result is returned regardless of
    * the sign of the components).
-   * <br/>
+   *
    * Returns finite values in components of the result per the definitional
    * formula in all remaining cases.
-   *
-   * @param  factor value to be multiplied by this {@code Complex}.
-   * @return {@code this * factor}.
-   * @throws NullArgumentException if {@code factor} is {@code null}.
    */
   Complex operator *(Object factor) {
     if (factor is Complex) {
@@ -355,9 +330,9 @@ class Complex {
   }
 
   /**
-   * Negate operator. Returns a {@code Complex} whose value is {@code (-this)}.
-   * Returns {@code NAN} if either real or imaginary
-   * part of this Complex number equals {@code double.NAN}.
+   * Negate operator. Returns a `Complex` whose value is `-this`.
+   * Returns `NAN` if either real or imaginary
+   * part of this complex number equals `double.NAN`.
    */
   Complex operator -() {
     if (isNaN) {
@@ -368,22 +343,16 @@ class Complex {
   }
 
   /**
-   * Returns a {@code Complex} whose value is
-   * {@code (this - subtrahend)}.
+   * Returns a `Complex` whose value is
+   * `this - subtrahend`.
    * Uses the definitional formula
-   * <pre>
-   *  <code>
-   *   (a + bi) - (c + di) = (a-c) + (b-d)i
-   *  </code>
-   * </pre>
-   * If either {@code this} or {@code subtrahend} has a {@code NaN]} value in either part,
-   * {@link #NaN} is returned; otherwise infinite and {@code NaN} values are
-   * returned in the parts of the result according to the rules for
-   * {@link java.lang.Double} arithmetic.
    *
-   * @param  subtrahend value to be subtracted from this {@code Complex}.
-   * @return {@code this - subtrahend}.
-   * @throws NullArgumentException if {@code subtrahend} is {@code null}.
+   *     (a + bi) - (c + di) = (a-c) + (b-d)i
+   *
+   * If either `this` or `subtrahend` has a `NaN` value in either part,
+   * [NAN] is returned; otherwise infinite and `NaN` values are
+   * returned in the parts of the result according to the rules for
+   * [double] arithmetic.
    */
   Complex operator -(Object subtrahend) {
     if (subtrahend is Complex) {
@@ -404,20 +373,15 @@ class Complex {
 
 
   /**
-   * Compute the
-   * <a href="http://mathworld.wolfram.com/InverseCosine.html" TARGET="_top">
-   * inverse cosine</a> of this complex number.
-   * Implements the formula:
-   * <pre>
-   *  <code>
-   *   acos(z) = -i (log(z + i (sqrt(1 - z<sup>2</sup>))))
-   *  </code>
-   * </pre>
-   * Returns {@link Complex#NaN} if either real or imaginary part of the
-   * input argument is {@code NaN} or infinite.
+   * Compute the [inverse cosine](http://mathworld.wolfram.com/InverseCosine.html)
+   * of this complex number.
    *
-   * @return the inverse cosine of this complex number.
-   * @since 1.2
+   * Implements the formula:
+   *
+   *     acos(z) = -i (log(z + i (sqrt(1 - z<sup>2</sup>))))
+   *
+   * Returns [NAN] if either real or imaginary part of the
+   * input argument is `NaN` or infinite.
    */
   Complex acos() {
     if (isNaN) {
@@ -427,20 +391,15 @@ class Complex {
   }
 
   /**
-   * Compute the
-   * <a href="http://mathworld.wolfram.com/InverseSine.html" TARGET="_top">
-   * inverse sine</a> of this complex number.
-   * Implements the formula:
-   * <pre>
-   *  <code>
-   *   asin(z) = -i (log(sqrt(1 - z<sup>2</sup>) + iz))
-   *  </code>
-   * </pre>
-   * Returns {@link Complex#NaN} if either real or imaginary part of the
-   * input argument is {@code NaN} or infinite.
+   * Compute the [inverse sine](http://mathworld.wolfram.com/InverseSine.html)
+   * of this complex number.
    *
-   * @return the inverse sine of this complex number.
-   * @since 1.2
+   * Implements the formula:
+   *
+   *     asin(z) = -i (log(sqrt(1 - z<sup>2</sup>) + iz))
+   *
+   * Returns [NAN] if either real or imaginary part of the
+   * input argument is `NaN` or infinite.
    */
   Complex asin() {
     if (isNaN) {
@@ -451,20 +410,15 @@ class Complex {
   }
 
   /**
-   * Compute the
-   * <a href="http://mathworld.wolfram.com/InverseTangent.html" TARGET="_top">
-   * inverse tangent</a> of this complex number.
-   * Implements the formula:
-   * <pre>
-   *  <code>
-   *   atan(z) = (i/2) log((i + z)/(i - z))
-   *  </code>
-   * </pre>
-   * Returns {@link Complex#NaN} if either real or imaginary part of the
-   * input argument is {@code NaN} or infinite.
+   * Compute the [inverse tangent](http://mathworld.wolfram.com/InverseTangent.html)
+   * of this complex number.
    *
-   * @return the inverse tangent of this complex number
-   * @since 1.2
+   * Implements the formula:
+   *
+   *     atan(z) = (i/2) log((i + z)/(i - z))
+   *
+   * Returns [NAN] if either real or imaginary part of the
+   * input argument is `NaN` or infinite.
    */
   Complex atan() {
     if (isNaN) {
@@ -475,36 +429,27 @@ class Complex {
   }
 
   /**
-   * Compute the
-   * <a href="http://mathworld.wolfram.com/Cosine.html" TARGET="_top">
-   * cosine</a>
+   * Compute the [cosine](http://mathworld.wolfram.com/Cosine.html)
    * of this complex number.
-   * Implements the formula:
-   * <pre>
-   *  <code>
-   *   cos(a + bi) = cos(a)cosh(b) - sin(a)sinh(b)i
-   *  </code>
-   * </pre>
-   * where the (real) functions on the right-hand side are
-   * {@link FastMath#sin}, {@link FastMath#cos},
-   * {@link FastMath#cosh} and {@link FastMath#sinh}.
-   * <br/>
-   * Returns {@link Complex#NaN} if either real or imaginary part of the
-   * input argument is {@code NaN}.
-   * <br/>
-   * Infinite values in real or imaginary parts of the input may result in
-   * infinite or NaN values returned in parts of the result.
-   * <pre>
-   *  Examples:
-   *  <code>
-   *   cos(1 &plusmn; INFINITY i) = 1 &#x2213; INFINITY i
-   *   cos(&plusmn;INFINITY + i) = NaN + NaN i
-   *   cos(&plusmn;INFINITY &plusmn; INFINITY i) = NaN + NaN i
-   *  </code>
-   * </pre>
    *
-   * @return the cosine of this complex number.
-   * @since 1.2
+   * Implements the formula:
+   *
+   *     cos(a + bi) = cos(a)cosh(b) - sin(a)sinh(b)i
+   *
+   * where the (real) functions on the right-hand side are
+   * [math.sin], [math.cos], [fastmath.cosh] and [fastmath.sinh].
+   *
+   * Returns [NAN] if either real or imaginary part of the
+   * input argument is `NaN`.
+   *
+   * Infinite values in real or imaginary parts of the input may result in
+   * infinite or `NaN` values returned in parts of the result.
+   *
+   * Examples:
+   *
+   *     cos(1 &plusmn; INFINITY i) = 1 &#x2213; INFINITY i
+   *     cos(&plusmn;INFINITY + i) = NaN + NaN i
+   *     cos(&plusmn;INFINITY &plusmn; INFINITY i) = NaN + NaN i
    */
   Complex cos() {
     if (isNaN) {
@@ -515,35 +460,27 @@ class Complex {
   }
 
   /**
-   * Compute the
-   * <a href="http://mathworld.wolfram.com/HyperbolicCosine.html" TARGET="_top">
-   * hyperbolic cosine</a> of this complex number.
+   * Compute the [hyperbolic cosine](http://mathworld.wolfram.com/HyperbolicCosine.html)
+   * of this complex number.
+   *
    * Implements the formula:
-   * <pre>
-   *  <code>
-   *   cosh(a + bi) = cosh(a)cos(b) + sinh(a)sin(b)i}
-   *  </code>
-   * </pre>
+   *
+   *     cosh(a + bi) = cosh(a)cos(b) + sinh(a)sin(b)i}
+   *
    * where the (real) functions on the right-hand side are
-   * {@link FastMath#sin}, {@link FastMath#cos},
-   * {@link FastMath#cosh} and {@link FastMath#sinh}.
-   * <br/>
-   * Returns {@link Complex#NaN} if either real or imaginary part of the
-   * input argument is {@code NaN}.
-   * <br/>
+   * [math.sin], [math.cos], [fastmath.cosh] and [fastmath.sinh].
+   *
+   * Returns [NAN] if either real or imaginary part of the
+   * input argument is `NaN`.
+   *
    * Infinite values in real or imaginary parts of the input may result in
    * infinite or NaN values returned in parts of the result.
-   * <pre>
-   *  Examples:
-   *  <code>
-   *   cosh(1 &plusmn; INFINITY i) = NaN + NaN i
-   *   cosh(&plusmn;INFINITY + i) = INFINITY &plusmn; INFINITY i
-   *   cosh(&plusmn;INFINITY &plusmn; INFINITY i) = NaN + NaN i
-   *  </code>
-   * </pre>
    *
-   * @return the hyperbolic cosine of this complex number.
-   * @since 1.2
+   * Examples:
+   *
+   *     cosh(1 &plusmn; INFINITY i) = NaN + NaN i
+   *     cosh(&plusmn;INFINITY + i) = INFINITY &plusmn; INFINITY i
+   *     cosh(&plusmn;INFINITY &plusmn; INFINITY i) = NaN + NaN i
    */
   Complex cosh() {
     if (isNaN) {
@@ -554,36 +491,28 @@ class Complex {
   }
 
   /**
-   * Compute the
-   * <a href="http://mathworld.wolfram.com/ExponentialFunction.html" TARGET="_top">
-   * exponential function</a> of this complex number.
-   * Implements the formula:
-   * <pre>
-   *  <code>
-   *   exp(a + bi) = exp(a)cos(b) + exp(a)sin(b)i
-   *  </code>
-   * </pre>
-   * where the (real) functions on the right-hand side are
-   * {@link FastMath#exp}, {@link FastMath#cos}, and
-   * {@link FastMath#sin}.
-   * <br/>
-   * Returns {@link Complex#NaN} if either real or imaginary part of the
-   * input argument is {@code NaN}.
-   * <br/>
-   * Infinite values in real or imaginary parts of the input may result in
-   * infinite or NaN values returned in parts of the result.
-   * <pre>
-   *  Examples:
-   *  <code>
-   *   exp(1 &plusmn; INFINITY i) = NaN + NaN i
-   *   exp(INFINITY + i) = INFINITY + INFINITY i
-   *   exp(-INFINITY + i) = 0 + 0i
-   *   exp(&plusmn;INFINITY &plusmn; INFINITY i) = NaN + NaN i
-   *  </code>
-   * </pre>
+   * Compute the [exponential function](http://mathworld.wolfram.com/ExponentialFunction.html)
+   * of this complex number.
    *
-   * @return <code><i>e</i><sup>this</sup></code>.
-   * @since 1.2
+   * Implements the formula:
+   *
+   *     exp(a + bi) = exp(a)cos(b) + exp(a)sin(b)i
+   *
+   * where the (real) functions on the right-hand side are
+   * [math.exp], [math.cos], and [math.sin].
+   *
+   * Returns [NAN] if either real or imaginary part of the
+   * input argument is `NaN`.
+   *
+   * Infinite values in real or imaginary parts of the input may result in
+   * infinite or `NaN` values returned in parts of the result.
+   *
+   * Examples:
+   *
+   *     exp(1 &plusmn; INFINITY i) = NaN + NaN i
+   *     exp(INFINITY + i) = INFINITY + INFINITY i
+   *     exp(-INFINITY + i) = 0 + 0i
+   *     exp(&plusmn;INFINITY &plusmn; INFINITY i) = NaN + NaN i
    */
   Complex exp() {
     if (isNaN) {
@@ -595,39 +524,31 @@ class Complex {
   }
 
   /**
-   * Compute the
-   * <a href="http://mathworld.wolfram.com/NaturalLogarithm.html" TARGET="_top">
-   * natural logarithm</a> of this complex number.
+   * Compute the [natural logarithm](http://mathworld.wolfram.com/NaturalLogarithm.html)
+   * of this complex number.
+   *
    * Implements the formula:
-   * <pre>
-   *  <code>
-   *   log(a + bi) = ln(|a + bi|) + arg(a + bi)i
-   *  </code>
-   * </pre>
-   * where ln on the right hand side is {@link FastMath#log},
-   * {@code |a + bi|} is the modulus, {@link Complex#abs},  and
-   * {@code arg(a + bi) = }{@link FastMath#atan2}(b, a).
-   * <br/>
-   * Returns {@link Complex#NaN} if either real or imaginary part of the
-   * input argument is {@code NaN}.
-   * <br/>
+   *
+   *     log(a + bi) = ln(|a + bi|) + arg(a + bi)i
+   *
+   * where ln on the right hand side is [math.log],
+   * `|a + bi|` is the modulus, [abs],  and
+   * `arg(a + bi) = atan2(b, a).
+   *
+   * Returns [NAN] if either real or imaginary part of the
+   * input argument is `NaN`.
+   *
    * Infinite (or critical) values in real or imaginary parts of the input may
    * result in infinite or NaN values returned in parts of the result.
-   * <pre>
-   *  Examples:
-   *  <code>
-   *   log(1 &plusmn; INFINITY i) = INFINITY &plusmn; (&pi;/2)i
-   *   log(INFINITY + i) = INFINITY + 0i
-   *   log(-INFINITY + i) = INFINITY + &pi;i
-   *   log(INFINITY &plusmn; INFINITY i) = INFINITY &plusmn; (&pi;/4)i
-   *   log(-INFINITY &plusmn; INFINITY i) = INFINITY &plusmn; (3&pi;/4)i
-   *   log(0 + 0i) = -INFINITY + 0i
-   *  </code>
-   * </pre>
    *
-   * @return the value <code>ln &nbsp; this</code>, the natural logarithm
-   * of {@code this}.
-   * @since 1.2
+   * Examples:
+   *
+   *     log(1 &plusmn; INFINITY i) = INFINITY &plusmn; (&pi;/2)i
+   *     log(INFINITY + i) = INFINITY + 0i
+   *     log(-INFINITY + i) = INFINITY + &pi;i
+   *     log(INFINITY &plusmn; INFINITY i) = INFINITY &plusmn; (&pi;/4)i
+   *     log(-INFINITY &plusmn; INFINITY i) = INFINITY &plusmn; (3&pi;/4)i
+   *     log(0 + 0i) = -INFINITY + 0i
    */
   Complex log() {
     if (isNaN) {
@@ -638,71 +559,52 @@ class Complex {
   }
 
   /**
-   * Returns of value of this complex number raised to the power of {@code x}.
-   * Implements the formula:
-   * <pre>
-   *  <code>
-   *   y<sup>x</sup> = exp(x&middot;log(y))
-   *  </code>
-   * </pre>
-   * where {@code exp} and {@code log} are {@link #exp} and
-   * {@link #log}, respectively.
-   * <br/>
-   * Returns {@link Complex#NaN} if either real or imaginary part of the
-   * input argument is {@code NaN} or infinite, or if {@code y}
-   * equals {@link Complex#ZERO}.
+   * Returns of value of this complex number raised to the power of `x`.
    *
-   * @param  x exponent to which this {@code Complex} is to be raised.
-   * @return <code> this<sup>{@code x}</sup></code>.
-   * @throws NullArgumentException if x is {@code null}.
-   * @since 1.2
+   * Implements the formula:
+   *
+   *     y<sup>x</sup> = exp(x&middot;log(y))
+   *
+   * where `exp` and `log` are [exp] and
+   * [log], respectively.
+   *
+   * Returns [NAN] if either real or imaginary part of the
+   * input argument is `NaN` or infinite, or if `y`
+   * equals [ZERO].
    */
   Complex power(Complex x) {
     return (this.log() * x).exp();
   }
 
   /**
-   * Returns of value of this complex number raised to the power of {@code x}.
-   *
-   * @param  x exponent to which this {@code Complex} is to be raised.
-   * @return <code>this<sup>x</sup></code>.
-   * @see #pow(Complex)
+   * Returns of value of this complex number raised to the power of `x`.
    */
   Complex pow(num x) {
     return (this.log() * x).exp();
   }
 
   /**
-   * Compute the
-   * <a href="http://mathworld.wolfram.com/Sine.html" TARGET="_top">
-   * sine</a>
+   * Compute the [sine](http://mathworld.wolfram.com/Sine.html)
    * of this complex number.
-   * Implements the formula:
-   * <pre>
-   *  <code>
-   *   sin(a + bi) = sin(a)cosh(b) - cos(a)sinh(b)i
-   *  </code>
-   * </pre>
-   * where the (real) functions on the right-hand side are
-   * {@link FastMath#sin}, {@link FastMath#cos},
-   * {@link FastMath#cosh} and {@link FastMath#sinh}.
-   * <br/>
-   * Returns {@link Complex#NaN} if either real or imaginary part of the
-   * input argument is {@code NaN}.
-   * <br/>
-   * Infinite values in real or imaginary parts of the input may result in
-   * infinite or {@code NaN} values returned in parts of the result.
-   * <pre>
-   *  Examples:
-   *  <code>
-   *   sin(1 &plusmn; INFINITY i) = 1 &plusmn; INFINITY i
-   *   sin(&plusmn;INFINITY + i) = NaN + NaN i
-   *   sin(&plusmn;INFINITY &plusmn; INFINITY i) = NaN + NaN i
-   *  </code>
-   * </pre>
    *
-   * @return the sine of this complex number.
-   * @since 1.2
+   * Implements the formula:
+   *
+   *     sin(a + bi) = sin(a)cosh(b) - cos(a)sinh(b)i
+   *
+   * where the (real) functions on the right-hand side are
+   * [math.sin], [math.cos], [fastmath.cosh] and [fastmath.sinh].
+   *
+   * Returns [NAN] if either real or imaginary part of the
+   * input argument is `NaN`.
+   *
+   * Infinite values in real or imaginary parts of the input may result in
+   * infinite or `NaN` values returned in parts of the result.
+   *
+   * Examples:
+   *
+   *     sin(1 &plusmn; INFINITY i) = 1 &plusmn; INFINITY i
+   *     sin(&plusmn;INFINITY + i) = NaN + NaN i
+   *     sin(&plusmn;INFINITY &plusmn; INFINITY i) = NaN + NaN i
    */
   Complex sin() {
     if (isNaN) {
@@ -713,35 +615,27 @@ class Complex {
   }
 
   /**
-   * Compute the
-   * <a href="http://mathworld.wolfram.com/HyperbolicSine.html" TARGET="_top">
-   * hyperbolic sine</a> of this complex number.
+   * Compute the [hyperbolic sine](http://mathworld.wolfram.com/HyperbolicSine.html)
+   * of this complex number.
+   *
    * Implements the formula:
-   * <pre>
-   *  <code>
-   *   sinh(a + bi) = sinh(a)cos(b)) + cosh(a)sin(b)i
-   *  </code>
-   * </pre>
+   *
+   *     sinh(a + bi) = sinh(a)cos(b)) + cosh(a)sin(b)i
+   *
    * where the (real) functions on the right-hand side are
-   * {@link FastMath#sin}, {@link FastMath#cos},
-   * {@link FastMath#cosh} and {@link FastMath#sinh}.
-   * <br/>
-   * Returns {@link Complex#NaN} if either real or imaginary part of the
-   * input argument is {@code NaN}.
-   * <br/>
+   * [math.sin], [math.cos], [fastmath.cosh] and [fastmath.sinh].
+   *
+   * Returns [NAN] if either real or imaginary part of the
+   * input argument is `NaN`.
+   *
    * Infinite values in real or imaginary parts of the input may result in
    * infinite or NaN values returned in parts of the result.
-   * <pre>
-   *  Examples:
-   *  <code>
-   *   sinh(1 &plusmn; INFINITY i) = NaN + NaN i
-   *   sinh(&plusmn;INFINITY + i) = &plusmn; INFINITY + INFINITY i
-   *   sinh(&plusmn;INFINITY &plusmn; INFINITY i) = NaN + NaN i
-   *  </code>
-   * </pre>
    *
-   * @return the hyperbolic sine of {@code this}.
-   * @since 1.2
+   * Examples:
+   *
+   *     sinh(1 &plusmn; INFINITY i) = NaN + NaN i
+   *     sinh(&plusmn;INFINITY + i) = &plusmn; INFINITY + INFINITY i
+   *     sinh(&plusmn;INFINITY &plusmn; INFINITY i) = NaN + NaN i
    */
   Complex sinh() {
     if (isNaN) {
@@ -752,38 +646,34 @@ class Complex {
   }
 
   /**
-   * Compute the
-   * <a href="http://mathworld.wolfram.com/SquareRoot.html" TARGET="_top">
-   * square root</a> of this complex number.
-   * Implements the following algorithm to compute {@code sqrt(a + bi)}:
-   * <ol><li>Let {@code t = sqrt((|a| + |a + bi|) / 2)}</li>
-   * <li><pre>if {@code  a &#8805; 0} return {@code t + (b/2t)i}
-   *  else return {@code |b|/2t + sign(b)t i }</pre></li>
-   * </ol>
-   * where <ul>
-   * <li>{@code |a| = }{@link FastMath#abs}(a)</li>
-   * <li>{@code |a + bi| = }{@link Complex#abs}(a + bi)</li>
-   * <li>{@code sign(b) =  }{@link FastMath#copySign(double,double) copySign(1d, b)}
-   * </ul>
-   * <br/>
-   * Returns {@link Complex#NaN} if either real or imaginary part of the
-   * input argument is {@code NaN}.
-   * <br/>
+   * Compute the [square root](http://mathworld.wolfram.com/SquareRoot.html)
+   * of this complex number.
+   *
+   * Implements the following algorithm to compute `sqrt(a + bi)}:
+   *
+   * 1. Let `t = sqrt((|a| + |a + bi|) / 2)`
+   * 2. if ` a &#8805; 0` return `t + (b/2t)i`
+   *  else return `|b|/2t + sign(b)t i`
+   *
+   * where:
+   *
+   * * `|a| = abs(a)`
+   * * `|a + bi| = abs(a + bi)`
+   * * `sign(b) = copySign(double, double) copySign(1d, b)`
+   *
+   * Returns [NAN] if either real or imaginary part of the
+   * input argument is `NaN`.
+   *
    * Infinite values in real or imaginary parts of the input may result in
    * infinite or NaN values returned in parts of the result.
-   * <pre>
-   *  Examples:
-   *  <code>
-   *   sqrt(1 &plusmn; INFINITY i) = INFINITY + NaN i
-   *   sqrt(INFINITY + i) = INFINITY + 0i
-   *   sqrt(-INFINITY + i) = 0 + INFINITY i
-   *   sqrt(INFINITY &plusmn; INFINITY i) = INFINITY + NaN i
-   *   sqrt(-INFINITY &plusmn; INFINITY i) = NaN &plusmn; INFINITY i
-   *  </code>
-   * </pre>
    *
-   * @return the square root of {@code this}.
-   * @since 1.2
+   * Examples:
+   *
+   *     sqrt(1 &plusmn; INFINITY i) = INFINITY + NaN i
+   *     sqrt(INFINITY + i) = INFINITY + 0i
+   *     sqrt(-INFINITY + i) = 0 + INFINITY i
+   *     sqrt(INFINITY &plusmn; INFINITY i) = INFINITY + NaN i
+   *     sqrt(-INFINITY &plusmn; INFINITY i) = NaN &plusmn; INFINITY i
    */
   Complex sqrt() {
     if (isNaN) {
@@ -803,57 +693,47 @@ class Complex {
   }
 
   /**
-   * Compute the
-   * <a href="http://mathworld.wolfram.com/SquareRoot.html" TARGET="_top">
-   * square root</a> of <code>1 - this<sup>2</sup></code> for this complex
+   * Compute the [square root](http://mathworld.wolfram.com/SquareRoot.html)
+   * of `1 - this<sup>2</sup>` for this complex
    * number.
+   *
    * Computes the result directly as
-   * {@code sqrt(ONE.subtract(z.multiply(z)))}.
-   * <br/>
-   * Returns {@link Complex#NaN} if either real or imaginary part of the
-   * input argument is {@code NaN}.
-   * <br/>
+   * `sqrt(ONE - (z * z))`.
+   *
+   * Returns [NAN] if either real or imaginary part of the
+   * input argument is `NaN`.
+   *
    * Infinite values in real or imaginary parts of the input may result in
    * infinite or NaN values returned in parts of the result.
-   *
-   * @return the square root of <code>1 - this<sup>2</sup></code>.
-   * @since 1.2
    */
   Complex sqrt1z() {
     return (complex(1.0, 0.0) - (this * this)).sqrt();
   }
 
   /**
-   * Compute the
-   * <a href="http://mathworld.wolfram.com/Tangent.html" TARGET="_top">
-   * tangent</a> of this complex number.
-   * Implements the formula:
-   * <pre>
-   *  <code>
-   *   tan(a + bi) = sin(2a)/(cos(2a)+cosh(2b)) + [sinh(2b)/(cos(2a)+cosh(2b))]i
-   *  </code>
-   * </pre>
-   * where the (real) functions on the right-hand side are
-   * {@link FastMath#sin}, {@link FastMath#cos}, {@link FastMath#cosh} and
-   * {@link FastMath#sinh}.
-   * <br/>
-   * Returns {@link Complex#NaN} if either real or imaginary part of the
-   * input argument is {@code NaN}.
-   * <br/>
-   * Infinite (or critical) values in real or imaginary parts of the input may
-   * result in infinite or NaN values returned in parts of the result.
-   * <pre>
-   *  Examples:
-   *  <code>
-   *   tan(a &plusmn; INFINITY i) = 0 &plusmn; i
-   *   tan(&plusmn;INFINITY + bi) = NaN + NaN i
-   *   tan(&plusmn;INFINITY &plusmn; INFINITY i) = NaN + NaN i
-   *   tan(&plusmn;&pi;/2 + 0 i) = &plusmn;INFINITY + NaN i
-   *  </code>
-   * </pre>
+   * Compute the [tangent](http://mathworld.wolfram.com/Tangent.html)
+   * of this complex number.
    *
-   * @return the tangent of {@code this}.
-   * @since 1.2
+   * Implements the formula:
+   *
+   *     tan(a + bi) = sin(2a)/(cos(2a)+cosh(2b)) + [sinh(2b)/(cos(2a)+cosh(2b))]i
+   *
+   * where the (real) functions on the right-hand side are
+   * [math.sin], [math.cos], [fastmath.cosh] and
+   * [fastmath.sinh].
+   *
+   * Returns [NAN] if either real or imaginary part of the
+   * input argument is `NaN`.
+   *
+   * Infinite (or critical) values in real or imaginary parts of the input may
+   * result in infinite or `NaN` values returned in parts of the result.
+   *
+   * Examples:
+   *
+   *     tan(a &plusmn; INFINITY i) = 0 &plusmn; i
+   *     tan(&plusmn;INFINITY + bi) = NaN + NaN i
+   *     tan(&plusmn;INFINITY &plusmn; INFINITY i) = NaN + NaN i
+   *     tan(&plusmn;&pi;/2 + 0 i) = &plusmn;INFINITY + NaN i
    */
   Complex tan() {
     if (isNaN || real.isInfinite) {
@@ -874,36 +754,29 @@ class Complex {
   }
 
   /**
-   * Compute the
-   * <a href="http://mathworld.wolfram.com/HyperbolicTangent.html" TARGET="_top">
-   * hyperbolic tangent</a> of this complex number.
+   * Compute the [hyperbolic tangent](http://mathworld.wolfram.com/HyperbolicTangent.html)
+   * of this complex number.
+   *
    * Implements the formula:
-   * <pre>
-   *  <code>
-   *   tan(a + bi) = sinh(2a)/(cosh(2a)+cos(2b)) + [sin(2b)/(cosh(2a)+cos(2b))]i
-   *  </code>
-   * </pre>
+   *
+   *     tan(a + bi) = sinh(2a)/(cosh(2a)+cos(2b)) + [sin(2b)/(cosh(2a)+cos(2b))]i
+   *
    * where the (real) functions on the right-hand side are
-   * {@link FastMath#sin}, {@link FastMath#cos}, {@link FastMath#cosh} and
-   * {@link FastMath#sinh}.
-   * <br/>
-   * Returns {@link Complex#NaN} if either real or imaginary part of the
-   * input argument is {@code NaN}.
-   * <br/>
+   * [math.sin], [math.cos], [fastmath.cosh] and
+   * [fastmath.sinh].
+   *
+   * Returns [NAN] if either real or imaginary part of the
+   * input argument is `NaN`.
+   *
    * Infinite values in real or imaginary parts of the input may result in
    * infinite or NaN values returned in parts of the result.
-   * <pre>
-   *  Examples:
-   *  <code>
-   *   tanh(a &plusmn; INFINITY i) = NaN + NaN i
-   *   tanh(&plusmn;INFINITY + bi) = &plusmn;1 + 0 i
-   *   tanh(&plusmn;INFINITY &plusmn; INFINITY i) = NaN + NaN i
-   *   tanh(0 + (&pi;/2)i) = NaN + INFINITY i
-   *  </code>
-   * </pre>
    *
-   * @return the hyperbolic tangent of {@code this}.
-   * @since 1.2
+   * Examples:
+   *
+   *     tanh(a &plusmn; INFINITY i) = NaN + NaN i
+   *     tanh(&plusmn;INFINITY + bi) = &plusmn;1 + 0 i
+   *     tanh(&plusmn;INFINITY &plusmn; INFINITY i) = NaN + NaN i
+   *     tanh(0 + (&pi;/2)i) = NaN + INFINITY i
    */
   Complex tanh() {
     if (isNaN || imaginary.isInfinite) {
@@ -922,24 +795,20 @@ class Complex {
     return complex(fastmath.sinh(real2) / d, math.sin(imaginary2) / d);
   }
 
-
-
   /**
    * Compute the argument of this complex number.
+   *
    * The argument is the angle phi between the positive real axis and
    * the point representing this number in the complex plane.
    * The value returned is between -PI (not inclusive)
    * and PI (inclusive), with negative values returned for numbers with
    * negative imaginary parts.
-   * <br/>
+   *
    * If either real or imaginary part (or both) is NaN, NaN is returned.
-   * Infinite parts are handled as {@code Math.atan2} handles them,
+   * Infinite parts are handled as `Math.atan2} handles them,
    * essentially treating finite parts as zero in the presence of an
    * infinite coordinate and returning a multiple of pi/4 depending on
    * the signs of the infinite parts.
-   * See the javadoc for {@code Math.atan2} for full details.
-   *
-   * @return the argument of {@code this}.
    */
   double argument() {
     return fastmath.atan2(imaginary, real);
@@ -947,25 +816,19 @@ class Complex {
 
   /**
    * Computes the n-th roots of this complex number.
-   * The nth roots are defined by the formula:
-   * <pre>
-   *  <code>
-   *   z<sub>k</sub> = abs<sup>1/n</sup> (cos(phi + 2&pi;k/n) + i (sin(phi + 2&pi;k/n))
-   *  </code>
-   * </pre>
-   * for <i>{@code k=0, 1, ..., n-1}</i>, where {@code abs} and {@code phi}
-   * are respectively the {@link #abs() modulus} and
-   * {@link #getArgument() argument} of this complex number.
-   * <br/>
-   * If one or both parts of this complex number is NaN, a list with just
-   * one element, {@link #NaN} is returned.
-   * if neither part is NaN, but at least one part is infinite, the result
-   * is a one-element list containing {@link #INF}.
    *
-   * @param n Degree of root.
-   * @return a List<Complex> of all {@code n}-th roots of {@code this}.
-   * @throws NotPositiveException if {@code n <= 0}.
-   * @since 2.0
+   * The nth roots are defined by the formula:
+   *
+   *     z<sub>k</sub> = abs<sup>1/n</sup> (cos(phi + 2&pi;k/n) + i (sin(phi + 2&pi;k/n))
+   *
+   * for `k=0, 1, ..., n-1`, where `abs` and `phi`
+   * are respectively the modulus and
+   * argument of this complex number.
+   *
+   * If one or both parts of this complex number is NaN, a list with just
+   * one element, [NAN] is returned.
+   * If neither part is `NaN`, but at least one part is infinite, the result
+   * is a one-element list containing [INFINITY].
    */
   List<Complex> nthRoot(int n) {
     if (n <= 0) {
@@ -1003,8 +866,9 @@ class Complex {
 
   /**
    * Get a hashCode for the complex number.
-   * Any {@code Double.NaN} value in real or imaginary part produces
-   * the same hash code {@code 7}.
+   *
+   * Any [double.NAN] value in real or imaginary part produces
+   * the same hash code `7`.
    */
   int get hashCode {
     if (isNaN) {
@@ -1027,22 +891,23 @@ Complex complex(num real, [num imaginary = 0]) {
 
 /**
  * Creates a complex number from the given polar representation.
- * <p>
- * The value returned is <code>r&middot;e<sup>i&middot;theta</sup></code>,
- * computed as <code>r&middot;cos(theta) + r&middot;sin(theta)i</code></p>
- * <p>
- * If either <code>r</code> or <code>theta</code> is NaN, or
- * <code>theta</code> is infinite, {@link Complex#NaN} is returned.</p>
- * <p>
- * If <code>r</code> is infinite and <code>theta</code> is finite,
+ *
+ * The value returned is `r&middot;e<sup>i&middot;theta</sup>`,
+ * computed as `r&middot;cos(theta) + r&middot;sin(theta)i`
+ *
+ * If either [r] or [theta] is `NaN`, or
+ * [theta] is infinite, [Complex.NAN] is returned.
+ *
+ * If [r] is infinite and [theta] is finite,
  * infinite or NaN values may be returned in parts of the result, following
- * the rules for double arithmetic.<pre>
+ * the rules for double arithmetic.
+ *
  * Examples:
- * <code>
- * polar(INFINITY, &pi;/4) = INFINITY + INFINITY i
- * polar(INFINITY, 0) = INFINITY + NaN i
- * polar(INFINITY, -&pi;/4) = INFINITY - INFINITY i
- * polar(INFINITY, 5&pi;/4) = -INFINITY - INFINITY i </code></pre></p>
+ *
+ *     polar(INFINITY, &pi;/4) = INFINITY + INFINITY i
+ *     polar(INFINITY, 0) = INFINITY + NaN i
+ *     polar(INFINITY, -&pi;/4) = INFINITY - INFINITY i
+ *     polar(INFINITY, 5&pi;/4) = -INFINITY - INFINITY i
  */
 Complex polar(double r, double theta) {
   if (r < 0) {
