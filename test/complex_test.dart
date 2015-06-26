@@ -1,24 +1,23 @@
-/*
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Licensed to the Apache Software Foundation (ASF) under one or more
+// contributor license agreements.  See the NOTICE file distributed with
+// this work for additional information regarding copyright ownership.
+// The ASF licenses this file to You under the Apache License, Version 2.0
+// (the "License"); you may not use this file except in compliance with
+// the License.  You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 import 'dart:math' as math;
-import 'package:unittest/unittest.dart';
+import 'package:test/test.dart';
 import 'package:complex/complex.dart';
 
-main() {
+complexTest() {
   double inf = double.INFINITY;
   double neginf = double.NEGATIVE_INFINITY;
   double nan = double.NAN;
@@ -1001,24 +1000,19 @@ main() {
     expect(nanInf, equals(new Complex(0, pi / 2).tanh()));
   });
 
-  /** test issue MATH-221 */
+  /// test issue MATH-221
 
   test('Math221', () {
     //expect(Complex.equals(new Complex(0, -1), new Complex(0, 1) * new Complex(-1, 0)), isTrue);
     expect(new Complex(0, -1) == new Complex(0, 1) * new Complex(-1, 0), isTrue);
   });
 
-  /**
-   * Test: computing <b>third roots</b> of z.
-   * <pre>
-   * <code>
-   * <b>z = -2 + 2 * i</b>
-   *   => z_0 =  1      +          i
-   *   => z_1 = -1.3660 + 0.3660 * i
-   *   => z_2 =  0.3660 - 1.3660 * i
-   * </code>
-   * </pre>
-   */
+  /// Test: computing <b>third roots</b> of z.
+  ///
+  ///     z = -2 + 2 * i
+  ///      => z_0 =  1      +          i
+  ///      => z_1 = -1.3660 + 0.3660 * i
+  ///      => z_2 =  0.3660 - 1.3660 * i
 
   test('NthRoot_normal_thirdRoot', () {
     // The complex number we want to compute all third-roots for.
@@ -1039,18 +1033,13 @@ main() {
   });
 
 
-  /**
-   * Test: computing <b>fourth roots</b> of z.
-   * <pre>
-   * <code>
-   * <b>z = 5 - 2 * i</b>
-   *   => z_0 =  1.5164 - 0.1446 * i
-   *   => z_1 =  0.1446 + 1.5164 * i
-   *   => z_2 = -1.5164 + 0.1446 * i
-   *   => z_3 = -1.5164 - 0.1446 * i
-   * </code>
-   * </pre>
-   */
+  /// Test: computing <b>fourth roots</b> of z.
+  ///
+  ///     z = 5 - 2 * i
+  ///      => z_0 =  1.5164 - 0.1446 * i
+  ///      => z_1 =  0.1446 + 1.5164 * i
+  ///      => z_2 = -1.5164 + 0.1446 * i
+  ///      => z_3 = -1.5164 - 0.1446 * i
 
   test('NthRoot_normal_fourthRoot', () {
     // The complex number we want to compute all third-roots for.
@@ -1073,17 +1062,12 @@ main() {
     expect(-1.5164629308487783, closeTo(fourthRootsOfZ[3].imaginary, 1.0e-5));
   });
 
-  /**
-   * Test: computing <b>third roots</b> of z.
-   * <pre>
-   * <code>
-   * <b>z = 8</b>
-   *   => z_0 =  2
-   *   => z_1 = -1 + 1.73205 * i
-   *   => z_2 = -1 - 1.73205 * i
-   * </code>
-   * </pre>
-   */
+  /// Test: computing <b>third roots</b> of z.
+  ///
+  ///     z = 8
+  ///      => z_0 =  2
+  ///      => z_1 = -1 + 1.73205 * i
+  ///      => z_2 = -1 - 1.73205 * i
 
   test('NthRoot_cornercase_thirdRoot_imaginaryPartEmpty', () {
     // The number 8 has three third roots. One we all already know is the number 2.
@@ -1105,17 +1089,12 @@ main() {
   });
 
 
-  /**
-   * Test: computing <b>third roots</b> of z with real part 0.
-   * <pre>
-   * <code>
-   * <b>z = 2 * i</b>
-   *   => z_0 =  1.0911 + 0.6299 * i
-   *   => z_1 = -1.0911 + 0.6299 * i
-   *   => z_2 = -2.3144 - 1.2599 * i
-   * </code>
-   * </pre>
-   */
+  /// Test: computing <b>third roots</b> of z with real part 0.
+  ///
+  ///     z = 2 * i
+  ///      => z_0 =  1.0911 + 0.6299 * i
+  ///      => z_1 = -1.0911 + 0.6299 * i
+  ///      => z_2 = -2.3144 - 1.2599 * i
 
   test('NthRoot_cornercase_thirdRoot_realPartZero', () {
     // complex number with only imaginary part
@@ -1135,9 +1114,7 @@ main() {
     expect(-1.2599210498948732, closeTo(thirdRootsOfZ[2].imaginary, 1.0e-5));
   });
 
-  /**
-   * Test cornercases with NaN and Infinity.
-   */
+  /// Test cornercases with NaN and Infinity.
 
   test('NthRoot_cornercase_NAN_Inf', () {
     // NaN + finite -> NaN
@@ -1165,9 +1142,7 @@ main() {
     expect(Complex.INFINITY, equals(roots[0]));
   });
 
-  /**
-   * Test standard values
-   */
+  /// Test standard values
 
   test('argument', () {
     Complex z = new Complex(1, 0);
@@ -1196,9 +1171,7 @@ main() {
 
   });
 
-  /**
-   * Verify atan2-style handling of infinite parts
-   */
+  /// Verify atan2-style handling of infinite parts
 
   test('argumentInf', () {
     expect(math.PI / 4, closeTo(infInf.argument(), 1.0e-12));
@@ -1211,9 +1184,7 @@ main() {
     expect(-math.PI / 2, closeTo(oneNegInf.argument(), 1.0e-12));
   });
 
-  /**
-   * Verify that either part NaN results in NaN
-   */
+  /// Verify that either part NaN results in NaN
 
   test('GetArgumentNaN', () {
     expect(nanZero.argument().isNaN, isTrue);
@@ -1241,9 +1212,7 @@ main() {
   });*/
 }
 
-/**
- * Class to test extending Complex
- */
+/// Class to test extending Complex
 class TestComplex extends Complex {
 
   TestComplex(double real, double imaginary) : super(real, imaginary);
@@ -1300,3 +1269,5 @@ class _IsCloseToZ extends Matcher {
     }
   }
 }
+
+main() => complexTest();
