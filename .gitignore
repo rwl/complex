@@ -1,6 +1,7 @@
 out/
 packages
 pubspec.lock
+.pub/
 
 .idea/
 complex.iml
