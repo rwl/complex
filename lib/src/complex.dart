@@ -36,7 +36,7 @@ import 'fastmath.dart' as fastmath;
 /// `x` is `NaN`).
 class Complex {
   /// The square root of -1. A number representing "0.0 + 1.0i"
-  static final I = new Complex(0.0, -1.0);
+  static final I = new Complex(0.0, 1.0);
 
   /// A complex number representing "NaN + NaNi"
   static final NAN = new Complex(double.NAN, double.NAN);
