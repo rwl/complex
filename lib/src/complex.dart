@@ -36,19 +36,19 @@ import 'fastmath.dart' as fastmath;
 /// `x` is `NaN`).
 class Complex {
   /// The square root of -1. A number representing "0.0 + 1.0i"
-  static final I = new Complex(0.0, 1.0);
+  static const I = const Complex._(0.0, 1.0);
 
   /// A complex number representing "NaN + NaNi"
-  static final NAN = new Complex(double.NAN, double.NAN);
+  static const NAN = const Complex._(double.NAN, double.NAN);
 
   /// A complex number representing "+INF + INFi"
-  static final INFINITY = new Complex(double.INFINITY, double.INFINITY);
+  static const INFINITY = const Complex._(double.INFINITY, double.INFINITY);
 
   /// A complex number representing "1.0 + 0.0i"
-  static final ONE = new Complex(1.0);
+  static const ONE = const Complex._(1.0);
 
   /// A complex number representing "0.0 + 0.0i"
-  static final ZERO = new Complex(0.0);
+  static const ZERO = const Complex._(0.0);
 
   final double _imaginary, _real;
 
@@ -63,6 +63,35 @@ class Complex {
   Complex(num real, [num imaginary = 0])
       : _real = real.toDouble(),
         _imaginary = imaginary.toDouble();
+
+  const Complex._(this._real, [this._imaginary = 0.0]);
+
+  /// Creates a complex number from the given polar representation.
+  ///
+  /// The value returned is `r·e^(i·theta)`,
+  /// computed as `r·cos(theta) + r·sin(theta)i`
+  ///
+  /// If either [r] or [theta] is `NaN`, or
+  /// [theta] is infinite, [Complex.NAN] is returned.
+  ///
+  /// If [r] is infinite and [theta] is finite,
+  /// infinite or NaN values may be returned in parts of the result, following
+  /// the rules for double arithmetic.
+  ///
+  /// Examples:
+  ///
+  ///     polar(INFINITY, π/4) = INFINITY + INFINITY i
+  ///     polar(INFINITY, 0) = INFINITY + NaN i
+  ///     polar(INFINITY, -π/4) = INFINITY - INFINITY i
+  ///     polar(INFINITY, 5π/4) = -INFINITY - INFINITY i
+  factory Complex.polar(num r, num theta) {
+    r = r.toDouble();
+    theta = theta.toDouble();
+    if (r < 0) {
+      throw new ArgumentError('Negative complex modulus: $r');
+    }
+    return new Complex(r * math.cos(theta), r * math.sin(theta));
+  }
 
   /// True if the real and imaginary parts are finite; otherwise, false.
   bool get isFinite => !isNaN && _real.isFinite && _imaginary.isFinite;
@@ -116,12 +145,12 @@ class Complex {
       if (isNaN || addend.isNaN) {
         return Complex.NAN;
       }
-      return complex(_real + addend.real, _imaginary + addend.imaginary);
+      return new Complex._(_real + addend.real, _imaginary + addend.imaginary);
     } else if (addend is num) {
       if (isNaN || addend.isNaN) {
         return Complex.NAN;
       }
-      return complex(_real + addend, _imaginary);
+      return new Complex._(_real + addend, _imaginary);
     } else {
       throw new ArgumentError('factor must be a num or a Complex');
     }
@@ -141,7 +170,7 @@ class Complex {
     if (isNaN) {
       return Complex.NAN;
     }
-    return complex(real, -imaginary);
+    return new Complex._(real, -imaginary);
   }
 
   /// Returns a `Complex` whose value is
@@ -189,12 +218,12 @@ class Complex {
       if (c.abs() < d.abs()) {
         double q = c / d;
         double denominator = c * q + d;
-        return complex((_real * q + _imaginary) / denominator,
+        return new Complex._((_real * q + _imaginary) / denominator,
             (_imaginary * q - _real) / denominator);
       } else {
         double q = d / c;
         double denominator = d * q + c;
-        return complex((_imaginary * q + _real) / denominator,
+        return new Complex._((_imaginary * q + _real) / denominator,
             (_imaginary - _real * q) / denominator);
       }
     } else if (divisor is num) {
@@ -207,7 +236,7 @@ class Complex {
       if (divisor.isInfinite) {
         return !isInfinite ? ZERO : NAN;
       }
-      return complex(_real / divisor, _imaginary / divisor);
+      return new Complex._(_real / divisor, _imaginary / divisor);
     } else {
       throw new ArgumentError('factor must be a num or a Complex');
     }
@@ -230,11 +259,11 @@ class Complex {
     if (_real.abs() < _imaginary.abs()) {
       double q = _real / _imaginary;
       double scale = 1.0 / (_real * q + _imaginary);
-      return complex(scale * q, -scale);
+      return new Complex._(scale * q, -scale);
     } else {
       double q = _imaginary / _real;
       double scale = 1.0 / (_imaginary * q + _real);
-      return complex(scale, -scale * q);
+      return new Complex._(scale, -scale * q);
     }
   }
 
@@ -293,7 +322,8 @@ class Complex {
         // we don't use isInfinite to avoid testing for NaN again
         return INFINITY;
       }
-      return complex(_real * factor._real - _imaginary * factor._imaginary,
+      return new Complex._(
+          _real * factor._real - _imaginary * factor._imaginary,
           _real * factor._imaginary + _imaginary * factor._real);
     } else if (factor is num) {
       if (isNaN || factor.isNaN) {
@@ -303,7 +333,7 @@ class Complex {
         // we don't use isInfinite to avoid testing for NaN again
         return INFINITY;
       }
-      return complex(_real * factor, _imaginary * factor);
+      return new Complex._(_real * factor, _imaginary * factor);
     } else {
       throw new ArgumentError('factor must be a num or a Complex');
     }
@@ -317,7 +347,7 @@ class Complex {
       return NAN;
     }
 
-    return complex(-_real, -_imaginary);
+    return new Complex._(-_real, -_imaginary);
   }
 
   /// Returns a `Complex` whose value is
@@ -336,13 +366,13 @@ class Complex {
         return NAN;
       }
 
-      return complex(
+      return new Complex._(
           real - subtrahend._real, imaginary - subtrahend._imaginary);
     } else if (subtrahend is num) {
       if (isNaN || subtrahend.isNaN) {
         return NAN;
       }
-      return complex(real - subtrahend, imaginary);
+      return new Complex._(real - subtrahend, imaginary);
     } else {
       throw new ArgumentError('factor must be a num or a Complex');
     }
@@ -395,7 +425,7 @@ class Complex {
       return NAN;
     }
 
-    return ((this + I) / (I - this)).log() * (I / complex(2.0, 0.0));
+    return ((this + I) / (I - this)).log() * (I / new Complex._(2.0, 0.0));
   }
 
   /// Compute the [cosine](http://mathworld.wolfram.com/Cosine.html)
@@ -424,7 +454,7 @@ class Complex {
       return NAN;
     }
 
-    return complex(math.cos(real) * fastmath.cosh(imaginary),
+    return new Complex._(math.cos(real) * fastmath.cosh(imaginary),
         -math.sin(real) * fastmath.sinh(imaginary));
   }
 
@@ -454,7 +484,7 @@ class Complex {
       return NAN;
     }
 
-    return complex(fastmath.cosh(real) * math.cos(imaginary),
+    return new Complex._(fastmath.cosh(real) * math.cos(imaginary),
         fastmath.sinh(real) * math.sin(imaginary));
   }
 
@@ -486,7 +516,7 @@ class Complex {
     }
 
     double expReal = math.exp(real);
-    return complex(
+    return new Complex._(
         expReal * math.cos(imaginary), expReal * math.sin(imaginary));
   }
 
@@ -520,7 +550,7 @@ class Complex {
       return NAN;
     }
 
-    return complex(math.log(abs()), fastmath.atan2(imaginary, real));
+    return new Complex._(math.log(abs()), fastmath.atan2(imaginary, real));
   }
 
   /// Returns of value of this complex number raised to the power of `x`.
@@ -570,7 +600,7 @@ class Complex {
       return NAN;
     }
 
-    return complex(math.sin(real) * fastmath.cosh(imaginary),
+    return new Complex._(math.sin(real) * fastmath.cosh(imaginary),
         math.cos(real) * fastmath.sinh(imaginary));
   }
 
@@ -600,7 +630,7 @@ class Complex {
       return NAN;
     }
 
-    return complex(fastmath.sinh(real) * math.cos(imaginary),
+    return new Complex._(fastmath.sinh(real) * math.cos(imaginary),
         fastmath.cosh(real) * math.sin(imaginary));
   }
 
@@ -638,14 +668,14 @@ class Complex {
     }
 
     if (real == 0.0 && imaginary == 0.0) {
-      return complex(0.0, 0.0);
+      return new Complex._(0.0, 0.0);
     }
 
     double t = math.sqrt((real.abs() + abs()) / 2.0);
     if (real >= 0.0) {
-      return complex(t, imaginary / (2.0 * t));
+      return new Complex._(t, imaginary / (2.0 * t));
     } else {
-      return complex(
+      return new Complex._(
           imaginary.abs() / (2.0 * t), fastmath.copySign(1.0, imaginary) * t);
     }
   }
@@ -661,7 +691,7 @@ class Complex {
   /// Infinite values in real or imaginary parts of the input may result in
   /// infinite or NaN values returned in parts of the result.
   Complex sqrt1z() {
-    return (complex(1.0, 0.0) - (this * this)).sqrt();
+    return (new Complex._(1.0, 0.0) - (this * this)).sqrt();
   }
 
   /// Compute the [tangent](http://mathworld.wolfram.com/Tangent.html)
@@ -691,17 +721,17 @@ class Complex {
       return NAN;
     }
     if (imaginary > 20.0) {
-      return complex(0.0, 1.0);
+      return new Complex._(0.0, 1.0);
     }
     if (imaginary < -20.0) {
-      return complex(0.0, -1.0);
+      return new Complex._(0.0, -1.0);
     }
 
     double real2 = 2.0 * real;
     double imaginary2 = 2.0 * imaginary;
     double d = math.cos(real2) + fastmath.cosh(imaginary2);
 
-    return complex(math.sin(real2) / d, fastmath.sinh(imaginary2) / d);
+    return new Complex._(math.sin(real2) / d, fastmath.sinh(imaginary2) / d);
   }
 
   /// Compute the [hyperbolic tangent](http://mathworld.wolfram.com/HyperbolicTangent.html)
@@ -731,16 +761,16 @@ class Complex {
       return NAN;
     }
     if (real > 20.0) {
-      return complex(1.0, 0.0);
+      return new Complex._(1.0, 0.0);
     }
     if (real < -20.0) {
-      return complex(-1.0, 0.0);
+      return new Complex._(-1.0, 0.0);
     }
     double real2 = 2.0 * real;
     double imaginary2 = 2.0 * imaginary;
     double d = fastmath.cosh(real2) + math.cos(imaginary2);
 
-    return complex(fastmath.sinh(real2) / d, math.sin(imaginary2) / d);
+    return new Complex._(fastmath.sinh(real2) / d, math.sin(imaginary2) / d);
   }
 
   /// Compute the argument of this complex number.
@@ -800,7 +830,7 @@ class Complex {
       // inner part
       final double realPart = nthRootOfAbs * math.cos(innerPart);
       final double imaginaryPart = nthRootOfAbs * math.sin(innerPart);
-      result.add(complex(realPart, imaginaryPart));
+      result.add(new Complex._(realPart, imaginaryPart));
       innerPart += slice;
     }
 
@@ -821,34 +851,4 @@ class Complex {
   String toString() {
     return "($real, $imaginary)";
   }
-}
-
-/// Create a complex number given the real part and optionally the imaginary part.
-Complex complex(num real, [num imaginary = 0]) {
-  return new Complex(real, imaginary);
-}
-
-/// Creates a complex number from the given polar representation.
-///
-/// The value returned is `r·e^(i·theta)`,
-/// computed as `r·cos(theta) + r·sin(theta)i`
-///
-/// If either [r] or [theta] is `NaN`, or
-/// [theta] is infinite, [Complex.NAN] is returned.
-///
-/// If [r] is infinite and [theta] is finite,
-/// infinite or NaN values may be returned in parts of the result, following
-/// the rules for double arithmetic.
-///
-/// Examples:
-///
-///     polar(INFINITY, π/4) = INFINITY + INFINITY i
-///     polar(INFINITY, 0) = INFINITY + NaN i
-///     polar(INFINITY, -π/4) = INFINITY - INFINITY i
-///     polar(INFINITY, 5π/4) = -INFINITY - INFINITY i
-Complex polar(double r, double theta) {
-  if (r < 0) {
-    throw new ArgumentError('Negative complex modulus: $r');
-  }
-  return new Complex(r * math.cos(theta), r * math.sin(theta));
 }

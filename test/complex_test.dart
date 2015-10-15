@@ -17,7 +17,7 @@ import 'dart:math' as math;
 import 'package:test/test.dart';
 import 'package:complex/complex.dart';
 
-complexTest() {
+main() {
   double inf = double.INFINITY;
   double neginf = double.NEGATIVE_INFINITY;
   double nan = double.NAN;
@@ -261,8 +261,8 @@ complexTest() {
     Complex act = z.reciprocal();
     double expRe = 5.0 / 61.0;
     double expIm = -6.0 / 61.0;
-    expect(expRe, closeTo(act.real, /*FastMath.ulp(expRe)*/1.0e-12));
-    expect(expIm, closeTo(act.imaginary, /*FastMath.ulp(expIm)*/1.0e-12));
+    expect(expRe, closeTo(act.real, /*FastMath.ulp(expRe)*/ 1.0e-12));
+    expect(expIm, closeTo(act.imaginary, /*FastMath.ulp(expIm)*/ 1.0e-12));
   });
 
   test('ReciprocalReal', () {
@@ -568,7 +568,8 @@ complexTest() {
     Complex z = new Complex(3, 4);
     Complex expected = new Complex(0.936812, -2.30551);
     expect(expected, closeToZ(z.acos(), 1.0e-5));
-    expect(new Complex(math.acos(0), 0), closeToZ(Complex.ZERO.acos(), 1.0e-12));
+    expect(
+        new Complex(math.acos(0), 0), closeToZ(Complex.ZERO.acos(), 1.0e-12));
   });
 
   test('AcosInf', () {
@@ -771,7 +772,8 @@ complexTest() {
     expect(Complex.NAN, equals(Complex.ZERO.power(Complex.I)));
     expect(Complex.ONE, closeToZ(Complex.ONE.power(Complex.ZERO), 10e-12));
     expect(Complex.ONE, closeToZ(Complex.I.power(Complex.ZERO), 10e-12));
-    expect(Complex.ONE, closeToZ(new Complex(-1, 3).power(Complex.ZERO), 10e-12));
+    expect(
+        Complex.ONE, closeToZ(new Complex(-1, 3).power(Complex.ZERO), 10e-12));
   });
 
   test('ScalarPow', () {
@@ -887,7 +889,6 @@ complexTest() {
   test('SqrtImaginaryZero', () {
     Complex z = new Complex(-3.0, 0.0);
     Complex expected = new Complex(0.0, 1.73205);
-
   });
 
   test('SqrtImaginaryNegative', () {
@@ -903,8 +904,8 @@ complexTest() {
       double theta = 0.0;
       for (int j = 0; j < 11; j++) {
         theta += pi / 12;
-        Complex z = polar(r, theta);
-        Complex sqrtz = polar(math.sqrt(r), theta / 2);
+        Complex z = new Complex.polar(r, theta);
+        Complex sqrtz = new Complex.polar(math.sqrt(r), theta / 2);
         expect(sqrtz, closeToZ(z.sqrt(), 10e-12));
       }
     }
@@ -953,8 +954,8 @@ complexTest() {
   });
 
   test('TanInf', () {
-    expect(complex(0.0, 1.0), equals(oneInf.tan()));
-    expect(complex(0.0, -1.0), equals(oneNegInf.tan()));
+    expect(new Complex(0.0, 1.0), equals(oneInf.tan()));
+    expect(new Complex(0.0, -1.0), equals(oneNegInf.tan()));
     expect(Complex.NAN, equals(infOne.tan()));
     expect(Complex.NAN, equals(negInfOne.tan()));
     expect(Complex.NAN, equals(infInf.tan()));
@@ -988,8 +989,8 @@ complexTest() {
   test('TanhInf', () {
     expect(Complex.NAN, equals(oneInf.tanh()));
     expect(Complex.NAN, equals(oneNegInf.tanh()));
-    expect(complex(1.0, 0.0), equals(infOne.tanh()));
-    expect(complex(-1.0, 0.0), equals(negInfOne.tanh()));
+    expect(new Complex(1.0, 0.0), equals(infOne.tanh()));
+    expect(new Complex(-1.0, 0.0), equals(negInfOne.tanh()));
     expect(Complex.NAN, equals(infInf.tanh()));
     expect(Complex.NAN, equals(infNegInf.tanh()));
     expect(Complex.NAN, equals(negInfInf.tanh()));
@@ -1004,7 +1005,8 @@ complexTest() {
 
   test('Math221', () {
     //expect(Complex.equals(new Complex(0, -1), new Complex(0, 1) * new Complex(-1, 0)), isTrue);
-    expect(new Complex(0, -1) == new Complex(0, 1) * new Complex(-1, 0), isTrue);
+    expect(
+        new Complex(0, -1) == new Complex(0, 1) * new Complex(-1, 0), isTrue);
   });
 
   /// Test: computing <b>third roots</b> of z.
@@ -1018,7 +1020,7 @@ complexTest() {
     // The complex number we want to compute all third-roots for.
     Complex z = new Complex(-2, 2);
     // The List holding all third roots
-    List<Complex> thirdRootsOfZ = z.nthRoot(3);//.toArray(new Complex[0]);
+    List<Complex> thirdRootsOfZ = z.nthRoot(3); //.toArray(new Complex[0]);
     // Returned Collection must not be empty!
     expect(3, equals(thirdRootsOfZ.length));
     // test z_0
@@ -1032,7 +1034,6 @@ complexTest() {
     expect(-1.3660254037844384, closeTo(thirdRootsOfZ[2].imaginary, 1.0e-5));
   });
 
-
   /// Test: computing <b>fourth roots</b> of z.
   ///
   ///     z = 5 - 2 * i
@@ -1045,7 +1046,7 @@ complexTest() {
     // The complex number we want to compute all third-roots for.
     Complex z = new Complex(5, -2);
     // The List holding all fourth roots
-    List<Complex> fourthRootsOfZ = z.nthRoot(4);//.toArray(new Complex[0]);
+    List<Complex> fourthRootsOfZ = z.nthRoot(4); //.toArray(new Complex[0]);
     // Returned Collection must not be empty!
     expect(4, equals(fourthRootsOfZ.length));
     // test z_0
@@ -1074,7 +1075,7 @@ complexTest() {
     // But there are two more complex roots.
     Complex z = new Complex(8, 0);
     // The List holding all third roots
-    List<Complex> thirdRootsOfZ = z.nthRoot(3);//.toArray(new Complex[0]);
+    List<Complex> thirdRootsOfZ = z.nthRoot(3); //.toArray(new Complex[0]);
     // Returned Collection must not be empty!
     expect(3, equals(thirdRootsOfZ.length));
     // test z_0
@@ -1088,7 +1089,6 @@ complexTest() {
     expect(-1.732050807568877, closeTo(thirdRootsOfZ[2].imaginary, 1.0e-5));
   });
 
-
   /// Test: computing <b>third roots</b> of z with real part 0.
   ///
   ///     z = 2 * i
@@ -1100,7 +1100,7 @@ complexTest() {
     // complex number with only imaginary part
     Complex z = new Complex(0, 2);
     // The List holding all third roots
-    List<Complex> thirdRootsOfZ = z.nthRoot(3);//.toArray(new Complex[0]);
+    List<Complex> thirdRootsOfZ = z.nthRoot(3); //.toArray(new Complex[0]);
     // Returned Collection must not be empty!
     expect(3, equals(thirdRootsOfZ.length));
     // test z_0
@@ -1168,7 +1168,6 @@ complexTest() {
 
     z = new Complex(1, -1);
     expect(-math.PI / 4, closeTo(z.argument(), 1.0e-12));
-
   });
 
   /// Verify atan2-style handling of infinite parts
@@ -1214,7 +1213,6 @@ complexTest() {
 
 /// Class to test extending Complex
 class TestComplex extends Complex {
-
   TestComplex(double real, double imaginary) : super(real, imaginary);
 
   factory TestComplex.from(Complex other) {
@@ -1225,9 +1223,7 @@ class TestComplex extends Complex {
   String toString() {
     return "$real ${imaginary}j";
   }
-
 }
-
 
 /// Returns a matcher which matches if the match argument is within [delta]
 /// of some [value]; i.e. if the match argument is greater than
@@ -1257,9 +1253,14 @@ class _IsCloseToZ extends Matcher {
     return true;
   }
 
-  Description describe(Description description) => description.add('a complex value within ').addDescriptionOf(_delta).add(' of ').addDescriptionOf(_value);
+  Description describe(Description description) => description
+      .add('a complex value within ')
+      .addDescriptionOf(_delta)
+      .add(' of ')
+      .addDescriptionOf(_value);
 
-  Description describeMismatch(item, Description mismatchDescription, Map matchState, bool verbose) {
+  Description describeMismatch(
+      item, Description mismatchDescription, Map matchState, bool verbose) {
     if (item is! Complex) {
       return mismatchDescription.add(' not complex');
     } else {
@@ -1269,5 +1270,3 @@ class _IsCloseToZ extends Matcher {
     }
   }
 }
-
-main() => complexTest();
