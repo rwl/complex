@@ -78,15 +78,21 @@ class Complex {
   /// infinite or NaN values may be returned in parts of the result, following
   /// the rules for double arithmetic.
   ///
+  /// If [radians] is `false` then [theta] is converted from degrees to
+  /// radians.
+  ///
   /// Examples:
   ///
   ///     polar(INFINITY, π/4) = INFINITY + INFINITY i
   ///     polar(INFINITY, 0) = INFINITY + NaN i
   ///     polar(INFINITY, -π/4) = INFINITY - INFINITY i
   ///     polar(INFINITY, 5π/4) = -INFINITY - INFINITY i
-  factory Complex.polar(num r, num theta) {
+  factory Complex.polar(num r, num theta, [bool radians = true]) {
     r = r.toDouble();
     theta = theta.toDouble();
+    if (!radians) {
+      theta = theta * math.PI / 180.0;
+    }
     if (r < 0) {
       throw new ArgumentError('Negative complex modulus: $r');
     }
