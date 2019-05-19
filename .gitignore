@@ -9,3 +9,5 @@ complex.iml
 
 .project
 /.settings/
+
+.dart_tool/
