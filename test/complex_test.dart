@@ -18,121 +18,121 @@ import 'package:test/test.dart';
 import 'package:complex/complex.dart';
 
 main() {
-  double inf = double.INFINITY;
-  double neginf = double.NEGATIVE_INFINITY;
-  double nan = double.NAN;
-  double pi = math.PI;
-  Complex oneInf = new Complex(1, inf);
-  Complex oneNegInf = new Complex(1, neginf);
-  Complex infOne = new Complex(inf, 1);
-  Complex infZero = new Complex(inf, 0);
-  Complex infNaN = new Complex(inf, nan);
-  Complex infNegInf = new Complex(inf, neginf);
-  Complex infInf = new Complex(inf, inf);
-  Complex negInfInf = new Complex(neginf, inf);
-  Complex negInfZero = new Complex(neginf, 0);
-  Complex negInfOne = new Complex(neginf, 1);
-  Complex negInfNaN = new Complex(neginf, nan);
-  Complex negInfNegInf = new Complex(neginf, neginf);
-  Complex oneNaN = new Complex(1, nan);
-  Complex zeroInf = new Complex(0, inf);
-  Complex zeroNaN = new Complex(0, nan);
-  Complex nanInf = new Complex(nan, inf);
-  Complex nanNegInf = new Complex(nan, neginf);
-  Complex nanZero = new Complex(nan, 0);
+  double inf = double.infinity;
+  double neginf = double.negativeInfinity;
+  double nan = double.nan;
+  double pi = math.pi;
+  Complex oneInf = Complex(1, inf);
+  Complex oneNegInf = Complex(1, neginf);
+  Complex infOne = Complex(inf, 1);
+  Complex infZero = Complex(inf, 0);
+  Complex infNaN = Complex(inf, nan);
+  Complex infNegInf = Complex(inf, neginf);
+  Complex infInf = Complex(inf, inf);
+  Complex negInfInf = Complex(neginf, inf);
+  Complex negInfZero = Complex(neginf, 0);
+  Complex negInfOne = Complex(neginf, 1);
+  Complex negInfNaN = Complex(neginf, nan);
+  Complex negInfNegInf = Complex(neginf, neginf);
+  Complex oneNaN = Complex(1, nan);
+  Complex zeroInf = Complex(0, inf);
+  Complex zeroNaN = Complex(0, nan);
+  Complex nanInf = Complex(nan, inf);
+  Complex nanNegInf = Complex(nan, neginf);
+  Complex nanZero = Complex(nan, 0);
 
   test('Constructor', () {
-    Complex z = new Complex(3.0, 4.0);
+    Complex z = Complex(3.0, 4.0);
     expect(3.0, closeTo(z.real, 1.0e-5));
     expect(4.0, closeTo(z.imaginary, 1.0e-5));
   });
 
   test('ConstructorNaN', () {
-    Complex z = new Complex(3.0, double.NAN);
+    Complex z = Complex(3.0, double.nan);
     expect(z.isNaN, isTrue);
 
-    z = new Complex(nan, 4.0);
+    z = Complex(nan, 4.0);
     expect(z.isNaN, isTrue);
 
-    z = new Complex(3.0, 4.0);
+    z = Complex(3.0, 4.0);
     expect(z.isNaN, isFalse);
   });
 
   test('Abs', () {
-    Complex z = new Complex(3.0, 4.0);
+    Complex z = Complex(3.0, 4.0);
     expect(5.0, closeTo(z.abs(), 1.0e-5));
   });
 
   test('AbsNaN', () {
     expect(Complex.NAN.abs().isNaN, isTrue);
-    Complex z = new Complex(inf, nan);
+    Complex z = Complex(inf, nan);
     expect(z.abs().isNaN, isTrue);
   });
 
   test('AbsInfinite', () {
-    Complex z = new Complex(inf, 0);
+    Complex z = Complex(inf, 0);
     expect(inf, equals(z.abs()));
-    z = new Complex(0, neginf);
+    z = Complex(0, neginf);
     expect(inf, equals(z.abs()));
-    z = new Complex(inf, neginf);
+    z = Complex(inf, neginf);
     expect(inf, equals(z.abs()));
   });
 
   test('Add', () {
-    Complex x = new Complex(3.0, 4.0);
-    Complex y = new Complex(5.0, 6.0);
+    Complex x = Complex(3.0, 4.0);
+    Complex y = Complex(5.0, 6.0);
     Complex z = x + y;
     expect(8.0, closeTo(z.real, 1.0e-5));
     expect(10.0, closeTo(z.imaginary, 1.0e-5));
   });
 
   test('AddNaN', () {
-    Complex x = new Complex(3.0, 4.0);
+    Complex x = Complex(3.0, 4.0);
     Complex z = x + Complex.NAN;
     expect(Complex.NAN, equals(z));
-    z = new Complex(1, nan);
+    z = Complex(1, nan);
     Complex w = x + z;
     expect(Complex.NAN, equals(w));
   });
 
   test('AddInf', () {
-    Complex x = new Complex(1, 1);
-    Complex z = new Complex(inf, 0);
+    Complex x = Complex(1, 1);
+    Complex z = Complex(inf, 0);
     Complex w = x + z;
     expect(w.imaginary, equals(1));
     expect(inf, equals(w.real));
 
-    x = new Complex(neginf, 0);
+    x = Complex(neginf, 0);
     expect((x + z).real.isNaN, isTrue);
   });
 
   test('ScalarAdd', () {
-    Complex x = new Complex(3.0, 4.0);
+    Complex x = Complex(3.0, 4.0);
     double yDouble = 2.0;
-    Complex yComplex = new Complex(yDouble);
+    Complex yComplex = Complex(yDouble);
     expect(x + yComplex, equals(x + yDouble));
   });
 
   test('ScalarAddNaN', () {
-    Complex x = new Complex(3.0, 4.0);
-    double yDouble = double.NAN;
-    Complex yComplex = new Complex(yDouble);
+    Complex x = Complex(3.0, 4.0);
+    double yDouble = double.nan;
+    Complex yComplex = Complex(yDouble);
     expect(x + yComplex, equals(x + yDouble));
   });
 
   test('ScalarAddInf', () {
-    Complex x = new Complex(1, 1);
-    double yDouble = double.INFINITY;
+    Complex x = Complex(1, 1);
+    double yDouble = double.infinity;
 
-    Complex yComplex = new Complex(yDouble);
+    Complex yComplex = Complex(yDouble);
     expect(x + yComplex, x + yDouble);
 
-    x = new Complex(neginf, 0);
+    x = Complex(neginf, 0);
     expect(x + yComplex, x + yDouble);
   });
 
   test('Conjugate', () {
-    Complex x = new Complex(3.0, 4.0);
+    Complex x = Complex(3.0, 4.0);
     Complex z = x.conjugate();
     expect(3.0, closeTo(z.real, 1.0e-5));
     expect(-4.0, closeTo(z.imaginary, 1.0e-5));
@@ -144,67 +144,67 @@ main() {
   });
 
   test('ConjugateInfinite', () {
-    Complex z = new Complex(0, inf);
+    Complex z = Complex(0, inf);
     expect(neginf, equals(z.conjugate().imaginary));
-    z = new Complex(0, neginf);
+    z = Complex(0, neginf);
     expect(inf, equals(z.conjugate().imaginary));
   });
 
   test('Divide', () {
-    Complex x = new Complex(3.0, 4.0);
-    Complex y = new Complex(5.0, 6.0);
+    Complex x = Complex(3.0, 4.0);
+    Complex y = Complex(5.0, 6.0);
     Complex z = x / y;
     expect(39.0 / 61.0, closeTo(z.real, 1.0e-5));
     expect(2.0 / 61.0, closeTo(z.imaginary, 1.0e-5));
   });
 
   test('DivideReal', () {
-    Complex x = new Complex(2, 3);
-    Complex y = new Complex(2, 0);
-    expect(new Complex(1, 1.5), equals(x / y));
+    Complex x = Complex(2, 3);
+    Complex y = Complex(2, 0);
+    expect(Complex(1, 1.5), equals(x / y));
   });
 
   test('DivideImaginary', () {
-    Complex x = new Complex(2, 3);
-    Complex y = new Complex(0, 2);
-    expect(new Complex(1.5, -1), equals(x / y));
+    Complex x = Complex(2, 3);
+    Complex y = Complex(0, 2);
+    expect(Complex(1.5, -1), equals(x / y));
   });
 
   test('DivideInf', () {
-    Complex x = new Complex(3, 4);
-    Complex w = new Complex(neginf, inf);
+    Complex x = Complex(3, 4);
+    Complex w = Complex(neginf, inf);
     expect(x / w == Complex.ZERO, isTrue);
 
     Complex z = w / x;
     expect(z.real.isNaN, isTrue);
     expect(inf, equals(z.imaginary));
 
-    w = new Complex(inf, inf);
+    w = Complex(inf, inf);
     z = w / x;
     expect(z.imaginary.isNaN, isTrue);
     expect(inf, equals(z.real));
 
-    w = new Complex(1, inf);
+    w = Complex(1, inf);
     z = w / w;
     expect(z.real.isNaN, isTrue);
     expect(z.imaginary.isNaN, isTrue);
   });
 
   test('DivideZero', () {
-    Complex x = new Complex(3.0, 4.0);
+    Complex x = Complex(3.0, 4.0);
     Complex z = x / Complex.ZERO;
     // expect(z, Complex.INF); // See MATH-657
     expect(z, equals(Complex.NAN));
   });
 
   test('DivideZeroZero', () {
-    Complex x = new Complex(0.0, 0.0);
+    Complex x = Complex(0.0, 0.0);
     Complex z = x / Complex.ZERO;
     expect(z, equals(Complex.NAN));
   });
 
   test('DivideNaN', () {
-    Complex x = new Complex(3.0, 4.0);
+    Complex x = Complex(3.0, 4.0);
     Complex z = x / Complex.NAN;
     expect(z.isNaN, isTrue);
   });
@@ -224,40 +224,40 @@ main() {
   });
 
   test('ScalarDivide', () {
-    Complex x = new Complex(3.0, 4.0);
+    Complex x = Complex(3.0, 4.0);
     double yDouble = 2.0;
-    Complex yComplex = new Complex(yDouble);
+    Complex yComplex = Complex(yDouble);
     expect(x / yComplex, equals(x / yDouble));
   });
 
   test('ScalarDivideNaN', () {
-    Complex x = new Complex(3.0, 4.0);
-    double yDouble = double.NAN;
-    Complex yComplex = new Complex(yDouble);
+    Complex x = Complex(3.0, 4.0);
+    double yDouble = double.nan;
+    Complex yComplex = Complex(yDouble);
     expect(x / yComplex, equals(x / yDouble));
   });
 
   test('ScalarDivideInf', () {
-    Complex x = new Complex(1, 1);
-    double yDouble = double.INFINITY;
-    Complex yComplex = new Complex(yDouble);
+    Complex x = Complex(1, 1);
+    double yDouble = double.infinity;
+    Complex yComplex = Complex(yDouble);
     expect(x / yComplex, equals(x / yDouble));
 
-    yDouble = double.NEGATIVE_INFINITY;
-    yComplex = new Complex(yDouble);
+    yDouble = double.negativeInfinity;
+    yComplex = Complex(yDouble);
     expect(x / yComplex, equals(x / yDouble));
 
-    x = new Complex(1, double.NEGATIVE_INFINITY);
+    x = Complex(1, double.negativeInfinity);
     expect(x / yComplex, equals(x / yDouble));
   });
 
   test('ScalarDivideZero', () {
-    Complex x = new Complex(1, 1);
+    Complex x = Complex(1, 1);
     expect(x / Complex.ZERO, equals(x / 0));
   });
 
   test('Reciprocal', () {
-    Complex z = new Complex(5.0, 6.0);
+    Complex z = Complex(5.0, 6.0);
     Complex act = z.reciprocal();
     double expRe = 5.0 / 61.0;
     double expIm = -6.0 / 61.0;
@@ -266,21 +266,21 @@ main() {
   });
 
   test('ReciprocalReal', () {
-    Complex z = new Complex(-2.0, 0.0);
-    //expect(Complex.equals(new Complex(-0.5, 0.0), z.reciprocal()), isTrue);
-    expect(new Complex(-0.5, 0.0), equals(z.reciprocal()));
+    Complex z = Complex(-2.0, 0.0);
+    //expect(Complex.equals(Complex(-0.5, 0.0), z.reciprocal()), isTrue);
+    expect(Complex(-0.5, 0.0), equals(z.reciprocal()));
   });
 
   test('ReciprocalImaginary', () {
-    Complex z = new Complex(0.0, -2.0);
-    expect(new Complex(0.0, 0.5), equals(z.reciprocal()));
+    Complex z = Complex(0.0, -2.0);
+    expect(Complex(0.0, 0.5), equals(z.reciprocal()));
   });
 
   test('ReciprocalInf', () {
-    Complex z = new Complex(neginf, inf);
+    Complex z = Complex(neginf, inf);
     expect(z.reciprocal() == Complex.ZERO, isTrue);
 
-    z = new Complex(1, inf).reciprocal();
+    z = Complex(1, inf).reciprocal();
     expect(z, equals(Complex.ZERO));
   });
 
@@ -293,15 +293,15 @@ main() {
   });
 
   test('Multiply', () {
-    Complex x = new Complex(3.0, 4.0);
-    Complex y = new Complex(5.0, 6.0);
+    Complex x = Complex(3.0, 4.0);
+    Complex y = Complex(5.0, 6.0);
     Complex z = x * y;
     expect(-9.0, closeTo(z.real, 1.0e-5));
     expect(38.0, closeTo(z.imaginary, 1.0e-5));
   });
 
   test('MultiplyNaN', () {
-    Complex x = new Complex(3.0, 4.0);
+    Complex x = Complex(3.0, 4.0);
     Complex z = x * Complex.NAN;
     expect(Complex.NAN, equals(z));
     z = Complex.NAN * 5;
@@ -314,15 +314,15 @@ main() {
   });
 
   test('MultiplyNaNInf', () {
-    Complex z = new Complex(1, 1);
+    Complex z = Complex(1, 1);
     Complex w = z * infOne;
     expect(w.real, equals(inf));
     expect(w.imaginary, equals(inf));
 
     // [MATH-164]
-    expect(new Complex(1, 0) * infInf == Complex.INFINITY, isTrue);
-    expect(new Complex(-1, 0) * infInf == Complex.INFINITY, isTrue);
-    expect(new Complex(1, 0) * negInfZero == Complex.INFINITY, isTrue);
+    expect(Complex(1, 0) * infInf == Complex.INFINITY, isTrue);
+    expect(Complex(-1, 0) * infInf == Complex.INFINITY, isTrue);
+    expect(Complex(1, 0) * negInfZero == Complex.INFINITY, isTrue);
 
     w = oneInf * oneNegInf;
     expect(w.real, equals(inf));
@@ -332,40 +332,40 @@ main() {
     expect(w.real.isNaN, isTrue);
     expect(w.imaginary.isNaN, isTrue);
 
-    z = new Complex(1, neginf);
+    z = Complex(1, neginf);
     expect(Complex.INFINITY, equals(z * z));
   });
 
   test('ScalarMultiply', () {
-    Complex x = new Complex(3.0, 4.0);
+    Complex x = Complex(3.0, 4.0);
     double yDouble = 2.0;
-    Complex yComplex = new Complex(yDouble);
+    Complex yComplex = Complex(yDouble);
     expect(x * yComplex, equals(x * yDouble));
     int zInt = -5;
-    Complex zComplex = new Complex(zInt);
+    Complex zComplex = Complex(zInt);
     expect(x * zComplex, equals(x * zInt));
   });
 
   test('ScalarMultiplyNaN', () {
-    Complex x = new Complex(3.0, 4.0);
-    double yDouble = double.NAN;
-    Complex yComplex = new Complex(yDouble);
+    Complex x = Complex(3.0, 4.0);
+    double yDouble = double.nan;
+    Complex yComplex = Complex(yDouble);
     expect(x * yComplex, equals(x * yDouble));
   });
 
   test('ScalarMultiplyInf', () {
-    Complex x = new Complex(1, 1);
-    double yDouble = double.INFINITY;
-    Complex yComplex = new Complex(yDouble);
+    Complex x = Complex(1, 1);
+    double yDouble = double.infinity;
+    Complex yComplex = Complex(yDouble);
     expect(x * yComplex, equals(x * yDouble));
 
-    yDouble = double.NEGATIVE_INFINITY;
-    yComplex = new Complex(yDouble);
+    yDouble = double.negativeInfinity;
+    yComplex = Complex(yDouble);
     expect(x * yComplex, equals(x * yDouble));
   });
 
   test('Negate', () {
-    Complex x = new Complex(3.0, 4.0);
+    Complex x = Complex(3.0, 4.0);
     Complex z = -x;
     expect(-3.0, closeTo(z.real, 1.0e-5));
     expect(-4.0, closeTo(z.imaginary, 1.0e-5));
@@ -377,81 +377,81 @@ main() {
   });
 
   test('Subtract', () {
-    Complex x = new Complex(3.0, 4.0);
-    Complex y = new Complex(5.0, 6.0);
+    Complex x = Complex(3.0, 4.0);
+    Complex y = Complex(5.0, 6.0);
     Complex z = x - y;
     expect(-2.0, closeTo(z.real, 1.0e-5));
     expect(-2.0, closeTo(z.imaginary, 1.0e-5));
   });
 
   test('SubtractNaN', () {
-    Complex x = new Complex(3.0, 4.0);
+    Complex x = Complex(3.0, 4.0);
     Complex z = x - Complex.NAN;
     expect(Complex.NAN, equals(z));
-    z = new Complex(1, nan);
+    z = Complex(1, nan);
     Complex w = x - z;
     expect(Complex.NAN, equals(w));
   });
 
   test('SubtractInf', () {
-    Complex x = new Complex(1, 1);
-    Complex z = new Complex(neginf, 0);
+    Complex x = Complex(1, 1);
+    Complex z = Complex(neginf, 0);
     Complex w = x - z;
     expect(w.imaginary, equals(1));
     expect(inf, equals(w.real));
 
-    x = new Complex(neginf, 0);
+    x = Complex(neginf, 0);
     expect((x - z).real.isNaN, isTrue);
   });
 
   test('ScalarSubtract', () {
-    Complex x = new Complex(3.0, 4.0);
+    Complex x = Complex(3.0, 4.0);
     double yDouble = 2.0;
-    Complex yComplex = new Complex(yDouble);
+    Complex yComplex = Complex(yDouble);
     expect(x - yComplex, equals(x - yDouble));
   });
 
   test('ScalarSubtractNaN', () {
-    Complex x = new Complex(3.0, 4.0);
-    double yDouble = double.NAN;
-    Complex yComplex = new Complex(yDouble);
+    Complex x = Complex(3.0, 4.0);
+    double yDouble = double.nan;
+    Complex yComplex = Complex(yDouble);
     expect(x - yComplex, equals(x - yDouble));
   });
 
   test('ScalarSubtractInf', () {
-    Complex x = new Complex(1, 1);
-    double yDouble = double.INFINITY;
-    Complex yComplex = new Complex(yDouble);
+    Complex x = Complex(1, 1);
+    double yDouble = double.infinity;
+    Complex yComplex = Complex(yDouble);
     expect(x - yComplex, equals(x - yDouble));
 
-    x = new Complex(neginf, 0);
+    x = Complex(neginf, 0);
     expect(x - yComplex, equals(x - yDouble));
   });
 
   test('EqualsNull', () {
-    Complex x = new Complex(3.0, 4.0);
+    Complex x = Complex(3.0, 4.0);
     expect(x == null, isFalse);
   });
 
   /*test('FloatingPointEqualsPrecondition1', () {
     expect(() {
-      Complex.equals(new Complex(3.0, 4.0), null, 3);
+      Complex.equals(Complex(3.0, 4.0), null, 3);
     }, throwsA(NullPointerException));
   });
 
   test('FloatingPointEqualsPrecondition2', () {
     expect(() {
-      Complex.equals(null, new Complex(3.0, 4.0), 3);
+      Complex.equals(null, Complex(3.0, 4.0), 3);
     }, throwsA(NullPointerException));
   });*/
 
   test('EqualsClass', () {
-    Complex x = new Complex(3.0, 4.0);
+    Complex x = Complex(3.0, 4.0);
     expect(x == TestComplex, isFalse);
   });
 
   test('EqualsSame', () {
-    Complex x = new Complex(3.0, 4.0);
+    Complex x = Complex(3.0, 4.0);
     expect(x == x, isTrue);
   });
 
@@ -459,8 +459,8 @@ main() {
     double re = -3.21;
     double im = 456789e10;
 
-    final Complex x = new Complex(re, im);
-    Complex y = new Complex(re, im);
+    final Complex x = Complex(re, im);
+    Complex y = Complex(re, im);
 
     expect(x == y, isTrue);
     /*expect(Complex.equals(x, y), isTrue);
@@ -470,20 +470,20 @@ main() {
       re = FastMath.nextUp(re);
       im = FastMath.nextUp(im);
     }
-    y = new Complex(re, im);
+    y = Complex(re, im);
     expect(Complex.equals(x, y, maxUlps), isTrue);
 
     re = FastMath.nextUp(re);
     im = FastMath.nextUp(im);
-    y = new Complex(re, im);
+    y = Complex(re, im);
     expect(Complex.equals(x, y, maxUlps), isFalse);*/
   });
 
   /*test('FloatingPointEqualsNaN', () {
-    Complex c = new Complex(double.NAN, 1);
+    Complex c = Complex(double.nan, 1);
     expect(Complex.equals(c, c), isFalse);
 
-    c = new Complex(1, double.NAN);
+    c = Complex(1, double.nan);
     expect(Complex.equals(c, c), isFalse);
   });
 
@@ -491,8 +491,8 @@ main() {
     final double re = 153.0000;
     final double im = 152.9375;
     final double tol1 = 0.0625;
-    final Complex x = new Complex(re, im);
-    final Complex y = new Complex(re + tol1, im + tol1);
+    final Complex x = Complex(re, im);
+    final Complex y = Complex(re + tol1, im + tol1);
     expect(Complex.equals(x, y, tol1), isTrue);
 
     final double tol2 = 0.0624;
@@ -505,32 +505,32 @@ main() {
     final double im = 1e10;
 
     final double f = 1 + tol;
-    final Complex x = new Complex(re, im);
-    final Complex y = new Complex(re * f, im * f);
+    final Complex x = Complex(re, im);
+    final Complex y = Complex(re * f, im * f);
     expect(Complex.equalsWithRelativeTolerance(x, y, tol), isTrue);
   });*/
 
   test('EqualsTrue', () {
-    Complex x = new Complex(3.0, 4.0);
-    Complex y = new Complex(3.0, 4.0);
+    Complex x = Complex(3.0, 4.0);
+    Complex y = Complex(3.0, 4.0);
     expect(x == y, isTrue);
   });
 
   test('EqualsRealDifference', () {
-    Complex x = new Complex(0.0, 0.0);
-    Complex y = new Complex(0.0 + double.MIN_POSITIVE, 0.0);
+    Complex x = Complex(0.0, 0.0);
+    Complex y = Complex(0.0 + double.minPositive, 0.0);
     expect(x == y, isFalse);
   });
 
   test('EqualsImaginaryDifference', () {
-    Complex x = new Complex(0.0, 0.0);
-    Complex y = new Complex(0.0, 0.0 + double.MIN_POSITIVE);
+    Complex x = Complex(0.0, 0.0);
+    Complex y = Complex(0.0, 0.0 + double.minPositive);
     expect(x == y, isFalse);
   });
 
   test('EqualsNaN', () {
-    Complex realNaN = new Complex(double.NAN, 0.0);
-    Complex imaginaryNaN = new Complex(0.0, double.NAN);
+    Complex realNaN = Complex(double.nan, 0.0);
+    Complex imaginaryNaN = Complex(0.0, double.nan);
     Complex complexNaN = Complex.NAN;
     expect(realNaN == imaginaryNaN, isTrue);
     expect(imaginaryNaN == complexNaN, isTrue);
@@ -538,13 +538,13 @@ main() {
   });
 
   test('HashCode', () {
-    Complex x = new Complex(0.0, 0.0);
-    Complex y = new Complex(0.0, 0.0 + double.MIN_POSITIVE);
+    Complex x = Complex(0.0, 0.0);
+    Complex y = Complex(0.0, 0.0 + double.minPositive);
     // TODO expect(x.hashCode == y.hashCode, isFalse);
-    y = new Complex(0.0 + double.MIN_POSITIVE, 0.0);
+    y = Complex(0.0 + double.minPositive, 0.0);
     // TODO expect(x.hashCode == y.hashCode, isFalse);
-    Complex realNaN = new Complex(double.NAN, 0.0);
-    Complex imaginaryNaN = new Complex(0.0, double.NAN);
+    Complex realNaN = Complex(double.nan, 0.0);
+    Complex imaginaryNaN = Complex(0.0, double.nan);
     expect(realNaN.hashCode, equals(imaginaryNaN.hashCode));
     expect(imaginaryNaN.hashCode, equals(Complex.NAN.hashCode));
 
@@ -553,23 +553,22 @@ main() {
     // different hash codes, "equals" must return false.
     final String msg = "'==' not compatible with 'hashCode'";
 
-    x = new Complex(0.0, 0.0);
-    y = new Complex(0.0, -0.0);
+    x = Complex(0.0, 0.0);
+    y = Complex(0.0, -0.0);
     // TODO expect(x.hashCode != y.hashCode, isTrue);
     // TODO expect(x == y, isFalse, reason:msg);
 
-    x = new Complex(0.0, 0.0);
-    y = new Complex(-0.0, 0.0);
+    x = Complex(0.0, 0.0);
+    y = Complex(-0.0, 0.0);
     // TODO expect(x.hashCode != y.hashCode, isTrue);
     // TODO expect(x == y, isFalse, reason:msg);
   });
 
   test('Acos', () {
-    Complex z = new Complex(3, 4);
-    Complex expected = new Complex(0.936812, -2.30551);
+    Complex z = Complex(3, 4);
+    Complex expected = Complex(0.936812, -2.30551);
     expect(expected, closeToZ(z.acos(), 1.0e-5));
-    expect(
-        new Complex(math.acos(0), 0), closeToZ(Complex.ZERO.acos(), 1.0e-12));
+    expect(Complex(math.acos(0), 0), closeToZ(Complex.ZERO.acos(), 1.0e-12));
   });
 
   test('AcosInf', () {
@@ -588,8 +587,8 @@ main() {
   });
 
   test('Asin', () {
-    Complex z = new Complex(3, 4);
-    Complex expected = new Complex(0.633984, 2.30551);
+    Complex z = Complex(3, 4);
+    Complex expected = Complex(0.633984, 2.30551);
     expect(expected, closeToZ(z.asin(), 1.0e-5));
   });
 
@@ -609,8 +608,8 @@ main() {
   });
 
   test('Atan', () {
-    Complex z = new Complex(3, 4);
-    Complex expected = new Complex(1.44831, 0.158997);
+    Complex z = Complex(3, 4);
+    Complex expected = Complex(1.44831, 0.158997);
     expect(expected, closeToZ(z.atan(), 1.0e-5));
   });
 
@@ -634,8 +633,8 @@ main() {
   });
 
   test('Cos', () {
-    Complex z = new Complex(3, 4);
-    Complex expected = new Complex(-27.03495, -3.851153);
+    Complex z = Complex(3, 4);
+    Complex expected = Complex(-27.03495, -3.851153);
     expect(expected, closeToZ(z.cos(), 1.0e-5));
   });
 
@@ -655,8 +654,8 @@ main() {
   });
 
   test('Cosh', () {
-    Complex z = new Complex(3, 4);
-    Complex expected = new Complex(-6.58066, -7.58155);
+    Complex z = Complex(3, 4);
+    Complex expected = Complex(-6.58066, -7.58155);
     expect(expected, closeToZ(z.cosh(), 1.0e-5));
   });
 
@@ -676,11 +675,11 @@ main() {
   });
 
   test('Exp', () {
-    Complex z = new Complex(3, 4);
-    Complex expected = new Complex(-13.12878, -15.20078);
+    Complex z = Complex(3, 4);
+    Complex expected = Complex(-13.12878, -15.20078);
     expect(expected, closeToZ(z.exp(), 1.0e-5));
     expect(Complex.ONE, closeToZ(Complex.ZERO.exp(), 10e-12));
-    Complex iPi = Complex.I * new Complex(pi, 0);
+    Complex iPi = Complex.I * Complex(pi, 0);
     expect(-Complex.ONE, closeToZ(iPi.exp(), 10e-12));
   });
 
@@ -700,8 +699,8 @@ main() {
   });
 
   test('Log', () {
-    Complex z = new Complex(3, 4);
-    Complex expected = new Complex(1.60944, 0.927295);
+    Complex z = Complex(3, 4);
+    Complex expected = Complex(1.60944, 0.927295);
     expect(expected, closeToZ(z.log(), 1.0e-5));
   });
 
@@ -710,14 +709,14 @@ main() {
   });
 
   test('LogInf', () {
-    expect(new Complex(inf, pi / 2), closeToZ(oneInf.log(), 10e-12));
-    expect(new Complex(inf, -pi / 2), closeToZ(oneNegInf.log(), 10e-12));
+    expect(Complex(inf, pi / 2), closeToZ(oneInf.log(), 10e-12));
+    expect(Complex(inf, -pi / 2), closeToZ(oneNegInf.log(), 10e-12));
     expect(infZero, closeToZ(infOne.log(), 10e-12));
-    expect(new Complex(inf, pi), closeToZ(negInfOne.log(), 10e-12));
-    expect(new Complex(inf, pi / 4), closeToZ(infInf.log(), 10e-12));
-    expect(new Complex(inf, -pi / 4), closeToZ(infNegInf.log(), 10e-12));
-    expect(new Complex(inf, 3 * pi / 4), closeToZ(negInfInf.log(), 10e-12));
-    expect(new Complex(inf, -3 * pi / 4), closeToZ(negInfNegInf.log(), 10e-12));
+    expect(Complex(inf, pi), closeToZ(negInfOne.log(), 10e-12));
+    expect(Complex(inf, pi / 4), closeToZ(infInf.log(), 10e-12));
+    expect(Complex(inf, -pi / 4), closeToZ(infNegInf.log(), 10e-12));
+    expect(Complex(inf, 3 * pi / 4), closeToZ(negInfInf.log(), 10e-12));
+    expect(Complex(inf, -3 * pi / 4), closeToZ(negInfNegInf.log(), 10e-12));
   });
 
   test('LogZero', () {
@@ -725,19 +724,19 @@ main() {
   });
 
   test('Pow', () {
-    Complex x = new Complex(3, 4);
-    Complex y = new Complex(5, 6);
-    Complex expected = new Complex(-1.860893, 11.83677);
+    Complex x = Complex(3, 4);
+    Complex y = Complex(5, 6);
+    Complex expected = Complex(-1.860893, 11.83677);
     expect(expected, closeToZ(x.power(y), 1.0e-5));
   });
 
   test('PowNaNBase', () {
-    Complex x = new Complex(3, 4);
+    Complex x = Complex(3, 4);
     expect(Complex.NAN.power(x).isNaN, isTrue);
   });
 
   test('PowNaNExponent', () {
-    Complex x = new Complex(3, 4);
+    Complex x = Complex(3, 4);
     expect(x.power(Complex.NAN).isNaN, isTrue);
   });
 
@@ -772,46 +771,45 @@ main() {
     expect(Complex.NAN, equals(Complex.ZERO.power(Complex.I)));
     expect(Complex.ONE, closeToZ(Complex.ONE.power(Complex.ZERO), 10e-12));
     expect(Complex.ONE, closeToZ(Complex.I.power(Complex.ZERO), 10e-12));
-    expect(
-        Complex.ONE, closeToZ(new Complex(-1, 3).power(Complex.ZERO), 10e-12));
+    expect(Complex.ONE, closeToZ(Complex(-1, 3).power(Complex.ZERO), 10e-12));
   });
 
   test('ScalarPow', () {
-    Complex x = new Complex(3, 4);
+    Complex x = Complex(3, 4);
     double yDouble = 5.0;
-    Complex yComplex = new Complex(yDouble);
+    Complex yComplex = Complex(yDouble);
     expect(x.power(yComplex), equals(x.pow(yDouble)));
   });
 
   test('ScalarPowNaNBase', () {
     Complex x = Complex.NAN;
     double yDouble = 5.0;
-    Complex yComplex = new Complex(yDouble);
+    Complex yComplex = Complex(yDouble);
     expect(x.power(yComplex), equals(x.pow(yDouble)));
   });
 
   test('ScalarPowNaNExponent', () {
-    Complex x = new Complex(3, 4);
-    double yDouble = double.NAN;
-    Complex yComplex = new Complex(yDouble);
+    Complex x = Complex(3, 4);
+    double yDouble = double.nan;
+    Complex yComplex = Complex(yDouble);
     expect(x.power(yComplex), x.pow(yDouble));
   });
 
   test('ScalarPowInf', () {
-    expect(Complex.NAN, equals(Complex.ONE.pow(double.INFINITY)));
-    expect(Complex.NAN, equals(Complex.ONE.pow(double.NEGATIVE_INFINITY)));
+    expect(Complex.NAN, equals(Complex.ONE.pow(double.infinity)));
+    expect(Complex.NAN, equals(Complex.ONE.pow(double.negativeInfinity)));
     expect(Complex.NAN, equals(infOne.pow(1.0)));
     expect(Complex.NAN, equals(negInfOne.pow(1.0)));
     expect(Complex.NAN, equals(infInf.pow(1.0)));
     expect(Complex.NAN, equals(infNegInf.pow(1.0)));
     expect(Complex.NAN, equals(negInfInf.pow(10)));
     expect(Complex.NAN, equals(negInfNegInf.pow(1.0)));
-    expect(Complex.NAN, equals(negInfNegInf.pow(double.INFINITY)));
-    expect(Complex.NAN, equals(negInfNegInf.pow(double.INFINITY)));
-    expect(Complex.NAN, equals(infInf.pow(double.INFINITY)));
-    expect(Complex.NAN, equals(infInf.pow(double.NEGATIVE_INFINITY)));
-    expect(Complex.NAN, equals(infNegInf.pow(double.NEGATIVE_INFINITY)));
-    expect(Complex.NAN, equals(infNegInf.pow(double.INFINITY)));
+    expect(Complex.NAN, equals(negInfNegInf.pow(double.infinity)));
+    expect(Complex.NAN, equals(negInfNegInf.pow(double.infinity)));
+    expect(Complex.NAN, equals(infInf.pow(double.infinity)));
+    expect(Complex.NAN, equals(infInf.pow(double.negativeInfinity)));
+    expect(Complex.NAN, equals(infNegInf.pow(double.negativeInfinity)));
+    expect(Complex.NAN, equals(infNegInf.pow(double.infinity)));
   });
 
   test('ScalarPowZero', () {
@@ -819,7 +817,7 @@ main() {
     expect(Complex.NAN, equals(Complex.ZERO.pow(0.0)));
     expect(Complex.ONE, closeToZ(Complex.ONE.pow(0.0), 10e-12));
     expect(Complex.ONE, closeToZ(Complex.I.pow(0.0), 10e-12));
-    expect(Complex.ONE, closeToZ(new Complex(-1, 3).pow(0.0), 10e-12));
+    expect(Complex.ONE, closeToZ(Complex(-1, 3).pow(0.0), 10e-12));
   });
 
   test('powNull', () {
@@ -827,8 +825,8 @@ main() {
   });
 
   test('Sin', () {
-    Complex z = new Complex(3, 4);
-    Complex expected = new Complex(3.853738, -27.01681);
+    Complex z = Complex(3, 4);
+    Complex expected = Complex(3.853738, -27.01681);
     expect(expected, closeToZ(z.sin(), 1.0e-5));
   });
 
@@ -848,8 +846,8 @@ main() {
   });
 
   test('Sinh', () {
-    Complex z = new Complex(3, 4);
-    Complex expected = new Complex(-6.54812, -7.61923);
+    Complex z = Complex(3, 4);
+    Complex expected = Complex(-6.54812, -7.61923);
     expect(expected, closeToZ(z.sinh(), 1.0e-5));
   });
 
@@ -869,31 +867,31 @@ main() {
   });
 
   test('SqrtRealPositive', () {
-    Complex z = new Complex(3, 4);
-    Complex expected = new Complex(2, 1);
+    Complex z = Complex(3, 4);
+    Complex expected = Complex(2, 1);
     expect(expected, closeToZ(z.sqrt(), 1.0e-5));
   });
 
   test('SqrtRealZero', () {
-    Complex z = new Complex(0.0, 4);
-    Complex expected = new Complex(1.41421, 1.41421);
+    Complex z = Complex(0.0, 4);
+    Complex expected = Complex(1.41421, 1.41421);
     expect(expected, closeToZ(z.sqrt(), 1.0e-5));
   });
 
   test('SqrtRealNegative', () {
-    Complex z = new Complex(-3.0, 4);
-    Complex expected = new Complex(1, 2);
+    Complex z = Complex(-3.0, 4);
+    Complex expected = Complex(1, 2);
     expect(expected, closeToZ(z.sqrt(), 1.0e-5));
   });
 
   test('SqrtImaginaryZero', () {
-    Complex z = new Complex(-3.0, 0.0);
-    Complex expected = new Complex(0.0, 1.73205);
+    Complex z = Complex(-3.0, 0.0);
+    Complex expected = Complex(0.0, 1.73205);
   });
 
   test('SqrtImaginaryNegative', () {
-    Complex z = new Complex(-3.0, -4.0);
-    Complex expected = new Complex(1.0, -2.0);
+    Complex z = Complex(-3.0, -4.0);
+    Complex expected = Complex(1.0, -2.0);
     expect(expected, closeToZ(z.sqrt(), 1.0e-5));
   });
 
@@ -904,8 +902,8 @@ main() {
       double theta = 0.0;
       for (int j = 0; j < 11; j++) {
         theta += pi / 12;
-        Complex z = new Complex.polar(r, theta);
-        Complex sqrtz = new Complex.polar(math.sqrt(r), theta / 2);
+        Complex z = Complex.polar(r, theta);
+        Complex sqrtz = Complex.polar(math.sqrt(r), theta / 2);
         expect(sqrtz, closeToZ(z.sqrt(), 10e-12));
       }
     }
@@ -927,8 +925,8 @@ main() {
   });
 
   test('Sqrt1z', () {
-    Complex z = new Complex(3, 4);
-    Complex expected = new Complex(4.08033, -2.94094);
+    Complex z = Complex(3, 4);
+    Complex expected = Complex(4.08033, -2.94094);
     expect(expected, closeToZ(z.sqrt1z(), 1.0e-5));
   });
 
@@ -937,15 +935,15 @@ main() {
   });
 
   test('Tan', () {
-    Complex z = new Complex(3, 4);
-    Complex expected = new Complex(-0.000187346, 0.999356);
+    Complex z = Complex(3, 4);
+    Complex expected = Complex(-0.000187346, 0.999356);
     expect(expected, closeToZ(z.tan(), 1.0e-5));
     /* Check that no overflow occurs (MATH-722) */
-    Complex actual = new Complex(3.0, 1E10).tan();
-    expected = new Complex(0, 1);
+    Complex actual = Complex(3.0, 1E10).tan();
+    expected = Complex(0, 1);
     expect(expected, closeToZ(actual, 1.0e-5));
-    actual = new Complex(3.0, -1E10).tan();
-    expected = new Complex(0, -1);
+    actual = Complex(3.0, -1E10).tan();
+    expected = Complex(0, -1);
     expect(expected, closeToZ(actual, 1.0e-5));
   });
 
@@ -954,8 +952,8 @@ main() {
   });
 
   test('TanInf', () {
-    expect(new Complex(0.0, 1.0), equals(oneInf.tan()));
-    expect(new Complex(0.0, -1.0), equals(oneNegInf.tan()));
+    expect(Complex(0.0, 1.0), equals(oneInf.tan()));
+    expect(Complex(0.0, -1.0), equals(oneNegInf.tan()));
     expect(Complex.NAN, equals(infOne.tan()));
     expect(Complex.NAN, equals(negInfOne.tan()));
     expect(Complex.NAN, equals(infInf.tan()));
@@ -965,20 +963,20 @@ main() {
   });
 
   test('TanCritical', () {
-    expect(infNaN, equals(new Complex(pi / 2, 0).tan()));
-    expect(negInfNaN, equals(new Complex(-pi / 2, 0).tan()));
+    expect(infNaN, equals(Complex(pi / 2, 0).tan()));
+    expect(negInfNaN, equals(Complex(-pi / 2, 0).tan()));
   });
 
   test('Tanh', () {
-    Complex z = new Complex(3, 4);
-    Complex expected = new Complex(1.00071, 0.00490826);
+    Complex z = Complex(3, 4);
+    Complex expected = Complex(1.00071, 0.00490826);
     expect(expected, closeToZ(z.tanh(), 1.0e-5));
     /* Check that no overflow occurs (MATH-722) */
-    Complex actual = new Complex(1E10, 3.0).tanh();
-    expected = new Complex(1, 0);
+    Complex actual = Complex(1E10, 3.0).tanh();
+    expected = Complex(1, 0);
     expect(expected, closeToZ(actual, 1.0e-5));
-    actual = new Complex(-1E10, 3.0).tanh();
-    expected = new Complex(-1, 0);
+    actual = Complex(-1E10, 3.0).tanh();
+    expected = Complex(-1, 0);
     expect(expected, closeToZ(actual, 1.0e-5));
   });
 
@@ -989,8 +987,8 @@ main() {
   test('TanhInf', () {
     expect(Complex.NAN, equals(oneInf.tanh()));
     expect(Complex.NAN, equals(oneNegInf.tanh()));
-    expect(new Complex(1.0, 0.0), equals(infOne.tanh()));
-    expect(new Complex(-1.0, 0.0), equals(negInfOne.tanh()));
+    expect(Complex(1.0, 0.0), equals(infOne.tanh()));
+    expect(Complex(-1.0, 0.0), equals(negInfOne.tanh()));
     expect(Complex.NAN, equals(infInf.tanh()));
     expect(Complex.NAN, equals(infNegInf.tanh()));
     expect(Complex.NAN, equals(negInfInf.tanh()));
@@ -998,15 +996,14 @@ main() {
   });
 
   test('TanhCritical', () {
-    expect(nanInf, equals(new Complex(0, pi / 2).tanh()));
+    expect(nanInf, equals(Complex(0, pi / 2).tanh()));
   });
 
   /// test issue MATH-221
 
   test('Math221', () {
-    //expect(Complex.equals(new Complex(0, -1), new Complex(0, 1) * new Complex(-1, 0)), isTrue);
-    expect(
-        new Complex(0, -1) == new Complex(0, 1) * new Complex(-1, 0), isTrue);
+    //expect(Complex.equals(Complex(0, -1), Complex(0, 1) * Complex(-1, 0)), isTrue);
+    expect(Complex(0, -1) == Complex(0, 1) * Complex(-1, 0), isTrue);
   });
 
   /// Test: computing <b>third roots</b> of z.
@@ -1018,9 +1015,9 @@ main() {
 
   test('NthRoot_normal_thirdRoot', () {
     // The complex number we want to compute all third-roots for.
-    Complex z = new Complex(-2, 2);
+    Complex z = Complex(-2, 2);
     // The List holding all third roots
-    List<Complex> thirdRootsOfZ = z.nthRoot(3); //.toArray(new Complex[0]);
+    List<Complex> thirdRootsOfZ = z.nthRoot(3); //.toArray(Complex[0]);
     // Returned Collection must not be empty!
     expect(3, equals(thirdRootsOfZ.length));
     // test z_0
@@ -1044,9 +1041,9 @@ main() {
 
   test('NthRoot_normal_fourthRoot', () {
     // The complex number we want to compute all third-roots for.
-    Complex z = new Complex(5, -2);
+    Complex z = Complex(5, -2);
     // The List holding all fourth roots
-    List<Complex> fourthRootsOfZ = z.nthRoot(4); //.toArray(new Complex[0]);
+    List<Complex> fourthRootsOfZ = z.nthRoot(4); //.toArray(Complex[0]);
     // Returned Collection must not be empty!
     expect(4, equals(fourthRootsOfZ.length));
     // test z_0
@@ -1073,9 +1070,9 @@ main() {
   test('NthRoot_cornercase_thirdRoot_imaginaryPartEmpty', () {
     // The number 8 has three third roots. One we all already know is the number 2.
     // But there are two more complex roots.
-    Complex z = new Complex(8, 0);
+    Complex z = Complex(8, 0);
     // The List holding all third roots
-    List<Complex> thirdRootsOfZ = z.nthRoot(3); //.toArray(new Complex[0]);
+    List<Complex> thirdRootsOfZ = z.nthRoot(3); //.toArray(Complex[0]);
     // Returned Collection must not be empty!
     expect(3, equals(thirdRootsOfZ.length));
     // test z_0
@@ -1098,9 +1095,9 @@ main() {
 
   test('NthRoot_cornercase_thirdRoot_realPartZero', () {
     // complex number with only imaginary part
-    Complex z = new Complex(0, 2);
+    Complex z = Complex(0, 2);
     // The List holding all third roots
-    List<Complex> thirdRootsOfZ = z.nthRoot(3); //.toArray(new Complex[0]);
+    List<Complex> thirdRootsOfZ = z.nthRoot(3); //.toArray(Complex[0]);
     // Returned Collection must not be empty!
     expect(3, equals(thirdRootsOfZ.length));
     // test z_0
@@ -1145,42 +1142,42 @@ main() {
   /// Test standard values
 
   test('argument', () {
-    Complex z = new Complex(1, 0);
+    Complex z = Complex(1, 0);
     expect(0.0, closeTo(z.argument(), 1.0e-12));
 
-    z = new Complex(1, 1);
-    expect(math.PI / 4, closeTo(z.argument(), 1.0e-12));
+    z = Complex(1, 1);
+    expect(math.pi / 4, closeTo(z.argument(), 1.0e-12));
 
-    z = new Complex(0, 1);
-    expect(math.PI / 2, closeTo(z.argument(), 1.0e-12));
+    z = Complex(0, 1);
+    expect(math.pi / 2, closeTo(z.argument(), 1.0e-12));
 
-    z = new Complex(-1, 1);
-    expect(3 * math.PI / 4, closeTo(z.argument(), 1.0e-12));
+    z = Complex(-1, 1);
+    expect(3 * math.pi / 4, closeTo(z.argument(), 1.0e-12));
 
-    z = new Complex(-1, 0);
-    expect(math.PI, closeTo(z.argument(), 1.0e-12));
+    z = Complex(-1, 0);
+    expect(math.pi, closeTo(z.argument(), 1.0e-12));
 
-    z = new Complex(-1, -1);
-    expect(-3 * math.PI / 4, closeTo(z.argument(), 1.0e-12));
+    z = Complex(-1, -1);
+    expect(-3 * math.pi / 4, closeTo(z.argument(), 1.0e-12));
 
-    z = new Complex(0, -1);
-    expect(-math.PI / 2, closeTo(z.argument(), 1.0e-12));
+    z = Complex(0, -1);
+    expect(-math.pi / 2, closeTo(z.argument(), 1.0e-12));
 
-    z = new Complex(1, -1);
-    expect(-math.PI / 4, closeTo(z.argument(), 1.0e-12));
+    z = Complex(1, -1);
+    expect(-math.pi / 4, closeTo(z.argument(), 1.0e-12));
   });
 
   /// Verify atan2-style handling of infinite parts
 
   test('argumentInf', () {
-    expect(math.PI / 4, closeTo(infInf.argument(), 1.0e-12));
-    expect(math.PI / 2, closeTo(oneInf.argument(), 1.0e-12));
+    expect(math.pi / 4, closeTo(infInf.argument(), 1.0e-12));
+    expect(math.pi / 2, closeTo(oneInf.argument(), 1.0e-12));
     expect(0.0, closeTo(infOne.argument(), 1.0e-12));
-    expect(math.PI / 2, closeTo(zeroInf.argument(), 1.0e-12));
+    expect(math.pi / 2, closeTo(zeroInf.argument(), 1.0e-12));
     expect(0.0, closeTo(infZero.argument(), 1.0e-12));
-    expect(math.PI, closeTo(negInfOne.argument(), 1.0e-12));
-    expect(-3.0 * math.PI / 4, closeTo(negInfNegInf.argument(), 1.0e-12));
-    expect(-math.PI / 2, closeTo(oneNegInf.argument(), 1.0e-12));
+    expect(math.pi, closeTo(negInfOne.argument(), 1.0e-12));
+    expect(-3.0 * math.pi / 4, closeTo(negInfNegInf.argument(), 1.0e-12));
+    expect(-math.pi / 2, closeTo(oneNegInf.argument(), 1.0e-12));
   });
 
   /// Verify that either part NaN results in NaN
@@ -1192,7 +1189,7 @@ main() {
   });
 
   /*test('Serial', () {
-    Complex z = new Complex(3.0, 4.0);
+    Complex z = Complex(3.0, 4.0);
     expect(z, equals(TestUtils.serializeAndRecover(z)));
     Complex ncmplx = TestUtils.serializeAndRecover(oneNaN) as Complex;
     expect(nanZero, equals(ncmplx));
@@ -1200,12 +1197,12 @@ main() {
     Complex infcmplx = TestUtils.serializeAndRecover(infInf) as Complex;
     expect(infInf, equals(infcmplx));
     expect(infcmplx.isInfinite, isTrue);
-    TestComplex tz = new TestComplex(3.0, 4.0);
+    TestComplex tz = TestComplex(3.0, 4.0);
     expect(tz, TestUtils.serializeAndRecover(tz));
-    TestComplex ntcmplx = TestUtils.serializeAndRecover(new TestComplex.from(oneNaN)) as TestComplex;
+    TestComplex ntcmplx = TestUtils.serializeAndRecover(TestComplex.from(oneNaN)) as TestComplex;
     expect(nanZero, equals(ntcmplx));
     expect(ntcmplx.isNaN, isTrue);
-    TestComplex inftcmplx = TestUtils.serializeAndRecover(new TestComplex.from(infInf)) as TestComplex;
+    TestComplex inftcmplx = TestUtils.serializeAndRecover(TestComplex.from(infInf)) as TestComplex;
     expect(infInf, inftcmplx);
     expect(inftcmplx.isInfinite, isTrue);
   });*/
@@ -1216,7 +1213,7 @@ class TestComplex extends Complex {
   TestComplex(double real, double imaginary) : super(real, imaginary);
 
   factory TestComplex.from(Complex other) {
-    new TestComplex(other.real, other.imaginary);
+    return TestComplex(other.real, other.imaginary);
   }
 
   @override
@@ -1228,7 +1225,7 @@ class TestComplex extends Complex {
 /// Returns a matcher which matches if the match argument is within [delta]
 /// of some [value]; i.e. if the match argument is greater than
 /// than or equal [value]-[delta] and less than or equal to [value]+[delta].
-Matcher closeToZ(Complex value, num delta) => new _IsCloseToZ(value, delta);
+Matcher closeToZ(Complex value, num delta) => _IsCloseToZ(value, delta);
 
 class _IsCloseToZ extends Matcher {
   final Complex _value;

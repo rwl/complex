@@ -39,10 +39,10 @@ class Complex {
   static const I = const Complex._(0.0, 1.0);
 
   /// A complex number representing "NaN + NaNi"
-  static const NAN = const Complex._(double.NAN, double.NAN);
+  static const NAN = const Complex._(double.nan, double.nan);
 
   /// A complex number representing "+INF + INFi"
-  static const INFINITY = const Complex._(double.INFINITY, double.INFINITY);
+  static const INFINITY = const Complex._(double.infinity, double.infinity);
 
   /// A complex number representing "1.0 + 0.0i"
   static const ONE = const Complex._(1.0);
@@ -91,7 +91,7 @@ class Complex {
     r = r.toDouble();
     theta = theta.toDouble();
     if (!radians) {
-      theta = theta * math.PI / 180.0;
+      theta = theta * math.pi / 180.0;
     }
     if (r < 0) {
       throw new ArgumentError('Negative complex modulus: $r');
@@ -116,10 +116,10 @@ class Complex {
   /// but at least one part is infinite.
   double abs() {
     if (isNaN) {
-      return double.NAN;
+      return double.nan;
     }
     if (isInfinite) {
-      return double.INFINITY;
+      return double.infinity;
     }
     if (_real.abs() < _imaginary.abs()) {
       if (_imaginary == 0.0) {
@@ -166,7 +166,7 @@ class Complex {
   /// The conjugate of `a + bi` is `a - bi`.
   ///
   /// [NaN] is returned if either the real or imaginary
-  /// part of this Complex number equals `double.NAN`.
+  /// part of this Complex number equals `double.nan`.
   ///
   /// If the imaginary part is infinite, and the real part is not
   /// `NaN`, the returned value has infinite imaginary part
@@ -276,12 +276,12 @@ class Complex {
   /// Test for equality with another object.
   ///
   /// If both the real and imaginary parts of two complex numbers
-  /// are exactly the same, and neither is `double.NaN`, the two
+  /// are exactly the same, and neither is `double.nan`, the two
   /// Complex objects are considered to be equal.
   ///
   /// * All `NaN` values are considered to be equal,
   ///   i.e, if either (or both) real and imaginary parts of the complex
-  ///   number are equal to `double.NaN`, the complex number is equal
+  ///   number are equal to `double.nan`, the complex number is equal
   ///   to `NaN`.
   /// * Instances constructed with different representations of zero (i.e.
   ///   either "0" or "-0") are *not* considered to be equal.
@@ -347,7 +347,7 @@ class Complex {
 
   /// Negate operator. Returns a `Complex` whose value is `-this`.
   /// Returns `NAN` if either real or imaginary
-  /// part of this complex number equals `double.NAN`.
+  /// part of this complex number equals `double.nan`.
   Complex operator -() {
     if (isNaN) {
       return NAN;
@@ -830,7 +830,7 @@ class Complex {
 
     // Compute nth roots of complex number with k = 0, 1, ... n-1
     final double nthPhi = argument() / n;
-    final double slice = 2 * math.PI / n;
+    final double slice = 2 * math.pi / n;
     double innerPart = nthPhi;
     for (int k = 0; k < n; k++) {
       // inner part
@@ -845,7 +845,7 @@ class Complex {
 
   /// Get a hashCode for the complex number.
   ///
-  /// Any [double.NAN] value in real or imaginary part produces
+  /// Any [double.nan] value in real or imaginary part produces
   /// the same hash code `7`.
   int get hashCode {
     if (isNaN) {

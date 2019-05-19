@@ -22,10 +22,10 @@ main() {
     expect(1.0, closeTo(fastmath.copySign(1.0, 2.0), delta));
     expect(1.0, closeTo(fastmath.copySign(1.0, 0.0), delta));
     // TODO expect(-1.0, closeTo(fastmath.copySign(1.0, -0.0), delta));
-    expect(1.0, closeTo(fastmath.copySign(1.0, double.INFINITY), delta));
+    expect(1.0, closeTo(fastmath.copySign(1.0, double.infinity), delta));
     expect(
-        -1.0, closeTo(fastmath.copySign(1.0, double.NEGATIVE_INFINITY), delta));
-    expect(1.0, closeTo(fastmath.copySign(1.0, double.NAN), delta));
+        -1.0, closeTo(fastmath.copySign(1.0, double.negativeInfinity), delta));
+    expect(1.0, closeTo(fastmath.copySign(1.0, double.nan), delta));
     expect(-1.0, closeTo(fastmath.copySign(1.0, -2.0), delta));
   });
 }

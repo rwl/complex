@@ -5,7 +5,7 @@ import 'dart:math' as math;
 part 'literals.dart';
 part 'tables.dart';
 
-final double LOG_MAX_VALUE = math.log(double.MAX_FINITE);
+final double LOG_MAX_VALUE = math.log(double.maxFinite);
 
 /// `0x40000000` - used to split a double into two parts, both with the low
 /// order bits cleared. Equivalent to `2^30`.
@@ -77,7 +77,7 @@ double cosh(double x) {
     }
   }
 
-  final List<double> hiPrec = new List<double>(2);
+  final hiPrec = List<double>(2);
   if (x < 0.0) {
     x = -x;
   }
@@ -168,22 +168,22 @@ double exp(double x, [double extra = 0.0, List<double> hiPrec = null]) {
 
     intVal = -intVal;
   } else {
-    if (x == double.INFINITY) {
+    if (x == double.infinity) {
       if (hiPrec != null) {
-        hiPrec[0] = double.INFINITY;
+        hiPrec[0] = double.infinity;
         hiPrec[1] = 0.0;
       }
-      return double.INFINITY;
+      return double.infinity;
     }
 
     intVal = x.toInt();
 
     if (intVal > 709) {
       if (hiPrec != null) {
-        hiPrec[0] = double.INFINITY;
+        hiPrec[0] = double.infinity;
         hiPrec[1] = 0.0;
       }
-      return double.INFINITY;
+      return double.infinity;
     }
 
     intPartA = EXP_INT_TABLE_A[EXP_INT_TABLE_MAX_INDEX + intVal];
@@ -286,7 +286,7 @@ double sinh(double x) {
   double result;
 
   if (x > 0.25) {
-    final hiPrec = new List<double>(2);
+    final hiPrec = List<double>(2);
     exp(x, 0.0, hiPrec);
 
     double ya = hiPrec[0] + hiPrec[1];
@@ -303,12 +303,9 @@ double sinh(double x) {
     double recipb = recip - recipa;
 
     // Correct for rounding in division
-    recipb += (1.0 -
-            yaa * recipa -
-            yaa * recipb -
-            yab * recipa -
-            yab * recipb) *
-        recip;
+    recipb +=
+        (1.0 - yaa * recipa - yaa * recipb - yab * recipa - yab * recipb) *
+            recip;
     // Account for yb
     recipb += -yb * recip * recip;
 
@@ -326,7 +323,7 @@ double sinh(double x) {
     result = ya + yb;
     result *= 0.5;
   } else {
-    final hiPrec = new List<double>(2);
+    final hiPrec = List<double>(2);
     expm1(x, hiPrec);
 
     double ya = hiPrec[0] + hiPrec[1];
@@ -379,7 +376,7 @@ double sinh(double x) {
 double atan(double xa, [double xb = 0.0, bool leftPlane = false]) {
   if (xa == 0.0) {
     // Matches +/- 0.0; return correct sign
-    return leftPlane ? copySign(math.PI, xa) : xa;
+    return leftPlane ? copySign(math.pi, xa) : xa;
   }
 
   bool negate;
@@ -394,7 +391,7 @@ double atan(double xa, [double xb = 0.0, bool leftPlane = false]) {
 
   if (xa > 1.633123935319537E16) {
     // Very large input
-    return (negate != leftPlane) ? (-math.PI * F_1_2) : (math.PI * F_1_2);
+    return (negate != leftPlane) ? (-math.pi * F_1_2) : (math.pi * F_1_2);
   }
 
   /* Estimate the closest tabulated arctan value, compute eps = xa-tangentTable */
@@ -404,7 +401,8 @@ double atan(double xa, [double xb = 0.0, bool leftPlane = false]) {
   } else {
     final double oneOverXa = 1 / xa;
     idx = (-((-1.7168146928204136 * oneOverXa * oneOverXa + 8.0) * oneOverXa) +
-        13.07).toInt();
+            13.07)
+        .toInt();
   }
 
   final double ttA = TANGENT_TABLE_A[idx];
@@ -533,7 +531,7 @@ double expm1(double x, List<double> hiPrecOut) {
   if (x <= -1.0 || x >= 1.0) {
     // If not between +/- 1.0
     //return exp(x) - 1.0;
-    final hiPrec = new List<double>(2);
+    final hiPrec = List<double>(2);
     exp(x, 0.0, hiPrec);
     if (x > 0.0) {
       return -1.0 + hiPrec[0] + hiPrec[1];
@@ -672,7 +670,7 @@ double expm1(double x, List<double> hiPrecOut) {
 /// Returns phase angle of point (x,y) between `-PI` and `PI`.
 double atan2(double y, double x) {
   if (x != x || y != y) {
-    return double.NAN;
+    return double.nan;
   }
 
   if (y == 0) {
@@ -685,15 +683,15 @@ double atan2(double y, double x) {
       if (x > 0) {
         return y; // return +/- 0.0
       } else {
-        return copySign(math.PI, y);
+        return copySign(math.pi, y);
       }
     }
 
     if (x < 0 || invx < 0) {
       if (y < 0 || invy < 0) {
-        return -math.PI;
+        return -math.pi;
       } else {
-        return math.PI;
+        return math.pi;
       }
     } else {
       return result;
@@ -702,31 +700,31 @@ double atan2(double y, double x) {
 
   // y cannot now be zero
 
-  if (y == double.INFINITY) {
-    if (x == double.INFINITY) {
-      return math.PI * F_1_4;
+  if (y == double.infinity) {
+    if (x == double.infinity) {
+      return math.pi * F_1_4;
     }
 
-    if (x == double.NEGATIVE_INFINITY) {
-      return math.PI * F_3_4;
+    if (x == double.negativeInfinity) {
+      return math.pi * F_3_4;
     }
 
-    return math.PI * F_1_2;
+    return math.pi * F_1_2;
   }
 
-  if (y == double.NEGATIVE_INFINITY) {
-    if (x == double.INFINITY) {
-      return -math.PI * F_1_4;
+  if (y == double.negativeInfinity) {
+    if (x == double.infinity) {
+      return -math.pi * F_1_4;
     }
 
-    if (x == double.NEGATIVE_INFINITY) {
-      return -math.PI * F_3_4;
+    if (x == double.negativeInfinity) {
+      return -math.pi * F_3_4;
     }
 
-    return -math.PI * F_1_2;
+    return -math.pi * F_1_2;
   }
 
-  if (x == double.INFINITY) {
+  if (x == double.infinity) {
     if (y > 0 || 1 / y > 0) {
       return 0.0;
     }
@@ -736,13 +734,13 @@ double atan2(double y, double x) {
     }
   }
 
-  if (x == double.NEGATIVE_INFINITY) {
+  if (x == double.negativeInfinity) {
     if (y > 0.0 || 1 / y > 0.0) {
-      return math.PI;
+      return math.pi;
     }
 
     if (y < 0 || 1 / y < 0) {
-      return -math.PI;
+      return -math.pi;
     }
   }
 
@@ -750,11 +748,11 @@ double atan2(double y, double x) {
 
   if (x == 0) {
     if (y > 0 || 1 / y > 0) {
-      return math.PI * F_1_2;
+      return math.pi * F_1_2;
     }
 
     if (y < 0 || 1 / y < 0) {
-      return -math.PI * F_1_2;
+      return -math.pi * F_1_2;
     }
   }
 
