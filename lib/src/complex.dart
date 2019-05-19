@@ -122,14 +122,14 @@ class Complex {
       return double.infinity;
     }
     if (_real.abs() < _imaginary.abs()) {
-      if (_imaginary == 0.0) {
-        return _real.abs();
+      if (_real == 0.0) {
+        return _imaginary.abs();
       }
       double q = _real / _imaginary;
       return _imaginary.abs() * math.sqrt(1 + q * q);
     } else {
-      if (_real == 0.0) {
-        return _imaginary.abs();
+      if (_imaginary == 0.0) {
+        return _real.abs();
       }
       double q = _imaginary / _real;
       return _real.abs() * math.sqrt(1 + q * q);
@@ -240,7 +240,7 @@ class Complex {
         return NAN;
       }
       if (divisor.isInfinite) {
-        return !isInfinite ? ZERO : NAN;
+        return isFinite ? ZERO : NAN;
       }
       return Complex._(_real / divisor, _imaginary / divisor);
     } else {
