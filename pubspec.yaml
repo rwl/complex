@@ -4,4 +4,7 @@ author: Richard Lincoln <r.w.lincoln@gmail.com>
 description: A representation of a complex number, i.e. a number which has both a real and imaginary part.
 homepage: https://github.com/rwl/complex
 dev_dependencies:
-  test: ^1.6.3
+  test: ^1.6.4
+
+environment:
+  sdk: ">=2.0.0 <3.0.0"
