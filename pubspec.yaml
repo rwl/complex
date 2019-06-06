@@ -1,5 +1,5 @@
 name: complex
-version: 0.1.1
+version: 0.5.0
 author: Richard Lincoln <r.w.lincoln@gmail.com>
 description: A representation of a complex number, i.e. a number which has both a real and imaginary part.
 homepage: https://github.com/rwl/complex
