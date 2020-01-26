@@ -405,8 +405,8 @@ double atan(double xa, [double xb = 0.0, bool leftPlane = false]) {
         .toInt();
   }
 
-  final double ttA = TANGENT_TABLE_A[idx];
-  final double ttB = TANGENT_TABLE_B[idx];
+  final double ttA = tangentTableA[idx];
+  final double ttB = tangentTableB[idx];
 
   double epsA = xa - ttA;
   double epsB = -(epsA - xa + ttA);
