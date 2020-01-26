@@ -36,19 +36,19 @@ import 'fastmath.dart' as fastmath;
 /// `x` is `NaN`).
 class Complex {
   /// The square root of -1. A number representing "0.0 + 1.0i"
-  static const I = const Complex._(0.0, 1.0);
+  static const i = Complex._(0.0, 1.0);
 
   /// A complex number representing "NaN + NaNi"
-  static const NAN = const Complex._(double.nan, double.nan);
+  static const nan = Complex._(double.nan, double.nan);
 
   /// A complex number representing "+INF + INFi"
-  static const INFINITY = const Complex._(double.infinity, double.infinity);
+  static const infinity = Complex._(double.infinity, double.infinity);
 
   /// A complex number representing "1.0 + 0.0i"
-  static const ONE = const Complex._(1.0);
+  static const one = Complex._(1.0);
 
   /// A complex number representing "0.0 + 0.0i"
-  static const ZERO = const Complex._(0.0);
+  static const zero = Complex._(0.0);
 
   final double _imaginary, _real;
 
@@ -72,7 +72,7 @@ class Complex {
   /// computed as `r·cos(theta) + r·sin(theta)i`
   ///
   /// If either [r] or [theta] is `NaN`, or
-  /// [theta] is infinite, [Complex.NAN] is returned.
+  /// [theta] is infinite, [Complex.nan] is returned.
   ///
   /// If [r] is infinite and [theta] is finite,
   /// infinite or NaN values may be returned in parts of the result, following
@@ -149,12 +149,12 @@ class Complex {
   Complex operator +(Object addend) {
     if (addend is Complex) {
       if (isNaN || addend.isNaN) {
-        return Complex.NAN;
+        return Complex.nan;
       }
       return Complex._(_real + addend.real, _imaginary + addend.imaginary);
     } else if (addend is num) {
       if (isNaN || addend.isNaN) {
-        return Complex.NAN;
+        return Complex.nan;
       }
       return Complex._(_real + addend, _imaginary);
     } else {
@@ -174,7 +174,7 @@ class Complex {
   /// `1 + INFINITY i is `1 - NEGATIVE_INFINITY i`.
   Complex conjugate() {
     if (isNaN) {
-      return Complex.NAN;
+      return Complex.nan;
     }
     return Complex._(real, -imaginary);
   }
@@ -194,13 +194,13 @@ class Complex {
   /// following rules, applied in the order presented:
   ///
   /// * If either `this` or `divisor` has a `NaN` value
-  ///   in either part, [NAN] is returned.
-  /// * If `divisor` equals [ZERO], [NAN] is returned.
+  ///   in either part, [nan] is returned.
+  /// * If `divisor` equals [zero], [nan] is returned.
   /// * If `this` and `divisor` are both infinite,
-  ///   [NAN] is returned.
+  ///   [nan] is returned.
   /// * If `this` is finite (i.e., has no `Infinite` or
   ///   `NAN` parts) and `divisor` is infinite (one or both parts
-  ///   infinite), [ZERO] is returned.
+  ///   infinite), [zero] is returned.
   /// * If `this` is infinite and `divisor` is finite,
   /// `NAN` values are returned in the parts of the result if the
   /// [double] rules applied to the definitional formula
@@ -208,17 +208,17 @@ class Complex {
   Complex operator /(Object divisor) {
     if (divisor is Complex) {
       if (isNaN || divisor.isNaN) {
-        return NAN;
+        return nan;
       }
 
       final double c = divisor.real;
       final double d = divisor.imaginary;
       if (c == 0.0 && d == 0.0) {
-        return NAN;
+        return nan;
       }
 
       if (divisor.isInfinite && !isInfinite) {
-        return ZERO;
+        return zero;
       }
 
       if (c.abs() < d.abs()) {
@@ -234,13 +234,13 @@ class Complex {
       }
     } else if (divisor is num) {
       if (isNaN || divisor.isNaN) {
-        return NAN;
+        return nan;
       }
       if (divisor == 0) {
-        return NAN;
+        return nan;
       }
       if (divisor.isInfinite) {
-        return isFinite ? ZERO : NAN;
+        return isFinite ? zero : nan;
       }
       return Complex._(_real / divisor, _imaginary / divisor);
     } else {
@@ -251,15 +251,15 @@ class Complex {
   /// Returns the multiplicative inverse of `this` element.
   Complex reciprocal() {
     if (isNaN) {
-      return NAN;
+      return nan;
     }
 
     if (_real == 0.0 && _imaginary == 0.0) {
-      return INFINITY;
+      return infinity;
     }
 
     if (isInfinite) {
-      return ZERO;
+      return zero;
     }
 
     if (_real.abs() < _imaginary.abs()) {
@@ -306,10 +306,10 @@ class Complex {
   ///
   ///     (a + bi)(c + di) = (ac - bd) + (ad + bc)i
   ///
-  /// Returns [NAN] if either `this` or `factor` has one or
+  /// Returns [nan] if either `this` or `factor` has one or
   /// more `NaN` parts.
   ///
-  /// Returns [INFINITY] if neither `this` nor `factor` has one
+  /// Returns [infinity] if neither `this` nor `factor` has one
   /// or more `NaN` parts and if either `this` or `factor`
   /// has one or more infinite parts (same result is returned regardless of
   /// the sign of the components).
@@ -319,24 +319,24 @@ class Complex {
   Complex operator *(Object factor) {
     if (factor is Complex) {
       if (isNaN || factor.isNaN) {
-        return NAN;
+        return nan;
       }
       if (_real.isInfinite ||
           _imaginary.isInfinite ||
           factor._real.isInfinite ||
           factor._imaginary.isInfinite) {
         // we don't use isInfinite to avoid testing for NaN again
-        return INFINITY;
+        return infinity;
       }
       return Complex._(_real * factor._real - _imaginary * factor._imaginary,
           _real * factor._imaginary + _imaginary * factor._real);
     } else if (factor is num) {
       if (isNaN || factor.isNaN) {
-        return NAN;
+        return nan;
       }
       if (_real.isInfinite || _imaginary.isInfinite || factor.isInfinite) {
         // we don't use isInfinite to avoid testing for NaN again
-        return INFINITY;
+        return infinity;
       }
       return Complex._(_real * factor, _imaginary * factor);
     } else {
@@ -349,7 +349,7 @@ class Complex {
   /// part of this complex number equals `double.nan`.
   Complex operator -() {
     if (isNaN) {
-      return NAN;
+      return nan;
     }
 
     return Complex._(-_real, -_imaginary);
@@ -362,20 +362,20 @@ class Complex {
   ///     (a + bi) - (c + di) = (a-c) + (b-d)i
   ///
   /// If either `this` or `subtrahend` has a `NaN` value in either part,
-  /// [NAN] is returned; otherwise infinite and `NaN` values are
+  /// [nan] is returned; otherwise infinite and `NaN` values are
   /// returned in the parts of the result according to the rules for
   /// [double] arithmetic.
   Complex operator -(Object subtrahend) {
     if (subtrahend is Complex) {
       if (isNaN || subtrahend.isNaN) {
-        return NAN;
+        return nan;
       }
 
       return Complex._(
           real - subtrahend._real, imaginary - subtrahend._imaginary);
     } else if (subtrahend is num) {
       if (isNaN || subtrahend.isNaN) {
-        return NAN;
+        return nan;
       }
       return Complex._(real - subtrahend, imaginary);
     } else {
@@ -390,13 +390,13 @@ class Complex {
   ///
   ///     acos(z) = -i (log(z + i (sqrt(1 - z^2))))
   ///
-  /// Returns [NAN] if either real or imaginary part of the
+  /// Returns [nan] if either real or imaginary part of the
   /// input argument is `NaN` or infinite.
   Complex acos() {
     if (isNaN) {
-      return NAN;
+      return nan;
     }
-    return (this + (this.sqrt1z() * I)).log() * (-I);
+    return (this + (this.sqrt1z() * i)).log() * (-i);
   }
 
   /// Compute the [inverse sine](http://mathworld.wolfram.com/InverseSine.html)
@@ -406,14 +406,14 @@ class Complex {
   ///
   ///     asin(z) = -i (log(sqrt(1 - z^2) + iz))
   ///
-  /// Returns [NAN] if either real or imaginary part of the
+  /// Returns [nan] if either real or imaginary part of the
   /// input argument is `NaN` or infinite.
   Complex asin() {
     if (isNaN) {
-      return NAN;
+      return nan;
     }
 
-    return (sqrt1z() + (this * I)).log() * -I;
+    return (sqrt1z() + (this * i)).log() * -i;
   }
 
   /// Compute the [inverse tangent](http://mathworld.wolfram.com/InverseTangent.html)
@@ -423,14 +423,14 @@ class Complex {
   ///
   ///     atan(z) = (i/2) log((i + z)/(i - z))
   ///
-  /// Returns [NAN] if either real or imaginary part of the
+  /// Returns [nan] if either real or imaginary part of the
   /// input argument is `NaN` or infinite.
   Complex atan() {
     if (isNaN) {
-      return NAN;
+      return nan;
     }
 
-    return ((this + I) / (I - this)).log() * (I / Complex._(2.0, 0.0));
+    return ((this + i) / (i - this)).log() * (i / Complex._(2.0, 0.0));
   }
 
   /// Compute the [cosine](http://mathworld.wolfram.com/Cosine.html)
@@ -443,7 +443,7 @@ class Complex {
   /// where the (real) functions on the right-hand side are
   /// [math.sin], [math.cos], [fastmath.cosh] and [fastmath.sinh].
   ///
-  /// Returns [NAN] if either real or imaginary part of the
+  /// Returns [nan] if either real or imaginary part of the
   /// input argument is `NaN`.
   ///
   /// Infinite values in real or imaginary parts of the input may result in
@@ -456,7 +456,7 @@ class Complex {
   ///     cos(±INFINITY ± INFINITY i) = NaN + NaN i
   Complex cos() {
     if (isNaN) {
-      return NAN;
+      return nan;
     }
 
     return Complex._(math.cos(real) * fastmath.cosh(imaginary),
@@ -473,7 +473,7 @@ class Complex {
   /// where the (real) functions on the right-hand side are
   /// [math.sin], [math.cos], [fastmath.cosh] and [fastmath.sinh].
   ///
-  /// Returns [NAN] if either real or imaginary part of the
+  /// Returns [nan] if either real or imaginary part of the
   /// input argument is `NaN`.
   ///
   /// Infinite values in real or imaginary parts of the input may result in
@@ -486,7 +486,7 @@ class Complex {
   ///     cosh±INFINITY &plusmn; INFINITY i) = NaN + NaN i
   Complex cosh() {
     if (isNaN) {
-      return NAN;
+      return nan;
     }
 
     return Complex._(fastmath.cosh(real) * math.cos(imaginary),
@@ -503,7 +503,7 @@ class Complex {
   /// where the (real) functions on the right-hand side are
   /// [math.exp], [math.cos], and [math.sin].
   ///
-  /// Returns [NAN] if either real or imaginary part of the
+  /// Returns [nan] if either real or imaginary part of the
   /// input argument is `NaN`.
   ///
   /// Infinite values in real or imaginary parts of the input may result in
@@ -517,7 +517,7 @@ class Complex {
   ///     exp(±INFINITY ± INFINITY i) = NaN + NaN i
   Complex exp() {
     if (isNaN) {
-      return NAN;
+      return nan;
     }
 
     double expReal = math.exp(real);
@@ -536,7 +536,7 @@ class Complex {
   /// `|a + bi|` is the modulus, [abs],  and
   /// `arg(a + bi) = atan2(b, a).
   ///
-  /// Returns [NAN] if either real or imaginary part of the
+  /// Returns [nan] if either real or imaginary part of the
   /// input argument is `NaN`.
   ///
   /// Infinite (or critical) values in real or imaginary parts of the input may
@@ -552,7 +552,7 @@ class Complex {
   ///     log(0 + 0i) = -INFINITY + 0i
   Complex log() {
     if (isNaN) {
-      return NAN;
+      return nan;
     }
 
     return Complex._(math.log(abs()), fastmath.atan2(imaginary, real));
@@ -567,9 +567,9 @@ class Complex {
   /// where `exp` and `log` are [exp] and
   /// [log], respectively.
   ///
-  /// Returns [NAN] if either real or imaginary part of the
+  /// Returns [nan] if either real or imaginary part of the
   /// input argument is `NaN` or infinite, or if `y`
-  /// equals [ZERO].
+  /// equals [zero].
   Complex power(Complex x) {
     return (this.log() * x).exp();
   }
@@ -589,7 +589,7 @@ class Complex {
   /// where the (real) functions on the right-hand side are
   /// [math.sin], [math.cos], [fastmath.cosh] and [fastmath.sinh].
   ///
-  /// Returns [NAN] if either real or imaginary part of the
+  /// Returns [nan] if either real or imaginary part of the
   /// input argument is `NaN`.
   ///
   /// Infinite values in real or imaginary parts of the input may result in
@@ -602,7 +602,7 @@ class Complex {
   ///     sin(±INFINITY ± INFINITY i) = NaN + NaN i
   Complex sin() {
     if (isNaN) {
-      return NAN;
+      return nan;
     }
 
     return Complex._(math.sin(real) * fastmath.cosh(imaginary),
@@ -619,7 +619,7 @@ class Complex {
   /// where the (real) functions on the right-hand side are
   /// [math.sin], [math.cos], [fastmath.cosh] and [fastmath.sinh].
   ///
-  /// Returns [NAN] if either real or imaginary part of the
+  /// Returns [nan] if either real or imaginary part of the
   /// input argument is `NaN`.
   ///
   /// Infinite values in real or imaginary parts of the input may result in
@@ -632,7 +632,7 @@ class Complex {
   ///     sinh(±INFINITY ± INFINITY i) = NaN + NaN i
   Complex sinh() {
     if (isNaN) {
-      return NAN;
+      return nan;
     }
 
     return Complex._(fastmath.sinh(real) * math.cos(imaginary),
@@ -654,7 +654,7 @@ class Complex {
   /// * `|a + bi| = abs(a + bi)`
   /// * `sign(b) = copySign(double, double) copySign(1d, b)`
   ///
-  /// Returns [NAN] if either real or imaginary part of the
+  /// Returns [nan] if either real or imaginary part of the
   /// input argument is `NaN`.
   ///
   /// Infinite values in real or imaginary parts of the input may result in
@@ -669,7 +669,7 @@ class Complex {
   ///     sqrt(-INFINITY ± INFINITY i) = NaN ± INFINITY i
   Complex sqrt() {
     if (isNaN) {
-      return NAN;
+      return nan;
     }
 
     if (real == 0.0 && imaginary == 0.0) {
@@ -690,7 +690,7 @@ class Complex {
   ///
   /// Computes the result directly as `sqrt(ONE - (z * z))`.
   ///
-  /// Returns [NAN] if either real or imaginary part of the
+  /// Returns [nan] if either real or imaginary part of the
   /// input argument is `NaN`.
   ///
   /// Infinite values in real or imaginary parts of the input may result in
@@ -709,7 +709,7 @@ class Complex {
   /// where the (real) functions on the right-hand side are
   /// [math.sin], [math.cos], [fastmath.cosh] and [fastmath.sinh].
   ///
-  /// Returns [NAN] if either real or imaginary part of the
+  /// Returns [nan] if either real or imaginary part of the
   /// input argument is `NaN`.
   ///
   /// Infinite (or critical) values in real or imaginary parts of the input may
@@ -723,7 +723,7 @@ class Complex {
   ///     tan(±π/2 + 0 i) = ±INFINITY + NaN i
   Complex tan() {
     if (isNaN || real.isInfinite) {
-      return NAN;
+      return nan;
     }
     if (imaginary > 20.0) {
       return Complex._(0.0, 1.0);
@@ -749,7 +749,7 @@ class Complex {
   /// where the (real) functions on the right-hand side are
   /// [math.sin], [math.cos], [fastmath.cosh] and [fastmath.sinh].
   ///
-  /// Returns [NAN] if either real or imaginary part of the
+  /// Returns [nan] if either real or imaginary part of the
   /// input argument is `NaN`.
   ///
   /// Infinite values in real or imaginary parts of the input may result in
@@ -763,7 +763,7 @@ class Complex {
   ///     tanh(0 + (π/2)i) = NaN + INFINITY i
   Complex tanh() {
     if (isNaN || imaginary.isInfinite) {
-      return NAN;
+      return nan;
     }
     if (real > 20.0) {
       return Complex._(1.0, 0.0);
@@ -805,9 +805,9 @@ class Complex {
   /// are respectively the modulus and argument of this complex number.
   ///
   /// If one or both parts of this complex number is NaN, a list with just
-  /// one element, [NAN] is returned.
+  /// one element, [nan] is returned.
   /// If neither part is `NaN`, but at least one part is infinite, the result
-  /// is a one-element list containing [INFINITY].
+  /// is a one-element list containing [infinity].
   List<Complex> nthRoot(int n) {
     if (n <= 0) {
       throw ArgumentError("Can't compute nth root for negative n");
@@ -816,11 +816,11 @@ class Complex {
     final result = List<Complex>();
 
     if (isNaN) {
-      result.add(NAN);
+      result.add(nan);
       return result;
     }
     if (isInfinite) {
-      result.add(INFINITY);
+      result.add(infinity);
       return result;
     }
 

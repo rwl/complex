@@ -31,7 +31,7 @@ const double F_1_4 = 1.0 / 4.0;
 
 /// This is used by sinQ, because its faster to do a table lookup than
 /// a multiply in this time-critical routine
-const EIGHTHS = const <double>[
+const EIGHTHS = <double>[
   0.0,
   0.125,
   0.25,
@@ -120,7 +120,7 @@ double cosh(double x) {
 /// [x] is the original argument of the exponential function.
 /// [extra] bits of precision on input (To Be Confirmed).
 /// [hiPrec] extra bits of precision on output (To Be Confirmed)
-double exp(double x, [double extra = 0.0, List<double> hiPrec = null]) {
+double exp(double x, [double extra = 0.0, List<double> hiPrec]) {
   double intPartA;
   double intPartB;
   int intVal;

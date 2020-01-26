@@ -64,7 +64,7 @@ main() {
   });
 
   test('AbsNaN', () {
-    expect(Complex.NAN.abs().isNaN, isTrue);
+    expect(Complex.nan.abs().isNaN, isTrue);
     Complex z = Complex(inf, nan);
     expect(z.abs().isNaN, isTrue);
   });
@@ -88,11 +88,11 @@ main() {
 
   test('AddNaN', () {
     Complex x = Complex(3.0, 4.0);
-    Complex z = x + Complex.NAN;
-    expect(Complex.NAN, equals(z));
+    Complex z = x + Complex.nan;
+    expect(Complex.nan, equals(z));
     z = Complex(1, nan);
     Complex w = x + z;
-    expect(Complex.NAN, equals(w));
+    expect(Complex.nan, equals(w));
   });
 
   test('AddInf', () {
@@ -139,7 +139,7 @@ main() {
   });
 
   test('ConjugateNaN', () {
-    Complex z = Complex.NAN.conjugate();
+    Complex z = Complex.nan.conjugate();
     expect(z.isNaN, isTrue);
   });
 
@@ -173,7 +173,7 @@ main() {
   test('DivideInf', () {
     Complex x = Complex(3, 4);
     Complex w = Complex(neginf, inf);
-    expect(x / w == Complex.ZERO, isTrue);
+    expect(x / w == Complex.zero, isTrue);
 
     Complex z = w / x;
     expect(z.real.isNaN, isTrue);
@@ -192,25 +192,25 @@ main() {
 
   test('DivideZero', () {
     Complex x = Complex(3.0, 4.0);
-    Complex z = x / Complex.ZERO;
+    Complex z = x / Complex.zero;
     // expect(z, Complex.INF); // See MATH-657
-    expect(z, equals(Complex.NAN));
+    expect(z, equals(Complex.nan));
   });
 
   test('DivideZeroZero', () {
     Complex x = Complex(0.0, 0.0);
-    Complex z = x / Complex.ZERO;
-    expect(z, equals(Complex.NAN));
+    Complex z = x / Complex.zero;
+    expect(z, equals(Complex.nan));
   });
 
   test('DivideNaN', () {
     Complex x = Complex(3.0, 4.0);
-    Complex z = x / Complex.NAN;
+    Complex z = x / Complex.nan;
     expect(z.isNaN, isTrue);
   });
 
   test('DivideNaNInf', () {
-    Complex z = oneInf / Complex.ONE;
+    Complex z = oneInf / Complex.one;
     expect(z.real.isNaN, isTrue);
     expect(inf, equals(z.imaginary));
 
@@ -218,7 +218,7 @@ main() {
     expect(z.real.isNaN, isTrue);
     expect(z.imaginary.isNaN, isTrue);
 
-    z = negInfInf / Complex.ONE;
+    z = negInfInf / Complex.one;
     expect(z.real.isNaN, isTrue);
     expect(z.imaginary.isNaN, isTrue);
   });
@@ -253,7 +253,7 @@ main() {
 
   test('ScalarDivideZero', () {
     Complex x = Complex(1, 1);
-    expect(x / Complex.ZERO, equals(x / 0));
+    expect(x / Complex.zero, equals(x / 0));
   });
 
   test('Reciprocal', () {
@@ -278,18 +278,18 @@ main() {
 
   test('ReciprocalInf', () {
     Complex z = Complex(neginf, inf);
-    expect(z.reciprocal() == Complex.ZERO, isTrue);
+    expect(z.reciprocal() == Complex.zero, isTrue);
 
     z = Complex(1, inf).reciprocal();
-    expect(z, equals(Complex.ZERO));
+    expect(z, equals(Complex.zero));
   });
 
   test('ReciprocalZero', () {
-    expect(Complex.ZERO.reciprocal(), equals(Complex.INFINITY));
+    expect(Complex.zero.reciprocal(), equals(Complex.infinity));
   });
 
   test('ReciprocalNaN', () {
-    expect(Complex.NAN.reciprocal().isNaN, isTrue);
+    expect(Complex.nan.reciprocal().isNaN, isTrue);
   });
 
   test('Multiply', () {
@@ -302,10 +302,10 @@ main() {
 
   test('MultiplyNaN', () {
     Complex x = Complex(3.0, 4.0);
-    Complex z = x * Complex.NAN;
-    expect(Complex.NAN, equals(z));
-    z = Complex.NAN * 5;
-    expect(Complex.NAN, equals(z));
+    Complex z = x * Complex.nan;
+    expect(Complex.nan, equals(z));
+    z = Complex.nan * 5;
+    expect(Complex.nan, equals(z));
   });
 
   test('MultiplyInfInf', () {
@@ -320,9 +320,9 @@ main() {
     expect(w.imaginary, equals(inf));
 
     // [MATH-164]
-    expect(Complex(1, 0) * infInf == Complex.INFINITY, isTrue);
-    expect(Complex(-1, 0) * infInf == Complex.INFINITY, isTrue);
-    expect(Complex(1, 0) * negInfZero == Complex.INFINITY, isTrue);
+    expect(Complex(1, 0) * infInf == Complex.infinity, isTrue);
+    expect(Complex(-1, 0) * infInf == Complex.infinity, isTrue);
+    expect(Complex(1, 0) * negInfZero == Complex.infinity, isTrue);
 
     w = oneInf * oneNegInf;
     expect(w.real, equals(inf));
@@ -333,7 +333,7 @@ main() {
     expect(w.imaginary.isNaN, isTrue);
 
     z = Complex(1, neginf);
-    expect(Complex.INFINITY, equals(z * z));
+    expect(Complex.infinity, equals(z * z));
   });
 
   test('ScalarMultiply', () {
@@ -372,7 +372,7 @@ main() {
   });
 
   test('NegateNaN', () {
-    Complex z = -Complex.NAN;
+    Complex z = -Complex.nan;
     expect(z.isNaN, isTrue);
   });
 
@@ -386,11 +386,11 @@ main() {
 
   test('SubtractNaN', () {
     Complex x = Complex(3.0, 4.0);
-    Complex z = x - Complex.NAN;
-    expect(Complex.NAN, equals(z));
+    Complex z = x - Complex.nan;
+    expect(Complex.nan, equals(z));
     z = Complex(1, nan);
     Complex w = x - z;
-    expect(Complex.NAN, equals(w));
+    expect(Complex.nan, equals(w));
   });
 
   test('SubtractInf', () {
@@ -531,7 +531,7 @@ main() {
   test('EqualsNaN', () {
     Complex realNaN = Complex(double.nan, 0.0);
     Complex imaginaryNaN = Complex(0.0, double.nan);
-    Complex complexNaN = Complex.NAN;
+    Complex complexNaN = Complex.nan;
     expect(realNaN == imaginaryNaN, isTrue);
     expect(imaginaryNaN == complexNaN, isTrue);
     expect(realNaN == complexNaN, isTrue);
@@ -546,7 +546,7 @@ main() {
     Complex realNaN = Complex(double.nan, 0.0);
     Complex imaginaryNaN = Complex(0.0, double.nan);
     expect(realNaN.hashCode, equals(imaginaryNaN.hashCode));
-    expect(imaginaryNaN.hashCode, equals(Complex.NAN.hashCode));
+    expect(imaginaryNaN.hashCode, equals(Complex.nan.hashCode));
 
     // MATH-1118
     // "equals" and "hashCode" must be compatible: if two objects have
@@ -568,22 +568,22 @@ main() {
     Complex z = Complex(3, 4);
     Complex expected = Complex(0.936812, -2.30551);
     expect(expected, closeToZ(z.acos(), 1.0e-5));
-    expect(Complex(math.acos(0), 0), closeToZ(Complex.ZERO.acos(), 1.0e-12));
+    expect(Complex(math.acos(0), 0), closeToZ(Complex.zero.acos(), 1.0e-12));
   });
 
   test('AcosInf', () {
-    expect(Complex.NAN, equals(oneInf.acos()));
-    expect(Complex.NAN, equals(oneNegInf.acos()));
-    expect(Complex.NAN, equals(infOne.acos()));
-    expect(Complex.NAN, equals(negInfOne.acos()));
-    expect(Complex.NAN, equals(infInf.acos()));
-    expect(Complex.NAN, equals(infNegInf.acos()));
-    expect(Complex.NAN, equals(negInfInf.acos()));
-    expect(Complex.NAN, equals(negInfNegInf.acos()));
+    expect(Complex.nan, equals(oneInf.acos()));
+    expect(Complex.nan, equals(oneNegInf.acos()));
+    expect(Complex.nan, equals(infOne.acos()));
+    expect(Complex.nan, equals(negInfOne.acos()));
+    expect(Complex.nan, equals(infInf.acos()));
+    expect(Complex.nan, equals(infNegInf.acos()));
+    expect(Complex.nan, equals(negInfInf.acos()));
+    expect(Complex.nan, equals(negInfNegInf.acos()));
   });
 
   test('AcosNaN', () {
-    expect(Complex.NAN.acos().isNaN, isTrue);
+    expect(Complex.nan.acos().isNaN, isTrue);
   });
 
   test('Asin', () {
@@ -593,18 +593,18 @@ main() {
   });
 
   test('AsinNaN', () {
-    expect(Complex.NAN.asin().isNaN, isTrue);
+    expect(Complex.nan.asin().isNaN, isTrue);
   });
 
   test('AsinInf', () {
-    expect(Complex.NAN, equals(oneInf.asin()));
-    expect(Complex.NAN, equals(oneNegInf.asin()));
-    expect(Complex.NAN, equals(infOne.asin()));
-    expect(Complex.NAN, equals(negInfOne.asin()));
-    expect(Complex.NAN, equals(infInf.asin()));
-    expect(Complex.NAN, equals(infNegInf.asin()));
-    expect(Complex.NAN, equals(negInfInf.asin()));
-    expect(Complex.NAN, equals(negInfNegInf.asin()));
+    expect(Complex.nan, equals(oneInf.asin()));
+    expect(Complex.nan, equals(oneNegInf.asin()));
+    expect(Complex.nan, equals(infOne.asin()));
+    expect(Complex.nan, equals(negInfOne.asin()));
+    expect(Complex.nan, equals(infInf.asin()));
+    expect(Complex.nan, equals(infNegInf.asin()));
+    expect(Complex.nan, equals(negInfInf.asin()));
+    expect(Complex.nan, equals(negInfNegInf.asin()));
   });
 
   test('Atan', () {
@@ -614,22 +614,22 @@ main() {
   });
 
   test('AtanInf', () {
-    expect(Complex.NAN, equals(oneInf.atan()));
-    expect(Complex.NAN, equals(oneNegInf.atan()));
-    expect(Complex.NAN, equals(infOne.atan()));
-    expect(Complex.NAN, equals(negInfOne.atan()));
-    expect(Complex.NAN, equals(infInf.atan()));
-    expect(Complex.NAN, equals(infNegInf.atan()));
-    expect(Complex.NAN, equals(negInfInf.atan()));
-    expect(Complex.NAN, equals(negInfNegInf.atan()));
+    expect(Complex.nan, equals(oneInf.atan()));
+    expect(Complex.nan, equals(oneNegInf.atan()));
+    expect(Complex.nan, equals(infOne.atan()));
+    expect(Complex.nan, equals(negInfOne.atan()));
+    expect(Complex.nan, equals(infInf.atan()));
+    expect(Complex.nan, equals(infNegInf.atan()));
+    expect(Complex.nan, equals(negInfInf.atan()));
+    expect(Complex.nan, equals(negInfNegInf.atan()));
   });
 
   test('AtanI', () {
-    expect(Complex.I.atan().isNaN, isTrue);
+    expect(Complex.i.atan().isNaN, isTrue);
   });
 
   test('AtanNaN', () {
-    expect(Complex.NAN.atan().isNaN, isTrue);
+    expect(Complex.nan.atan().isNaN, isTrue);
   });
 
   test('Cos', () {
@@ -639,18 +639,18 @@ main() {
   });
 
   test('CosNaN', () {
-    expect(Complex.NAN.cos().isNaN, isTrue);
+    expect(Complex.nan.cos().isNaN, isTrue);
   });
 
   test('CosInf', () {
     expect(infNegInf, equals(oneInf.cos()));
     expect(infInf, equals(oneNegInf.cos()));
-    expect(Complex.NAN, equals(infOne.cos()));
-    expect(Complex.NAN, equals(negInfOne.cos()));
-    expect(Complex.NAN, equals(infInf.cos()));
-    expect(Complex.NAN, equals(infNegInf.cos()));
-    expect(Complex.NAN, equals(negInfInf.cos()));
-    expect(Complex.NAN, equals(negInfNegInf.cos()));
+    expect(Complex.nan, equals(infOne.cos()));
+    expect(Complex.nan, equals(negInfOne.cos()));
+    expect(Complex.nan, equals(infInf.cos()));
+    expect(Complex.nan, equals(infNegInf.cos()));
+    expect(Complex.nan, equals(negInfInf.cos()));
+    expect(Complex.nan, equals(negInfNegInf.cos()));
   });
 
   test('Cosh', () {
@@ -660,42 +660,42 @@ main() {
   });
 
   test('CoshNaN', () {
-    expect(Complex.NAN.cosh().isNaN, isTrue);
+    expect(Complex.nan.cosh().isNaN, isTrue);
   });
 
   test('CoshInf', () {
-    expect(Complex.NAN, equals(oneInf.cosh()));
-    expect(Complex.NAN, equals(oneNegInf.cosh()));
+    expect(Complex.nan, equals(oneInf.cosh()));
+    expect(Complex.nan, equals(oneNegInf.cosh()));
     expect(infInf, equals(infOne.cosh()));
     expect(infNegInf, equals(negInfOne.cosh()));
-    expect(Complex.NAN, equals(infInf.cosh()));
-    expect(Complex.NAN, equals(infNegInf.cosh()));
-    expect(Complex.NAN, equals(negInfInf.cosh()));
-    expect(Complex.NAN, equals(negInfNegInf.cosh()));
+    expect(Complex.nan, equals(infInf.cosh()));
+    expect(Complex.nan, equals(infNegInf.cosh()));
+    expect(Complex.nan, equals(negInfInf.cosh()));
+    expect(Complex.nan, equals(negInfNegInf.cosh()));
   });
 
   test('Exp', () {
     Complex z = Complex(3, 4);
     Complex expected = Complex(-13.12878, -15.20078);
     expect(expected, closeToZ(z.exp(), 1.0e-5));
-    expect(Complex.ONE, closeToZ(Complex.ZERO.exp(), 10e-12));
-    Complex iPi = Complex.I * Complex(pi, 0);
-    expect(-Complex.ONE, closeToZ(iPi.exp(), 10e-12));
+    expect(Complex.one, closeToZ(Complex.zero.exp(), 10e-12));
+    Complex iPi = Complex.i * Complex(pi, 0);
+    expect(-Complex.one, closeToZ(iPi.exp(), 10e-12));
   });
 
   test('ExpNaN', () {
-    expect(Complex.NAN.exp().isNaN, isTrue);
+    expect(Complex.nan.exp().isNaN, isTrue);
   });
 
   test('ExpInf', () {
-    expect(Complex.NAN, equals(oneInf.exp()));
-    expect(Complex.NAN, equals(oneNegInf.exp()));
+    expect(Complex.nan, equals(oneInf.exp()));
+    expect(Complex.nan, equals(oneNegInf.exp()));
     expect(infInf, equals(infOne.exp()));
-    expect(Complex.ZERO, equals(negInfOne.exp()));
-    expect(Complex.NAN, equals(infInf.exp()));
-    expect(Complex.NAN, equals(infNegInf.exp()));
-    expect(Complex.NAN, equals(negInfInf.exp()));
-    expect(Complex.NAN, equals(negInfNegInf.exp()));
+    expect(Complex.zero, equals(negInfOne.exp()));
+    expect(Complex.nan, equals(infInf.exp()));
+    expect(Complex.nan, equals(infNegInf.exp()));
+    expect(Complex.nan, equals(negInfInf.exp()));
+    expect(Complex.nan, equals(negInfNegInf.exp()));
   });
 
   test('Log', () {
@@ -705,7 +705,7 @@ main() {
   });
 
   test('LogNaN', () {
-    expect(Complex.NAN.log().isNaN, isTrue);
+    expect(Complex.nan.log().isNaN, isTrue);
   });
 
   test('LogInf', () {
@@ -720,7 +720,7 @@ main() {
   });
 
   test('LogZero', () {
-    expect(negInfZero, equals(Complex.ZERO.log()));
+    expect(negInfZero, equals(Complex.zero.log()));
   });
 
   test('Pow', () {
@@ -732,46 +732,46 @@ main() {
 
   test('PowNaNBase', () {
     Complex x = Complex(3, 4);
-    expect(Complex.NAN.power(x).isNaN, isTrue);
+    expect(Complex.nan.power(x).isNaN, isTrue);
   });
 
   test('PowNaNExponent', () {
     Complex x = Complex(3, 4);
-    expect(x.power(Complex.NAN).isNaN, isTrue);
+    expect(x.power(Complex.nan).isNaN, isTrue);
   });
 
   test('PowInf', () {
-    expect(Complex.NAN, equals(Complex.ONE.power(oneInf)));
-    expect(Complex.NAN, equals(Complex.ONE.power(oneNegInf)));
-    expect(Complex.NAN, equals(Complex.ONE.power(infOne)));
-    expect(Complex.NAN, equals(Complex.ONE.power(infInf)));
-    expect(Complex.NAN, equals(Complex.ONE.power(infNegInf)));
-    expect(Complex.NAN, equals(Complex.ONE.power(negInfInf)));
-    expect(Complex.NAN, equals(Complex.ONE.power(negInfNegInf)));
-    expect(Complex.NAN, equals(infOne.power(Complex.ONE)));
-    expect(Complex.NAN, equals(negInfOne.power(Complex.ONE)));
-    expect(Complex.NAN, equals(infInf.power(Complex.ONE)));
-    expect(Complex.NAN, equals(infNegInf.power(Complex.ONE)));
-    expect(Complex.NAN, equals(negInfInf.power(Complex.ONE)));
-    expect(Complex.NAN, equals(negInfNegInf.power(Complex.ONE)));
-    expect(Complex.NAN, equals(negInfNegInf.power(infNegInf)));
-    expect(Complex.NAN, equals(negInfNegInf.power(negInfNegInf)));
-    expect(Complex.NAN, equals(negInfNegInf.power(infInf)));
-    expect(Complex.NAN, equals(infInf.power(infNegInf)));
-    expect(Complex.NAN, equals(infInf.power(negInfNegInf)));
-    expect(Complex.NAN, equals(infInf.power(infInf)));
-    expect(Complex.NAN, equals(infNegInf.power(infNegInf)));
-    expect(Complex.NAN, equals(infNegInf.power(negInfNegInf)));
-    expect(Complex.NAN, equals(infNegInf.power(infInf)));
+    expect(Complex.nan, equals(Complex.one.power(oneInf)));
+    expect(Complex.nan, equals(Complex.one.power(oneNegInf)));
+    expect(Complex.nan, equals(Complex.one.power(infOne)));
+    expect(Complex.nan, equals(Complex.one.power(infInf)));
+    expect(Complex.nan, equals(Complex.one.power(infNegInf)));
+    expect(Complex.nan, equals(Complex.one.power(negInfInf)));
+    expect(Complex.nan, equals(Complex.one.power(negInfNegInf)));
+    expect(Complex.nan, equals(infOne.power(Complex.one)));
+    expect(Complex.nan, equals(negInfOne.power(Complex.one)));
+    expect(Complex.nan, equals(infInf.power(Complex.one)));
+    expect(Complex.nan, equals(infNegInf.power(Complex.one)));
+    expect(Complex.nan, equals(negInfInf.power(Complex.one)));
+    expect(Complex.nan, equals(negInfNegInf.power(Complex.one)));
+    expect(Complex.nan, equals(negInfNegInf.power(infNegInf)));
+    expect(Complex.nan, equals(negInfNegInf.power(negInfNegInf)));
+    expect(Complex.nan, equals(negInfNegInf.power(infInf)));
+    expect(Complex.nan, equals(infInf.power(infNegInf)));
+    expect(Complex.nan, equals(infInf.power(negInfNegInf)));
+    expect(Complex.nan, equals(infInf.power(infInf)));
+    expect(Complex.nan, equals(infNegInf.power(infNegInf)));
+    expect(Complex.nan, equals(infNegInf.power(negInfNegInf)));
+    expect(Complex.nan, equals(infNegInf.power(infInf)));
   });
 
   test('PowZero', () {
-    expect(Complex.NAN, equals(Complex.ZERO.power(Complex.ONE)));
-    expect(Complex.NAN, equals(Complex.ZERO.power(Complex.ZERO)));
-    expect(Complex.NAN, equals(Complex.ZERO.power(Complex.I)));
-    expect(Complex.ONE, closeToZ(Complex.ONE.power(Complex.ZERO), 10e-12));
-    expect(Complex.ONE, closeToZ(Complex.I.power(Complex.ZERO), 10e-12));
-    expect(Complex.ONE, closeToZ(Complex(-1, 3).power(Complex.ZERO), 10e-12));
+    expect(Complex.nan, equals(Complex.zero.power(Complex.one)));
+    expect(Complex.nan, equals(Complex.zero.power(Complex.zero)));
+    expect(Complex.nan, equals(Complex.zero.power(Complex.i)));
+    expect(Complex.one, closeToZ(Complex.one.power(Complex.zero), 10e-12));
+    expect(Complex.one, closeToZ(Complex.i.power(Complex.zero), 10e-12));
+    expect(Complex.one, closeToZ(Complex(-1, 3).power(Complex.zero), 10e-12));
   });
 
   test('ScalarPow', () {
@@ -782,7 +782,7 @@ main() {
   });
 
   test('ScalarPowNaNBase', () {
-    Complex x = Complex.NAN;
+    Complex x = Complex.nan;
     double yDouble = 5.0;
     Complex yComplex = Complex(yDouble);
     expect(x.power(yComplex), equals(x.pow(yDouble)));
@@ -796,32 +796,32 @@ main() {
   });
 
   test('ScalarPowInf', () {
-    expect(Complex.NAN, equals(Complex.ONE.pow(double.infinity)));
-    expect(Complex.NAN, equals(Complex.ONE.pow(double.negativeInfinity)));
-    expect(Complex.NAN, equals(infOne.pow(1.0)));
-    expect(Complex.NAN, equals(negInfOne.pow(1.0)));
-    expect(Complex.NAN, equals(infInf.pow(1.0)));
-    expect(Complex.NAN, equals(infNegInf.pow(1.0)));
-    expect(Complex.NAN, equals(negInfInf.pow(10)));
-    expect(Complex.NAN, equals(negInfNegInf.pow(1.0)));
-    expect(Complex.NAN, equals(negInfNegInf.pow(double.infinity)));
-    expect(Complex.NAN, equals(negInfNegInf.pow(double.infinity)));
-    expect(Complex.NAN, equals(infInf.pow(double.infinity)));
-    expect(Complex.NAN, equals(infInf.pow(double.negativeInfinity)));
-    expect(Complex.NAN, equals(infNegInf.pow(double.negativeInfinity)));
-    expect(Complex.NAN, equals(infNegInf.pow(double.infinity)));
+    expect(Complex.nan, equals(Complex.one.pow(double.infinity)));
+    expect(Complex.nan, equals(Complex.one.pow(double.negativeInfinity)));
+    expect(Complex.nan, equals(infOne.pow(1.0)));
+    expect(Complex.nan, equals(negInfOne.pow(1.0)));
+    expect(Complex.nan, equals(infInf.pow(1.0)));
+    expect(Complex.nan, equals(infNegInf.pow(1.0)));
+    expect(Complex.nan, equals(negInfInf.pow(10)));
+    expect(Complex.nan, equals(negInfNegInf.pow(1.0)));
+    expect(Complex.nan, equals(negInfNegInf.pow(double.infinity)));
+    expect(Complex.nan, equals(negInfNegInf.pow(double.infinity)));
+    expect(Complex.nan, equals(infInf.pow(double.infinity)));
+    expect(Complex.nan, equals(infInf.pow(double.negativeInfinity)));
+    expect(Complex.nan, equals(infNegInf.pow(double.negativeInfinity)));
+    expect(Complex.nan, equals(infNegInf.pow(double.infinity)));
   });
 
   test('ScalarPowZero', () {
-    expect(Complex.NAN, equals(Complex.ZERO.pow(1.0)));
-    expect(Complex.NAN, equals(Complex.ZERO.pow(0.0)));
-    expect(Complex.ONE, closeToZ(Complex.ONE.pow(0.0), 10e-12));
-    expect(Complex.ONE, closeToZ(Complex.I.pow(0.0), 10e-12));
-    expect(Complex.ONE, closeToZ(Complex(-1, 3).pow(0.0), 10e-12));
+    expect(Complex.nan, equals(Complex.zero.pow(1.0)));
+    expect(Complex.nan, equals(Complex.zero.pow(0.0)));
+    expect(Complex.one, closeToZ(Complex.one.pow(0.0), 10e-12));
+    expect(Complex.one, closeToZ(Complex.i.pow(0.0), 10e-12));
+    expect(Complex.one, closeToZ(Complex(-1, 3).pow(0.0), 10e-12));
   });
 
   test('powNull', () {
-    expect(() => Complex.ONE.pow(null), throwsArgumentError);
+    expect(() => Complex.one.pow(null), throwsArgumentError);
   });
 
   test('Sin', () {
@@ -833,16 +833,16 @@ main() {
   test('SinInf', () {
     expect(infInf, equals(oneInf.sin()));
     expect(infNegInf, equals(oneNegInf.sin()));
-    expect(Complex.NAN, equals(infOne.sin()));
-    expect(Complex.NAN, equals(negInfOne.sin()));
-    expect(Complex.NAN, equals(infInf.sin()));
-    expect(Complex.NAN, equals(infNegInf.sin()));
-    expect(Complex.NAN, equals(negInfInf.sin()));
-    expect(Complex.NAN, equals(negInfNegInf.sin()));
+    expect(Complex.nan, equals(infOne.sin()));
+    expect(Complex.nan, equals(negInfOne.sin()));
+    expect(Complex.nan, equals(infInf.sin()));
+    expect(Complex.nan, equals(infNegInf.sin()));
+    expect(Complex.nan, equals(negInfInf.sin()));
+    expect(Complex.nan, equals(negInfNegInf.sin()));
   });
 
   test('SinNaN', () {
-    expect(Complex.NAN.sin().isNaN, isTrue);
+    expect(Complex.nan.sin().isNaN, isTrue);
   });
 
   test('Sinh', () {
@@ -852,18 +852,18 @@ main() {
   });
 
   test('SinhNaN', () {
-    expect(Complex.NAN.sinh().isNaN, isTrue);
+    expect(Complex.nan.sinh().isNaN, isTrue);
   });
 
   test('SinhInf', () {
-    expect(Complex.NAN, equals(oneInf.sinh()));
-    expect(Complex.NAN, equals(oneNegInf.sinh()));
+    expect(Complex.nan, equals(oneInf.sinh()));
+    expect(Complex.nan, equals(oneNegInf.sinh()));
     expect(infInf, equals(infOne.sinh()));
     expect(negInfInf, equals(negInfOne.sinh()));
-    expect(Complex.NAN, equals(infInf.sinh()));
-    expect(Complex.NAN, equals(infNegInf.sinh()));
-    expect(Complex.NAN, equals(negInfInf.sinh()));
-    expect(Complex.NAN, equals(negInfNegInf.sinh()));
+    expect(Complex.nan, equals(infInf.sinh()));
+    expect(Complex.nan, equals(infNegInf.sinh()));
+    expect(Complex.nan, equals(negInfInf.sinh()));
+    expect(Complex.nan, equals(negInfNegInf.sinh()));
   });
 
   test('SqrtRealPositive', () {
@@ -910,7 +910,7 @@ main() {
   });
 
   test('SqrtNaN', () {
-    expect(Complex.NAN.sqrt().isNaN, isTrue);
+    expect(Complex.nan.sqrt().isNaN, isTrue);
   });
 
   test('SqrtInf', () {
@@ -931,7 +931,7 @@ main() {
   });
 
   test('Sqrt1zNaN', () {
-    expect(Complex.NAN.sqrt1z().isNaN, isTrue);
+    expect(Complex.nan.sqrt1z().isNaN, isTrue);
   });
 
   test('Tan', () {
@@ -948,18 +948,18 @@ main() {
   });
 
   test('TanNaN', () {
-    expect(Complex.NAN.tan().isNaN, isTrue);
+    expect(Complex.nan.tan().isNaN, isTrue);
   });
 
   test('TanInf', () {
     expect(Complex(0.0, 1.0), equals(oneInf.tan()));
     expect(Complex(0.0, -1.0), equals(oneNegInf.tan()));
-    expect(Complex.NAN, equals(infOne.tan()));
-    expect(Complex.NAN, equals(negInfOne.tan()));
-    expect(Complex.NAN, equals(infInf.tan()));
-    expect(Complex.NAN, equals(infNegInf.tan()));
-    expect(Complex.NAN, equals(negInfInf.tan()));
-    expect(Complex.NAN, equals(negInfNegInf.tan()));
+    expect(Complex.nan, equals(infOne.tan()));
+    expect(Complex.nan, equals(negInfOne.tan()));
+    expect(Complex.nan, equals(infInf.tan()));
+    expect(Complex.nan, equals(infNegInf.tan()));
+    expect(Complex.nan, equals(negInfInf.tan()));
+    expect(Complex.nan, equals(negInfNegInf.tan()));
   });
 
   test('TanCritical', () {
@@ -981,18 +981,18 @@ main() {
   });
 
   test('TanhNaN', () {
-    expect(Complex.NAN.tanh().isNaN, isTrue);
+    expect(Complex.nan.tanh().isNaN, isTrue);
   });
 
   test('TanhInf', () {
-    expect(Complex.NAN, equals(oneInf.tanh()));
-    expect(Complex.NAN, equals(oneNegInf.tanh()));
+    expect(Complex.nan, equals(oneInf.tanh()));
+    expect(Complex.nan, equals(oneNegInf.tanh()));
     expect(Complex(1.0, 0.0), equals(infOne.tanh()));
     expect(Complex(-1.0, 0.0), equals(negInfOne.tanh()));
-    expect(Complex.NAN, equals(infInf.tanh()));
-    expect(Complex.NAN, equals(infNegInf.tanh()));
-    expect(Complex.NAN, equals(negInfInf.tanh()));
-    expect(Complex.NAN, equals(negInfNegInf.tanh()));
+    expect(Complex.nan, equals(infInf.tanh()));
+    expect(Complex.nan, equals(infNegInf.tanh()));
+    expect(Complex.nan, equals(negInfInf.tanh()));
+    expect(Complex.nan, equals(negInfNegInf.tanh()));
   });
 
   test('TanhCritical', () {
@@ -1117,26 +1117,26 @@ main() {
     // NaN + finite -> NaN
     List<Complex> roots = oneNaN.nthRoot(3);
     expect(1, equals(roots.length));
-    expect(Complex.NAN, equals(roots[0]));
+    expect(Complex.nan, equals(roots[0]));
 
     roots = nanZero.nthRoot(3);
     expect(1, equals(roots.length));
-    expect(Complex.NAN, equals(roots[0]));
+    expect(Complex.nan, equals(roots[0]));
 
     // NaN + infinite -> NaN
     roots = nanInf.nthRoot(3);
     expect(1, equals(roots.length));
-    expect(Complex.NAN, equals(roots[0]));
+    expect(Complex.nan, equals(roots[0]));
 
     // finite + infinite -> Inf
     roots = oneInf.nthRoot(3);
     expect(1, equals(roots.length));
-    expect(Complex.INFINITY, equals(roots[0]));
+    expect(Complex.infinity, equals(roots[0]));
 
     // infinite + infinite -> Inf
     roots = negInfInf.nthRoot(3);
     expect(1, equals(roots.length));
-    expect(Complex.INFINITY, equals(roots[0]));
+    expect(Complex.infinity, equals(roots[0]));
   });
 
   /// Test standard values
@@ -1185,7 +1185,7 @@ main() {
   test('GetArgumentNaN', () {
     expect(nanZero.argument().isNaN, isTrue);
     expect(zeroNaN.argument().isNaN, isTrue);
-    expect(Complex.NAN.argument().isNaN, isTrue);
+    expect(Complex.nan.argument().isNaN, isTrue);
   });
 
   /*test('Serial', () {
