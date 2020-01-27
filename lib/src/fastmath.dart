@@ -5,7 +5,7 @@ import 'dart:math' as math;
 part 'literals.dart';
 part 'tables.dart';
 
-final double LOG_MAX_VALUE = math.log(double.maxFinite);
+final double logMaxValue = math.log(double.maxFinite);
 
 /// `0x40000000` - used to split a double into two parts, both with the low
 /// order bits cleared. Equivalent to `2^30`.
@@ -60,7 +60,7 @@ double cosh(double x) {
   // exp(-z) can be ignored in comparison with exp(z)
 
   if (x > 20) {
-    if (x >= LOG_MAX_VALUE) {
+    if (x >= logMaxValue) {
       // Avoid overflow (MATH-905).
       final double t = math.exp(0.5 * x);
       return (0.5 * t) * t;
@@ -68,7 +68,7 @@ double cosh(double x) {
       return 0.5 * exp(x);
     }
   } else if (x < -20) {
-    if (x <= -LOG_MAX_VALUE) {
+    if (x <= -logMaxValue) {
       // Avoid overflow (MATH-905).
       final double t = exp(-0.5 * x);
       return (0.5 * t) * t;
@@ -257,7 +257,7 @@ double sinh(double x) {
   // exp(-z) can be ignored in comparison with exp(z)
 
   if (x > 20) {
-    if (x >= LOG_MAX_VALUE) {
+    if (x >= logMaxValue) {
       // Avoid overflow (MATH-905).
       final double t = exp(0.5 * x);
       return (0.5 * t) * t;
@@ -265,7 +265,7 @@ double sinh(double x) {
       return 0.5 * exp(x);
     }
   } else if (x < -20) {
-    if (x <= -LOG_MAX_VALUE) {
+    if (x <= -logMaxValue) {
       // Avoid overflow (MATH-905).
       final double t = exp(-0.5 * x);
       return (-0.5 * t) * t;
