@@ -5,7 +5,7 @@ import 'dart:math' as math;
 part 'literals.dart';
 part 'tables.dart';
 
-final double LOG_MAX_VALUE = math.log(double.maxFinite);
+final double logMaxValue = math.log(double.maxFinite);
 
 /// `0x40000000` - used to split a double into two parts, both with the low
 /// order bits cleared. Equivalent to `2^30`.
@@ -31,7 +31,7 @@ const double F_1_4 = 1.0 / 4.0;
 
 /// This is used by sinQ, because its faster to do a table lookup than
 /// a multiply in this time-critical routine
-const EIGHTHS = const <double>[
+const EIGHTHS = <double>[
   0.0,
   0.125,
   0.25,
@@ -60,7 +60,7 @@ double cosh(double x) {
   // exp(-z) can be ignored in comparison with exp(z)
 
   if (x > 20) {
-    if (x >= LOG_MAX_VALUE) {
+    if (x >= logMaxValue) {
       // Avoid overflow (MATH-905).
       final double t = math.exp(0.5 * x);
       return (0.5 * t) * t;
@@ -68,7 +68,7 @@ double cosh(double x) {
       return 0.5 * exp(x);
     }
   } else if (x < -20) {
-    if (x <= -LOG_MAX_VALUE) {
+    if (x <= -logMaxValue) {
       // Avoid overflow (MATH-905).
       final double t = exp(-0.5 * x);
       return (0.5 * t) * t;
@@ -120,7 +120,7 @@ double cosh(double x) {
 /// [x] is the original argument of the exponential function.
 /// [extra] bits of precision on input (To Be Confirmed).
 /// [hiPrec] extra bits of precision on output (To Be Confirmed)
-double exp(double x, [double extra = 0.0, List<double> hiPrec = null]) {
+double exp(double x, [double extra = 0.0, List<double> hiPrec]) {
   double intPartA;
   double intPartB;
   int intVal;
@@ -257,7 +257,7 @@ double sinh(double x) {
   // exp(-z) can be ignored in comparison with exp(z)
 
   if (x > 20) {
-    if (x >= LOG_MAX_VALUE) {
+    if (x >= logMaxValue) {
       // Avoid overflow (MATH-905).
       final double t = exp(0.5 * x);
       return (0.5 * t) * t;
@@ -265,7 +265,7 @@ double sinh(double x) {
       return 0.5 * exp(x);
     }
   } else if (x < -20) {
-    if (x <= -LOG_MAX_VALUE) {
+    if (x <= -logMaxValue) {
       // Avoid overflow (MATH-905).
       final double t = exp(-0.5 * x);
       return (-0.5 * t) * t;
@@ -405,8 +405,8 @@ double atan(double xa, [double xb = 0.0, bool leftPlane = false]) {
         .toInt();
   }
 
-  final double ttA = TANGENT_TABLE_A[idx];
-  final double ttB = TANGENT_TABLE_B[idx];
+  final double ttA = tangentTableA[idx];
+  final double ttB = tangentTableB[idx];
 
   double epsA = xa - ttA;
   double epsB = -(epsA - xa + ttA);

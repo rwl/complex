@@ -4,7 +4,7 @@ part of fastmath;
 const int SINE_TABLE_LEN = 14;
 
 /// Sine table (high bits).
-const SINE_TABLE_A = const <double>[
+const sineTableA = <double>[
   0.0,
   0.1246747374534607,
   0.24740394949913025,
@@ -22,7 +22,7 @@ const SINE_TABLE_A = const <double>[
 ];
 
 /// Sine table (low bits).
-const SINE_TABLE_B = const <double>[
+const sineTableB = <double>[
   0.0,
   -4.068233003401932E-9,
   9.755392680573412E-9,
@@ -40,7 +40,7 @@ const SINE_TABLE_B = const <double>[
 ];
 
 /// Cosine table (high bits).
-const COSINE_TABLE_A = const <double>[
+const cosineTableA = <double>[
   1.0,
   0.9921976327896118,
   0.9689123630523682,
@@ -58,7 +58,7 @@ const COSINE_TABLE_A = const <double>[
 ];
 
 /// Cosine table (low bits).
-const COSINE_TABLE_B = const <double>[
+const cosineTableB = <double>[
   0.0,
   3.4439717236742845E-8,
   5.865827662008209E-8,
@@ -76,7 +76,7 @@ const COSINE_TABLE_B = const <double>[
 ];
 
 /// Tangent table, used by atan() (high bits).
-const TANGENT_TABLE_A = const <double>[
+const tangentTableA = <double>[
   0.0,
   0.1256551444530487,
   0.25534194707870483,
@@ -94,7 +94,7 @@ const TANGENT_TABLE_A = const <double>[
 ];
 
 /// Tangent table, used by atan() (low bits).
-const TANGENT_TABLE_B = const <double>[
+const tangentTableB = <double>[
   0.0,
   -7.877917738262007E-9,
   -2.5857668567479893E-8,
