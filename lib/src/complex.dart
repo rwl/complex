@@ -41,6 +41,11 @@ abstract class Complex {
   /// ```
   const factory Complex(double real, [double imaginary]) = Cartesian;
 
+  /// A pure `imaginary` number.
+  ///
+  /// ```dart
+  /// Complex(0.0, 2.0) == Complex.imag(2.0); // true
+  /// ```
   factory Complex.imag(double imaginary) => Cartesian(0.0, imaginary);
 
   factory Complex.polar(double r, double phase) {
