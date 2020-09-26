@@ -163,8 +163,8 @@ double exp(double x, [double extra = 0.0, List<double> hiPrec]) {
 
     intVal++;
 
-    intPartA = EXP_INT_TABLE_A[EXP_INT_TABLE_MAX_INDEX - intVal];
-    intPartB = EXP_INT_TABLE_B[EXP_INT_TABLE_MAX_INDEX - intVal];
+    intPartA = EXP_INT_TABLE_A[exp_int_table_max_index - intVal];
+    intPartB = EXP_INT_TABLE_B[exp_int_table_max_index - intVal];
 
     intVal = -intVal;
   } else {
@@ -186,8 +186,8 @@ double exp(double x, [double extra = 0.0, List<double> hiPrec]) {
       return double.infinity;
     }
 
-    intPartA = EXP_INT_TABLE_A[EXP_INT_TABLE_MAX_INDEX + intVal];
-    intPartB = EXP_INT_TABLE_B[EXP_INT_TABLE_MAX_INDEX + intVal];
+    intPartA = EXP_INT_TABLE_A[exp_int_table_max_index + intVal];
+    intPartB = EXP_INT_TABLE_B[exp_int_table_max_index + intVal];
   }
 
   // Get the fractional part of x, find the greatest multiple of 2^-10 less than

@@ -1,7 +1,7 @@
 part of fastmath;
 
 /// Index of exp(0) in the array of integer exponentials.
-const int EXP_INT_TABLE_MAX_INDEX = 750;
+const int exp_int_table_max_index = 750;
 
 /// Exponential evaluated at integer values,
 ///     exp(x) =  expIntTableA[x + EXP_INT_TABLE_MAX_INDEX] + expIntTableB[x+EXP_INT_TABLE_MAX_INDEX].
