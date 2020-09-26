@@ -32,7 +32,14 @@ abstract class Complex {
   /// A complex number representing "0.0 + 0.0i"
   static const zero = Cartesian(0.0);
 
-  factory Complex(double real, [double imaginary]) = Cartesian;
+  /// [Complex] as a [Cartesian] with optional `imaginary` part.
+  ///
+  /// Example:
+  /// ```dart
+  /// const realComplex = Complex(3.0);
+  /// const complexWithImaginary = Complex(5.3, 4.5);
+  /// ```
+  const factory Complex(double real, [double imaginary]) = Cartesian;
 
   factory Complex.imag(double imaginary) => Cartesian(0.0, imaginary);
 
