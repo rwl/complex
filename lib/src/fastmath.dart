@@ -195,7 +195,7 @@ double exp(double x, [double extra = 0.0, List<double> hiPrec]) {
   // fracPartA will have the upper 22 bits, fracPartB the lower 52 bits.
   final int intFrac = ((x - intVal) * 1024.0).toInt();
   final double fracPartA = exp_frac_table_A[intFrac];
-  final double fracPartB = EXP_FRAC_TABLE_B[intFrac];
+  final double fracPartB = exp_frac_table_B[intFrac];
 
   // epsilon is the difference in x from the nearest multiple of 2^-10.  It
   // has a value in the range 0 <= epsilon < 2^-10.
@@ -556,7 +556,7 @@ double expm1(double x, List<double> hiPrecOut) {
   {
     int intFrac = (x * 1024.0).toInt();
     double tempA = exp_frac_table_A[intFrac] - 1.0;
-    double tempB = EXP_FRAC_TABLE_B[intFrac];
+    double tempB = exp_frac_table_B[intFrac];
 
     double temp = tempA + tempB;
     tempB = -(temp - tempA - tempB);
