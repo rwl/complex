@@ -163,7 +163,7 @@ double exp(double x, [double extra = 0.0, List<double> hiPrec]) {
 
     intVal++;
 
-    intPartA = EXP_INT_TABLE_A[exp_int_table_max_index - intVal];
+    intPartA = exp_int_table_A[exp_int_table_max_index - intVal];
     intPartB = EXP_INT_TABLE_B[exp_int_table_max_index - intVal];
 
     intVal = -intVal;
@@ -186,7 +186,7 @@ double exp(double x, [double extra = 0.0, List<double> hiPrec]) {
       return double.infinity;
     }
 
-    intPartA = EXP_INT_TABLE_A[exp_int_table_max_index + intVal];
+    intPartA = exp_int_table_A[exp_int_table_max_index + intVal];
     intPartB = EXP_INT_TABLE_B[exp_int_table_max_index + intVal];
   }
 

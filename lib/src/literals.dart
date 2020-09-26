@@ -5,7 +5,7 @@ const int exp_int_table_max_index = 750;
 
 /// Exponential evaluated at integer values,
 ///     exp(x) =  expIntTableA[x + EXP_INT_TABLE_MAX_INDEX] + expIntTableB[x+EXP_INT_TABLE_MAX_INDEX].
-const EXP_INT_TABLE_A = <double>[
+const exp_int_table_A = <double>[
   0.0,
   double.nan,
   double.nan,
