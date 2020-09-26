@@ -1,5 +1,6 @@
 part of '../complex.dart';
 
+/// [Cartesian] is a [Complex] that save `real` and `imaginary` parts
 class Cartesian implements Complex {
   final double imaginary, real;
 
