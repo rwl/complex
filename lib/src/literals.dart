@@ -1510,7 +1510,7 @@ const exp_int_table_A = <double>[
 
 /// Exponential evaluated at integer values,
 ///     exp(x) =  expIntTableA[x + EXP_INT_TABLE_MAX_INDEX] + expIntTableB[x+EXP_INT_TABLE_MAX_INDEX]
-const EXP_INT_TABLE_B = <double>[
+const exp_int_table_B = <double>[
   0.0,
   double.nan,
   double.nan,
