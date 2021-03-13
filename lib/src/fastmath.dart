@@ -5,33 +5,20 @@ import 'dart:math' as math;
 part 'literals.dart';
 part 'tables.dart';
 
-final double logMaxValue = math.log(double.maxFinite);
+/// The `logMaxValue` is the natural logarithm of `doubel.maxFinite`
+final logMaxValue = math.log(double.maxFinite);
 
 /// `0x40000000` - used to split a double into two parts, both with the low
 /// order bits cleared. Equivalent to `2^30`.
-const int HEX_40000000 = 0x40000000; // 1073741824L
+const int hex40000000 = 0x40000000; // 1073741824L
 
-const double F_1_3 = 1.0 / 3.0;
-const double F_1_5 = 1.0 / 5.0;
-const double F_1_7 = 1.0 / 7.0;
-const double F_1_9 = 1.0 / 9.0;
-const double F_1_11 = 1.0 / 11.0;
-const double F_1_13 = 1.0 / 13.0;
-const double F_1_15 = 1.0 / 15.0;
-const double F_1_17 = 1.0 / 17.0;
-const double F_3_4 = 3.0 / 4.0;
-const double F_15_16 = 15.0 / 16.0;
-const double F_13_14 = 13.0 / 14.0;
-const double F_11_12 = 11.0 / 12.0;
-const double F_9_10 = 9.0 / 10.0;
-const double F_7_8 = 7.0 / 8.0;
-const double F_5_6 = 5.0 / 6.0;
-const double F_1_2 = 1.0 / 2.0;
-const double F_1_4 = 1.0 / 4.0;
+const _f3_4 = 3.0 / 4.0;
+const _f1_2 = 1.0 / 2.0;
+const _f1_4 = 1.0 / 4.0;
 
 /// This is used by sinQ, because its faster to do a table lookup than
 /// a multiply in this time-critical routine
-const EIGHTHS = <double>[
+const _eighths = <double>[
   0.0,
   0.125,
   0.25,
@@ -62,7 +49,7 @@ double cosh(double x) {
   if (x > 20) {
     if (x >= logMaxValue) {
       // Avoid overflow (MATH-905).
-      final double t = math.exp(0.5 * x);
+      final t = math.exp(0.5 * x);
       return (0.5 * t) * t;
     } else {
       return 0.5 * exp(x);
@@ -70,31 +57,32 @@ double cosh(double x) {
   } else if (x < -20) {
     if (x <= -logMaxValue) {
       // Avoid overflow (MATH-905).
-      final double t = exp(-0.5 * x);
+      final t = exp(-0.5 * x);
       return (0.5 * t) * t;
     } else {
       return 0.5 * exp(-x);
     }
   }
 
-  final hiPrec = List<double>(2);
+  //final hiPrec = List<double>(2);
+  final hiPrec = List.filled(2, 0.0);
   if (x < 0.0) {
     x = -x;
   }
   exp(x, 0.0, hiPrec);
 
-  double ya = hiPrec[0] + hiPrec[1];
-  double yb = -(ya - hiPrec[0] - hiPrec[1]);
+  var ya = hiPrec[0] + hiPrec[1];
+  var yb = -(ya - hiPrec[0] - hiPrec[1]);
 
-  double temp = ya * HEX_40000000;
-  double yaa = ya + temp - temp;
-  double yab = ya - yaa;
+  var temp = ya * hex40000000;
+  final yaa = ya + temp - temp;
+  final yab = ya - yaa;
 
   // recip = 1/y
-  double recip = 1.0 / ya;
-  temp = recip * HEX_40000000;
-  double recipa = recip + temp - temp;
-  double recipb = recip - recipa;
+  final recip = 1.0 / ya;
+  temp = recip * hex40000000;
+  final recipa = recip + temp - temp;
+  var recipb = recip - recipa;
 
   // Correct for rounding in division
   recipb +=
@@ -110,9 +98,7 @@ double cosh(double x) {
   yb += -(temp - ya - recipb);
   ya = temp;
 
-  double result = ya + yb;
-  result *= 0.5;
-  return result;
+  return (ya + yb) * 0.5;
 }
 
 /// Internal helper method for exponential function.
@@ -120,7 +106,7 @@ double cosh(double x) {
 /// [x] is the original argument of the exponential function.
 /// [extra] bits of precision on input (To Be Confirmed).
 /// [hiPrec] extra bits of precision on output (To Be Confirmed)
-double exp(double x, [double extra = 0.0, List<double> hiPrec]) {
+double exp(double x, [double extra = 0.0, List<double>? hiPrec]) {
   double intPartA;
   double intPartB;
   int intVal;
@@ -141,8 +127,7 @@ double exp(double x, [double extra = 0.0, List<double> hiPrec]) {
 
     if (intVal > 709) {
       // This will produce a subnormal output
-      final double result =
-          exp(x + 40.19140625, extra, hiPrec) / 285040095144011776.0;
+      final result = exp(x + 40.19140625, extra, hiPrec) / 285040095144011776.0;
       if (hiPrec != null) {
         hiPrec[0] /= 285040095144011776.0;
         hiPrec[1] /= 285040095144011776.0;
@@ -152,8 +137,7 @@ double exp(double x, [double extra = 0.0, List<double> hiPrec]) {
 
     if (intVal == 709) {
       // exp(1.494140625) is nearly a machine number...
-      final double result =
-          exp(x + 1.494140625, extra, hiPrec) / 4.455505956692756620;
+      final result = exp(x + 1.494140625, extra, hiPrec) / 4.455505956692756620;
       if (hiPrec != null) {
         hiPrec[0] /= 4.455505956692756620;
         hiPrec[1] /= 4.455505956692756620;
@@ -163,8 +147,8 @@ double exp(double x, [double extra = 0.0, List<double> hiPrec]) {
 
     intVal++;
 
-    intPartA = EXP_INT_TABLE_A[EXP_INT_TABLE_MAX_INDEX - intVal];
-    intPartB = EXP_INT_TABLE_B[EXP_INT_TABLE_MAX_INDEX - intVal];
+    intPartA = expIntTableA[expIntTableMaxIndex - intVal];
+    intPartB = expIntTableB[expIntTableMaxIndex - intVal];
 
     intVal = -intVal;
   } else {
@@ -186,21 +170,22 @@ double exp(double x, [double extra = 0.0, List<double> hiPrec]) {
       return double.infinity;
     }
 
-    intPartA = EXP_INT_TABLE_A[EXP_INT_TABLE_MAX_INDEX + intVal];
-    intPartB = EXP_INT_TABLE_B[EXP_INT_TABLE_MAX_INDEX + intVal];
+    intPartA = expIntTableA[expIntTableMaxIndex + intVal];
+    intPartB = expIntTableB[expIntTableMaxIndex + intVal];
   }
 
   // Get the fractional part of x, find the greatest multiple of 2^-10 less than
   // x and look up the exp function of it.
   // fracPartA will have the upper 22 bits, fracPartB the lower 52 bits.
-  final int intFrac = ((x - intVal) * 1024.0).toInt();
-  final double fracPartA = EXP_FRAC_TABLE_A[intFrac];
-  final double fracPartB = EXP_FRAC_TABLE_B[intFrac];
+  final intFrac = ((x - intVal) * 1024.0).toInt();
+  final fracPartA = expFracTableA[intFrac];
+  final fracPartB = expFracTableB[intFrac];
 
   // epsilon is the difference in x from the nearest multiple of 2^-10.  It
   // has a value in the range 0 <= epsilon < 2^-10.
-  // Do the subtraction from x as the last step to avoid possible loss of percison.
-  final double epsilon = x - (intVal + intFrac / 1024.0);
+  // Do the subtraction from x as the last step to avoid possible
+  // loss of percison.
+  final epsilon = x - (intVal + intFrac / 1024.0);
 
   // Compute z = exp(epsilon) - 1.0 via a minimax polynomial.  z has
   // full double precision (52 bits).  Since z < 2^-10, we will have
@@ -209,7 +194,7 @@ double exp(double x, [double extra = 0.0, List<double> hiPrec]) {
 
   // Remez generated polynomial.  Converges on the interval [0, 2^-10], error
   // is less than 0.5 ULP
-  double z = 0.04168701738764507;
+  var z = 0.04168701738764507;
   z = z * epsilon + 0.1666666505023083;
   z = z * epsilon + 0.5000000000042687;
   z = z * epsilon + 1.0;
@@ -219,15 +204,15 @@ double exp(double x, [double extra = 0.0, List<double> hiPrec]) {
   // expansion.
   // tempA is exact since intPartA and intPartB only have 22 bits each.
   // tempB will have 52 bits of precision.
-  double tempA = intPartA * fracPartA;
-  double tempB =
+  final tempA = intPartA * fracPartA;
+  final tempB =
       intPartA * fracPartB + intPartB * fracPartA + intPartB * fracPartB;
 
   // Compute the result.  (1+z)(tempA+tempB).  Order of operations is
   // important.  For accuracy add by increasing size.  tempA is exact and
   // much larger than the others.  If there are extra bits specified from the
   // pow() function, use them.
-  final double tempC = tempB + tempA;
+  final tempC = tempB + tempA;
   double result;
   if (extra != 0.0) {
     result = tempC * extra * z + tempC * extra + tempC * z + tempB + tempA;
@@ -246,10 +231,11 @@ double exp(double x, [double extra = 0.0, List<double> hiPrec]) {
 
 /// Compute the hyperbolic sine of a number.
 double sinh(double x) {
-  bool negate = false;
   if (x != x) {
     return x;
   }
+
+  var negate = false;
 
   // sinh[z] = (exp(z) - exp(-z) / 2
 
@@ -259,7 +245,7 @@ double sinh(double x) {
   if (x > 20) {
     if (x >= logMaxValue) {
       // Avoid overflow (MATH-905).
-      final double t = exp(0.5 * x);
+      final t = exp(0.5 * x);
       return (0.5 * t) * t;
     } else {
       return 0.5 * exp(x);
@@ -267,7 +253,7 @@ double sinh(double x) {
   } else if (x < -20) {
     if (x <= -logMaxValue) {
       // Avoid overflow (MATH-905).
-      final double t = exp(-0.5 * x);
+      final t = exp(-0.5 * x);
       return (-0.5 * t) * t;
     } else {
       return -0.5 * exp(-x);
@@ -286,21 +272,21 @@ double sinh(double x) {
   double result;
 
   if (x > 0.25) {
-    final hiPrec = List<double>(2);
+    final hiPrec = List.filled(2, 0.0);
     exp(x, 0.0, hiPrec);
 
-    double ya = hiPrec[0] + hiPrec[1];
-    double yb = -(ya - hiPrec[0] - hiPrec[1]);
+    var ya = hiPrec[0] + hiPrec[1];
+    var yb = -(ya - hiPrec[0] - hiPrec[1]);
 
-    double temp = ya * HEX_40000000;
-    double yaa = ya + temp - temp;
-    double yab = ya - yaa;
+    var temp = ya * hex40000000;
+    final yaa = ya + temp - temp;
+    final yab = ya - yaa;
 
     // recip = 1/y
-    double recip = 1.0 / ya;
-    temp = recip * HEX_40000000;
-    double recipa = recip + temp - temp;
-    double recipb = recip - recipa;
+    final recip = 1.0 / ya;
+    temp = recip * hex40000000;
+    var recipa = recip + temp - temp;
+    var recipb = recip - recipa;
 
     // Correct for rounding in division
     recipb +=
@@ -323,24 +309,24 @@ double sinh(double x) {
     result = ya + yb;
     result *= 0.5;
   } else {
-    final hiPrec = List<double>(2);
+    final hiPrec = List.filled(2, 0.0);
     expm1(x, hiPrec);
 
-    double ya = hiPrec[0] + hiPrec[1];
-    double yb = -(ya - hiPrec[0] - hiPrec[1]);
+    var ya = hiPrec[0] + hiPrec[1];
+    var yb = -(ya - hiPrec[0] - hiPrec[1]);
 
     /* Compute expm1(-x) = -expm1(x) / (expm1(x) + 1) */
-    double denom = 1.0 + ya;
-    double denomr = 1.0 / denom;
-    double denomb = -(denom - 1.0 - ya) + yb;
-    double ratio = ya * denomr;
-    double temp = ratio * HEX_40000000;
-    double ra = ratio + temp - temp;
-    double rb = ratio - ra;
+    final denom = 1.0 + ya;
+    final denomr = 1.0 / denom;
+    final denomb = -(denom - 1.0 - ya) + yb;
+    final ratio = ya * denomr;
+    var temp = ratio * hex40000000;
+    final ra = ratio + temp - temp;
+    var rb = ratio - ra;
 
-    temp = denom * HEX_40000000;
-    double za = denom + temp - temp;
-    double zb = denom - za;
+    temp = denom * hex40000000;
+    final za = denom + temp - temp;
+    final zb = denom - za;
 
     rb += (ya - za * ra - za * rb - zb * ra - zb * rb) * denomr;
 
@@ -391,50 +377,51 @@ double atan(double xa, [double xb = 0.0, bool leftPlane = false]) {
 
   if (xa > 1.633123935319537E16) {
     // Very large input
-    return (negate != leftPlane) ? (-math.pi * F_1_2) : (math.pi * F_1_2);
+    return (negate != leftPlane) ? (-math.pi * _f1_2) : (math.pi * _f1_2);
   }
 
-  /* Estimate the closest tabulated arctan value, compute eps = xa-tangentTable */
+  // Estimate the closest tabulated arctan value, compute eps = xa-tangentTable
   int idx;
   if (xa < 1) {
     idx = (((-1.7168146928204136 * xa * xa + 8.0) * xa) + 0.5).toInt();
   } else {
-    final double oneOverXa = 1 / xa;
+    final oneOverXa = 1 / xa;
     idx = (-((-1.7168146928204136 * oneOverXa * oneOverXa + 8.0) * oneOverXa) +
             13.07)
         .toInt();
   }
 
-  final double ttA = tangentTableA[idx];
-  final double ttB = tangentTableB[idx];
+  final ttA = tangentTableA[idx];
+  final ttB = tangentTableB[idx];
 
-  double epsA = xa - ttA;
-  double epsB = -(epsA - xa + ttA);
+  var epsA = xa - ttA;
+  var epsB = -(epsA - xa + ttA);
   epsB += xb - ttB;
 
-  double temp = epsA + epsB;
+  var temp = epsA + epsB;
   epsB = -(temp - epsA - epsB);
   epsA = temp;
 
   /* Compute eps = eps / (1.0 + xa*tangent) */
-  temp = xa * HEX_40000000;
-  double ya = xa + temp - temp;
-  double yb = xb + xa - ya;
+  temp = xa * hex40000000;
+  var ya = xa + temp - temp;
+  var yb = xb + xa - ya;
   xa = ya;
   xb += yb;
 
   //if (idx > 8 || idx == 0)
   if (idx == 0) {
-    /// If the slope of the arctan is gentle enough (< 0.45), this approximation will suffice
+    /// If the slope of the arctan is gentle enough (< 0.45),
+    /// this approximation will suffice
     //double denom = 1.0 / (1.0 + xa*tangentTableA[idx] + xb*tangentTableA[idx] + xa*tangentTableB[idx] + xb*tangentTableB[idx]);
-    final double denom = 1.0 / (1.0 + (xa + xb) * (ttA + ttB));
+    final denom = 1.0 / (1.0 + (xa + xb) * (ttA + ttB));
     //double denom = 1.0 / (1.0 + xa*tangentTableA[idx]);
     ya = epsA * denom;
     yb = epsB * denom;
   } else {
-    double temp2 = xa * ttA;
-    double za = 1.0 + temp2;
-    double zb = -(za - 1.0 - temp2);
+    var temp2 = xa * ttA;
+    var za = 1.0 + temp2;
+    var zb = -(za - 1.0 - temp2);
     temp2 = xb * ttA + xa * ttB;
     temp = za + temp2;
     zb += -(temp - za - temp2);
@@ -443,13 +430,13 @@ double atan(double xa, [double xb = 0.0, bool leftPlane = false]) {
     zb += xb * ttB;
     ya = epsA / za;
 
-    temp = ya * HEX_40000000;
-    final double yaa = (ya + temp) - temp;
-    final double yab = ya - yaa;
+    temp = ya * hex40000000;
+    final yaa = (ya + temp) - temp;
+    final yab = ya - yaa;
 
-    temp = za * HEX_40000000;
-    final double zaa = (za + temp) - temp;
-    final double zab = za - zaa;
+    temp = za * hex40000000;
+    final zaa = (za + temp) - temp;
+    final zab = za - zaa;
 
     /* Correct for rounding in division */
     yb = (epsA - yaa * zaa - yaa * zab - yab * zaa - yab * zab) / za;
@@ -462,7 +449,7 @@ double atan(double xa, [double xb = 0.0, bool leftPlane = false]) {
   epsB = yb;
 
   // Evaluate polynomial
-  final double epsA2 = epsA * epsA;
+  final epsA2 = epsA * epsA;
 
   /*
   yb = -0.09001346640161823;
@@ -490,22 +477,22 @@ double atan(double xa, [double xb = 0.0, bool leftPlane = false]) {
   /* Add in effect of epsB.   atan'(x) = 1/(1+x^2) */
   yb += epsB / (1.0 + epsA * epsA);
 
-  final double eighths = EIGHTHS[idx];
+  final eighths = _eighths[idx];
 
   //result = yb + eighths[idx] + ya;
-  double za = eighths + ya;
-  double zb = -(za - eighths - ya);
+  var za = eighths + ya;
+  var zb = -(za - eighths - ya);
   temp = za + yb;
   zb += -(temp - za - yb);
   za = temp;
 
-  double result = za + zb;
+  var result = za + zb;
 
   if (leftPlane) {
     // Result is in the left plane
-    final double resultb = -(result - za - zb);
-    final double pia = 1.5707963267948966 * 2;
-    final double pib = 6.123233995736766E-17 * 2;
+    final resultb = -(result - za - zb);
+    final pia = 1.5707963267948966 * 2;
+    final pib = 6.123233995736766E-17 * 2;
 
     za = pia - result;
     zb = -(za - pia + result);
@@ -531,13 +518,13 @@ double expm1(double x, List<double> hiPrecOut) {
   if (x <= -1.0 || x >= 1.0) {
     // If not between +/- 1.0
     //return exp(x) - 1.0;
-    final hiPrec = List<double>(2);
+    final hiPrec = List.filled(2, 0.0);
     exp(x, 0.0, hiPrec);
     if (x > 0.0) {
       return -1.0 + hiPrec[0] + hiPrec[1];
     } else {
-      final double ra = -1.0 + hiPrec[0];
-      double rb = -(ra + 1.0 - hiPrec[0]);
+      final ra = -1.0 + hiPrec[0];
+      var rb = -(ra + 1.0 - hiPrec[0]);
       rb += hiPrec[1];
       return ra + rb;
     }
@@ -546,7 +533,7 @@ double expm1(double x, List<double> hiPrecOut) {
   double baseA;
   double baseB;
   double epsilon;
-  bool negative = false;
+  var negative = false;
 
   if (x < 0.0) {
     x = -x;
@@ -554,15 +541,15 @@ double expm1(double x, List<double> hiPrecOut) {
   }
 
   {
-    int intFrac = (x * 1024.0).toInt();
-    double tempA = EXP_FRAC_TABLE_A[intFrac] - 1.0;
-    double tempB = EXP_FRAC_TABLE_B[intFrac];
+    final intFrac = (x * 1024.0).toInt();
+    var tempA = expFracTableA[intFrac] - 1.0;
+    var tempB = expFracTableB[intFrac];
 
-    double temp = tempA + tempB;
+    var temp = tempA + tempB;
     tempB = -(temp - tempA - tempB);
     tempA = temp;
 
-    temp = tempA * HEX_40000000;
+    temp = tempA * hex40000000;
     baseA = tempA + temp - temp;
     baseB = tempB + (tempA - baseA);
 
@@ -570,28 +557,29 @@ double expm1(double x, List<double> hiPrecOut) {
   }
 
   /// Compute expm1(epsilon)
-  double zb = 0.008336750013465571;
+  var zb = 0.008336750013465571;
   zb = zb * epsilon + 0.041666663879186654;
   zb = zb * epsilon + 0.16666666666745392;
   zb = zb * epsilon + 0.49999999999999994;
   zb *= epsilon;
   zb *= epsilon;
 
-  double za = epsilon;
-  double temp = za + zb;
+  var za = epsilon;
+  var temp = za + zb;
   zb = -(temp - za - zb);
   za = temp;
 
-  temp = za * HEX_40000000;
+  temp = za * hex40000000;
   temp = za + temp - temp;
   zb += za - temp;
   za = temp;
 
-  /// Combine the parts.   `expm1(a+b) = expm1(a) + expm1(b) + expm1(a)*expm1(b)`
-  double ya = za * baseA;
+  /// Combine the parts.
+  /// `expm1(a+b) = expm1(a) + expm1(b) + expm1(a)*expm1(b)`
+  var ya = za * baseA;
   //double yb = za*baseB + zb*baseA + zb*baseB;
   temp = ya + za * baseB;
-  double yb = -(temp - ya - za * baseB);
+  var yb = -(temp - ya - za * baseB);
   ya = temp;
 
   temp = ya + zb * baseA;
@@ -625,15 +613,15 @@ double expm1(double x, List<double> hiPrecOut) {
 
   if (negative) {
     /// Compute `expm1(-x) = -expm1(x) / (expm1(x) + 1)`
-    double denom = 1.0 + ya;
-    double denomr = 1.0 / denom;
-    double denomb = -(denom - 1.0 - ya) + yb;
-    double ratio = ya * denomr;
-    temp = ratio * HEX_40000000;
-    final double ra = ratio + temp - temp;
-    double rb = ratio - ra;
+    final denom = 1.0 + ya;
+    final denomr = 1.0 / denom;
+    final denomb = -(denom - 1.0 - ya) + yb;
+    final ratio = ya * denomr;
+    temp = ratio * hex40000000;
+    final ra = ratio + temp - temp;
+    var rb = ratio - ra;
 
-    temp = denom * HEX_40000000;
+    temp = denom * hex40000000;
     za = denom + temp - temp;
     zb = denom - za;
 
@@ -656,10 +644,11 @@ double expm1(double x, List<double> hiPrecOut) {
     yb = -rb;
   }
 
-  if (hiPrecOut != null) {
-    hiPrecOut[0] = ya;
-    hiPrecOut[1] = yb;
-  }
+  // TODO(@kranfix): remove?
+  //if (hiPrecOut != null) {
+  //  hiPrecOut[0] = ya;
+  //  hiPrecOut[1] = yb;
+  //}
 
   return ya + yb;
 }
@@ -674,9 +663,9 @@ double atan2(double y, double x) {
   }
 
   if (y == 0) {
-    final double result = x * y;
-    final double invx = 1.0 / x;
-    final double invy = 1.0 / y;
+    final result = x * y;
+    final invx = 1.0 / x;
+    final invy = 1.0 / y;
 
     if (invx == 0) {
       // X is infinite
@@ -702,26 +691,26 @@ double atan2(double y, double x) {
 
   if (y == double.infinity) {
     if (x == double.infinity) {
-      return math.pi * F_1_4;
+      return math.pi * _f1_4;
     }
 
     if (x == double.negativeInfinity) {
-      return math.pi * F_3_4;
+      return math.pi * _f3_4;
     }
 
-    return math.pi * F_1_2;
+    return math.pi * _f1_2;
   }
 
   if (y == double.negativeInfinity) {
     if (x == double.infinity) {
-      return -math.pi * F_1_4;
+      return -math.pi * _f1_4;
     }
 
     if (x == double.negativeInfinity) {
-      return -math.pi * F_3_4;
+      return -math.pi * _f3_4;
     }
 
-    return -math.pi * F_1_2;
+    return -math.pi * _f1_2;
   }
 
   if (x == double.infinity) {
@@ -748,31 +737,31 @@ double atan2(double y, double x) {
 
   if (x == 0) {
     if (y > 0 || 1 / y > 0) {
-      return math.pi * F_1_2;
+      return math.pi * _f1_2;
     }
 
     if (y < 0 || 1 / y < 0) {
-      return -math.pi * F_1_2;
+      return -math.pi * _f1_2;
     }
   }
 
   // Compute ratio r = y/x
-  final double r = y / x;
+  final r = y / x;
   if (r.isInfinite) {
     // bypass calculations that can create NaN
     return atan(r, 0.0, x < 0);
   }
 
-  double ra = r; // TODO(rwl): doubleHighPart(r);
-  double rb = r - ra;
+  var ra = r; // TODO(rwl): doubleHighPart(r);
+  var rb = r - ra;
 
   // Split x
-  final double xa = x; // TODO(rwl): doubleHighPart(x);
-  final double xb = x - xa;
+  final xa = x; // TODO(rwl): doubleHighPart(x);
+  final xb = x - xa;
 
   rb += (y - ra * xa - ra * xb - rb * xa - rb * xb) / x;
 
-  final double temp = ra + rb;
+  final temp = ra + rb;
   rb = -(temp - ra - rb);
   ra = temp;
 
@@ -782,9 +771,7 @@ double atan2(double y, double x) {
   }
 
   // Call atan
-  final double result = atan(ra, rb, x < 0);
-
-  return result;
+  return atan(ra, rb, x < 0);
 }
 
 /// Returns the first argument with the sign of the second argument.

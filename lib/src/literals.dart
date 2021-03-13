@@ -1,11 +1,16 @@
 part of fastmath;
 
 /// Index of exp(0) in the array of integer exponentials.
-const int EXP_INT_TABLE_MAX_INDEX = 750;
+const int expIntTableMaxIndex = 750;
 
 /// Exponential evaluated at integer values,
-///     exp(x) =  expIntTableA[x + EXP_INT_TABLE_MAX_INDEX] + expIntTableB[x+EXP_INT_TABLE_MAX_INDEX].
-const EXP_INT_TABLE_A = const <double>[
+///
+///
+///  exp(x) =
+///     expIntTableA[x + expIntTableMaxIndex]
+///     + expIntTableB[x + expIntTableMaxIndex]
+///
+const expIntTableA = <double>[
   0.0,
   double.nan,
   double.nan,
@@ -1509,8 +1514,10 @@ const EXP_INT_TABLE_A = const <double>[
 ];
 
 /// Exponential evaluated at integer values,
-///     exp(x) =  expIntTableA[x + EXP_INT_TABLE_MAX_INDEX] + expIntTableB[x+EXP_INT_TABLE_MAX_INDEX]
-const EXP_INT_TABLE_B = const <double>[
+///   exp(x) =
+///      expIntTableA[x + exp_int_table_max_index]
+///      + expIntTableB[x+exp_int_table_max_index]
+const expIntTableB = <double>[
   0.0,
   double.nan,
   double.nan,
@@ -3016,7 +3023,7 @@ const EXP_INT_TABLE_B = const <double>[
 /// Exponential over the range of 0 - 1 in increments of `2^-10`
 ///     exp(x/1024) =  expFracTableA[x] + expFracTableB[x].
 ///     1024 = 2^10
-const EXP_FRAC_TABLE_A = const <double>[
+const expFracTableA = <double>[
   1.0,
   1.0009770393371582,
   1.0019550323486328,
@@ -4046,7 +4053,7 @@ const EXP_FRAC_TABLE_A = const <double>[
 
 /// Exponential over the range of 0 - 1 in increments of `2^-10`
 ///     exp(x/1024) =  expFracTableA[x] + expFracTableB[x].
-const EXP_FRAC_TABLE_B = const <double>[
+const expFracTableB = <double>[
   0.0,
   1.552583321178453E-10,
   1.2423699995465188E-9,

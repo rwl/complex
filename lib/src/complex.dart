@@ -17,6 +17,27 @@ part of '../complex.dart';
 /// point numbers (according to which the test `x == x` must fail if
 /// `x` is `NaN`).
 abstract class Complex {
+  /// [Complex] as a [Cartesian] with optional `imaginary` part.
+  ///
+  /// Example:
+  /// ```dart
+  /// const realComplex = Complex(3.0);
+  /// const complexWithImaginary = Complex(5.3, 4.5);
+  /// ```
+  const factory Complex(double real, [double imaginary]) = Cartesian;
+
+  /// A pure `imaginary` number.
+  ///
+  /// ```dart
+  /// Complex(0.0, 2.0) == Complex.imag(2.0); // true
+  /// ```
+  factory Complex.imag(double imaginary) => Cartesian(0.0, imaginary);
+
+  /// A [Complex]
+  factory Complex.polar([double r = 0.0, double phase = 0.0]) {
+    return Cartesian(r * math.cos(phase), r * math.sin(phase));
+  }
+
   /// The square root of -1. A number representing "0.0 + 1.0i"
   static const i = Cartesian(0.0, 1.0);
 
@@ -31,16 +52,6 @@ abstract class Complex {
 
   /// A complex number representing "0.0 + 0.0i"
   static const zero = Cartesian(0.0);
-
-  factory Complex(double real, [double imaginary]) = Cartesian;
-
-  factory Complex.imag(double imaginary) => Cartesian(0.0, imaginary);
-
-  factory Complex.polar(double r, double phase) {
-    r ??= 0.0;
-    phase ??= 0.0;
-    return Cartesian(r * math.cos(phase), r * math.sin(phase));
-  }
 
   /// The real part.
   double get real;
@@ -84,8 +95,8 @@ abstract class Complex {
   ///     (a + bi) + (c + di) = (a+c) + (b+d)i
   ///
   /// If either `this` or [addend] has a `NaN` value in
-  /// either part, [NaN] is returned; otherwise `Infinite`
-  /// and `NaN` values are returned in the parts of the result
+  /// either part, `NaN` is returned; otherwise `Infinite`
+  /// and [nan] values are returned in the parts of the result
   /// according to the rules for [double] arithmetic.
   Complex operator +(Object addend);
 
@@ -146,6 +157,7 @@ abstract class Complex {
   ///   to `NaN`.
   /// * Instances constructed with different representations of zero (i.e.
   ///   either "0" or "-0") are *not* considered to be equal.
+  @override
   bool operator ==(Object other);
 
   /// Return the absolute value of this complex number.
@@ -172,7 +184,7 @@ abstract class Complex {
   /// Return the conjugate of this complex number.
   /// The conjugate of `a + bi` is `a - bi`.
   ///
-  /// [NaN] is returned if either the real or imaginary
+  /// [nan] is returned if either the real or imaginary
   /// part of this Complex number equals `double.nan`.
   ///
   /// If the imaginary part is infinite, and the real part is not
@@ -293,9 +305,46 @@ abstract class Complex {
   /// Infinite values in real or imaginary parts of the input may result in
   /// infinite or NaN values returned in parts of the result.
   Complex sqrt1z();
+
+  @override
+  int get hashCode => real.hashCode ^ imaginary.hashCode;
 }
 
+/// The [ComplexerX] expose methods for easy convertion from
+/// [num] to [Complex].
+///
+/// {@template ComplexerX_real}
+/// To create a [Complex] without imaginary part (i.e. a real) from a [num],
+/// use [num].`real` getter.
+///
+/// ```
+/// final a = 3.real; // a = Complex(3.0, 0);
+/// final b = 4.0.real; // b = Complex(4.0, 0);
+/// final c = 3.re; // c = Complex(3.0, 0);
+/// final d = 4.0.re; // d = Complex(4.0, 0);
+/// ```
+/// {@endtemplate}
+///
+/// {@template ComplexerX_imag}
+/// use [num].`imag` getter.
+///
+/// ```
+/// final a = 3.imag; // a = Complex(0, 3.0);
+/// final b = 4.0.imag; // b = Complex(0, 4.0);
+/// final c = 3.im; // c = Complex(0, 3.0);
+/// final d = 4.0.im; // d = Complex(0, 4.0);
+/// ```
+/// {@endtemplate}
 extension ComplexerX on num {
-  Complex get real => Cartesian(this.toDouble());
-  Complex get imag => Cartesian(0, this.toDouble());
+  /// {@macro ComplexerX_real}
+  Complex get real => Cartesian(toDouble());
+
+  /// {@macro ComplexerX_real}
+  Complex get re => Cartesian(toDouble());
+
+  /// {@macro ComplexerX_imag}
+  Complex get imag => Cartesian(0, toDouble());
+
+  /// {@macro ComplexerX_imag}
+  Complex get im => Cartesian(0, toDouble());
 }

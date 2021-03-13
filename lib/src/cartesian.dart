@@ -1,11 +1,13 @@
 part of '../complex.dart';
 
+/// [Cartesian] is a [Complex] that save `real` and `imaginary` parts
 class Cartesian implements Complex {
-  final double imaginary, real;
-
   /// Create a complex number given the real part and optionally the imaginary
   /// part.
   const Cartesian(this.real, [this.imaginary = 0]);
+
+  @override
+  final double imaginary, real;
 
   @override
   bool get isFinite => !isNaN && real.isFinite && imaginary.isFinite;
@@ -21,8 +23,8 @@ class Cartesian implements Complex {
     if (isNaN) return double.nan;
     if (isInfinite) return double.infinity;
 
-    double x = real.abs();
-    double y = imaginary.abs();
+    var x = real.abs();
+    var y = imaginary.abs();
 
     if (x > y) {
       final z = x;
@@ -30,7 +32,7 @@ class Cartesian implements Complex {
       y = z;
     }
     if (x == 0.0) return y;
-    double q = x / y;
+    final q = x / y;
     return y * math.sqrt(1 + q * q);
   }
 
@@ -61,8 +63,8 @@ class Cartesian implements Complex {
         return Complex.nan;
       }
 
-      final double c = divisor.real;
-      final double d = divisor.imaginary;
+      final c = divisor.real;
+      final d = divisor.imaginary;
       if (c == 0.0 && d == 0.0) {
         return Complex.nan;
       }
@@ -72,15 +74,15 @@ class Cartesian implements Complex {
       }
 
       if (c.abs() < d.abs()) {
-        double q = c / d;
-        double denominator = c * q + d;
+        final q = c / d;
+        final denominator = c * q + d;
         return Cartesian(
           (real * q + imaginary) / denominator,
           (imaginary * q - real) / denominator,
         );
       } else {
-        double q = d / c;
-        double denominator = d * q + c;
+        final q = d / c;
+        final denominator = d * q + c;
         return Cartesian(
           (imaginary * q + real) / denominator,
           (imaginary - real * q) / denominator,
@@ -117,12 +119,12 @@ class Cartesian implements Complex {
     }
 
     if (real.abs() < imaginary.abs()) {
-      double q = real / imaginary;
-      double scale = 1.0 / (real * q + imaginary);
+      final q = real / imaginary;
+      final scale = 1.0 / (real * q + imaginary);
       return Cartesian(scale * q, -scale);
     } else {
-      double q = imaginary / real;
-      double scale = 1.0 / (imaginary * q + real);
+      final q = imaginary / real;
+      final scale = 1.0 / (imaginary * q + real);
       return Cartesian(scale, -scale * q);
     }
   }
@@ -133,7 +135,7 @@ class Cartesian implements Complex {
       return true;
     }
     if (other is Cartesian) {
-      Cartesian c = other;
+      final c = other;
       if (c.isNaN) {
         return isNaN;
       } else {
@@ -204,31 +206,30 @@ class Cartesian implements Complex {
   Cartesian exp() {
     if (isNaN) return Complex.nan;
 
-    double expReal = math.exp(real);
-    return Cartesian(
-        expReal * math.cos(imaginary), expReal * math.sin(imaginary));
+    final expReal = math.exp(real);
+    return Complex.polar(expReal, imaginary) as Cartesian;
   }
 
   @override
   Cartesian log() {
-    if (isNaN) Complex.nan;
+    if (isNaN) return Complex.nan;
     return Cartesian(math.log(abs()), fastmath.atan2(imaginary, real));
   }
 
   @override
-  Cartesian power<T extends Complex>(T z) => (this.log() * z).exp();
+  Cartesian power<T extends Complex>(T z) => (log() * z).exp();
 
   @override
-  Cartesian pow(num x) => (this.log() * x).exp();
+  Cartesian pow(num x) => (log() * x).exp();
 
   @override
   Cartesian sqrt() {
-    if (isNaN) Complex.nan;
+    if (isNaN) return Complex.nan;
 
     if (real == 0.0 && imaginary == 0.0) {
       return Complex.zero;
     }
-    double t = math.sqrt((real.abs() + abs()) / 2.0);
+    final t = math.sqrt((real.abs() + abs()) / 2.0);
     if (real >= 0.0) {
       return Cartesian(t, imaginary / (2.0 * t));
     } else {
@@ -257,5 +258,5 @@ class Cartesian implements Complex {
   }
 
   @override
-  String toString() => "($real, $imaginary)";
+  String toString() => '($real, $imaginary)';
 }

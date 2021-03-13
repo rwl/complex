@@ -16,9 +16,9 @@
 import 'package:test/test.dart';
 import 'package:complex/src/fastmath.dart' as fastmath;
 
-main() {
+void main() {
   test('indicator', () {
-    double delta = 0.0;
+    var delta = 0.0;
     expect(1.0, closeTo(fastmath.copySign(1.0, 2.0), delta));
     expect(1.0, closeTo(fastmath.copySign(1.0, 0.0), delta));
     // TODO expect(-1.0, closeTo(fastmath.copySign(1.0, -0.0), delta));
