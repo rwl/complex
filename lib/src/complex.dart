@@ -307,7 +307,7 @@ abstract class Complex {
   Complex sqrt1z();
 
   @override
-  int get hashCode => super.hashCode;
+  int get hashCode => real.hashCode ^ imaginary.hashCode;
 }
 
 /// The [ComplexerX] expose methods for easy convertion from
