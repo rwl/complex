@@ -11,7 +11,7 @@ class TestComplex extends Cartesian {
 
   @override
   String toString() {
-    return "$real ${imaginary}j";
+    return '$real ${imaginary}j';
   }
 }
 
@@ -21,34 +21,37 @@ class TestComplex extends Cartesian {
 Matcher closeToZ(Complex value, num delta) => _IsCloseToZ(value, delta);
 
 class _IsCloseToZ extends Matcher {
+  const _IsCloseToZ(this._value, this._delta);
+
   final Complex _value;
   final num _delta;
 
-  const _IsCloseToZ(this._value, this._delta);
-
+  @override
   bool matches(item, Map matchState) {
     if (item is! Complex) {
       return false;
     }
-    var re_diff = item.real - _value.real;
-    if (re_diff < 0) re_diff = -re_diff;
-    if (re_diff > _delta) {
+    var reDiff = item.real - _value.real;
+    if (reDiff < 0) reDiff = -reDiff;
+    if (reDiff > _delta) {
       return false;
     }
-    var im_diff = item.imaginary - _value.imaginary;
-    if (im_diff < 0) im_diff = -im_diff;
-    if (im_diff > _delta) {
+    var imDiff = item.imaginary - _value.imaginary;
+    if (imDiff < 0) imDiff = -imDiff;
+    if (imDiff > _delta) {
       return false;
     }
     return true;
   }
 
+  @override
   Description describe(Description description) => description
       .add('a complex value within ')
       .addDescriptionOf(_delta)
       .add(' of ')
       .addDescriptionOf(_value);
 
+  @override
   Description describeMismatch(
       item, Description mismatchDescription, Map matchState, bool verbose) {
     if (item is! Complex) {
