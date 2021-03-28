@@ -11,3 +11,6 @@ complex.iml
 /.settings/
 
 .dart_tool/
+
+# Coverage files
+coverage/**
