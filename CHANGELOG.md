@@ -1,3 +1,8 @@
+# 0.7.2
+
+- Adding example
+- Enhancing readme
+
 # 0.7.1
 
 - Adding very good analysis (linter)
