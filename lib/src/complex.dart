@@ -16,7 +16,8 @@ part of '../complex.dart';
 /// Note that this is in contradiction with the IEEE-754 standard for floating
 /// point numbers (according to which the test `x == x` must fail if
 /// `x` is `NaN`).
-abstract class Complex {
+@immutable
+sealed class Complex {
   /// [Complex] as a [Cartesian] with optional `imaginary` part.
   ///
   /// Example:
@@ -31,7 +32,7 @@ abstract class Complex {
   /// ```dart
   /// Complex(0.0, 2.0) == Complex.imag(2.0); // true
   /// ```
-  factory Complex.imag(double imaginary) => Cartesian(0.0, imaginary);
+  factory Complex.imag(double imaginary) => Cartesian(0, imaginary);
 
   /// A [Complex]
   factory Complex.polar([double r = 0.0, double phase = 0.0]) {
@@ -39,7 +40,7 @@ abstract class Complex {
   }
 
   /// The square root of -1. A number representing "0.0 + 1.0i"
-  static const i = Cartesian(0.0, 1.0);
+  static const i = Cartesian(0, 1);
 
   /// A complex number representing "NaN + NaNi"
   static const nan = Cartesian(double.nan, double.nan);
@@ -48,10 +49,10 @@ abstract class Complex {
   static const infinity = Cartesian(double.infinity, double.infinity);
 
   /// A complex number representing "1.0 + 0.0i"
-  static const one = Cartesian(1.0);
+  static const one = Cartesian(1);
 
   /// A complex number representing "0.0 + 0.0i"
-  static const zero = Cartesian(0.0);
+  static const zero = Cartesian(0);
 
   /// The real part.
   double get real;
