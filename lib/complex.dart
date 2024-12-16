@@ -15,7 +15,8 @@
 library complex;
 
 import 'dart:math' as math;
-import 'src/fastmath.dart' as fastmath;
+import 'package:complex/src/fastmath.dart' as fastmath;
+import 'package:meta/meta.dart';
 
 part 'src/complex.dart';
 part 'src/cartesian.dart';

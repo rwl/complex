@@ -1,7 +1,12 @@
+# 0.8.0
+
+- Compatible with Dart 3
+- [BREAKING] exponential functions receive a HihPrecision object instead of a list of two doubles
+
 # 0.7.2
 
-- Adding example
-- Enhancing readme
+- Added example
+- Enhanced readme
 
 # 0.7.1
 

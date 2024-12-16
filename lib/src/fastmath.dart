@@ -19,7 +19,7 @@ const _f1_4 = 1.0 / 4.0;
 /// This is used by sinQ, because its faster to do a table lookup than
 /// a multiply in this time-critical routine
 const _eighths = <double>[
-  0.0,
+  0,
   0.125,
   0.25,
   0.375,
@@ -27,12 +27,12 @@ const _eighths = <double>[
   0.625,
   0.75,
   0.875,
-  1.0,
+  1,
   1.125,
   1.25,
   1.375,
   1.5,
-  1.625
+  1.625,
 ];
 
 /// Compute the hyperbolic cosine of a number.
@@ -60,19 +60,18 @@ double cosh(double x) {
       final t = exp(-0.5 * x);
       return (0.5 * t) * t;
     } else {
-      return 0.5 * exp(-x);
+      return 0.5 * exp(0 - x);
     }
   }
 
-  //final hiPrec = List<double>(2);
-  final hiPrec = List.filled(2, 0.0);
+  final hiPrec = Precision();
   if (x < 0.0) {
     x = -x;
   }
-  exp(x, 0.0, hiPrec);
+  exp(x, 0, hiPrec);
 
-  var ya = hiPrec[0] + hiPrec[1];
-  var yb = -(ya - hiPrec[0] - hiPrec[1]);
+  var ya = hiPrec.re + hiPrec.im;
+  var yb = -(ya - hiPrec.re - hiPrec.im);
 
   var temp = ya * hex40000000;
   final yaa = ya + temp - temp;
@@ -106,7 +105,11 @@ double cosh(double x) {
 /// [x] is the original argument of the exponential function.
 /// [extra] bits of precision on input (To Be Confirmed).
 /// [hiPrec] extra bits of precision on output (To Be Confirmed)
-double exp(double x, [double extra = 0.0, List<double>? hiPrec]) {
+double exp(
+  double x, [
+  double extra = 0.0,
+  Precision? hiPrec,
+]) {
   double intPartA;
   double intPartB;
   int intVal;
@@ -118,19 +121,16 @@ double exp(double x, [double extra = 0.0, List<double>? hiPrec]) {
     intVal = -x.toInt();
 
     if (intVal > 746) {
-      if (hiPrec != null) {
-        hiPrec[0] = 0.0;
-        hiPrec[1] = 0.0;
-      }
-      return 0.0;
+      return 0;
     }
 
     if (intVal > 709) {
       // This will produce a subnormal output
       final result = exp(x + 40.19140625, extra, hiPrec) / 285040095144011776.0;
       if (hiPrec != null) {
-        hiPrec[0] /= 285040095144011776.0;
-        hiPrec[1] /= 285040095144011776.0;
+        hiPrec
+          ..re /= 285040095144011776.0
+          ..im /= 285040095144011776.0;
       }
       return result;
     }
@@ -139,8 +139,9 @@ double exp(double x, [double extra = 0.0, List<double>? hiPrec]) {
       // exp(1.494140625) is nearly a machine number...
       final result = exp(x + 1.494140625, extra, hiPrec) / 4.455505956692756620;
       if (hiPrec != null) {
-        hiPrec[0] /= 4.455505956692756620;
-        hiPrec[1] /= 4.455505956692756620;
+        hiPrec
+          ..re /= 4.455505956692756620
+          ..im /= 4.455505956692756620;
       }
       return result;
     }
@@ -154,8 +155,9 @@ double exp(double x, [double extra = 0.0, List<double>? hiPrec]) {
   } else {
     if (x == double.infinity) {
       if (hiPrec != null) {
-        hiPrec[0] = double.infinity;
-        hiPrec[1] = 0.0;
+        hiPrec
+          ..re = double.infinity
+          ..im = 0.0;
       }
       return double.infinity;
     }
@@ -164,8 +166,9 @@ double exp(double x, [double extra = 0.0, List<double>? hiPrec]) {
 
     if (intVal > 709) {
       if (hiPrec != null) {
-        hiPrec[0] = double.infinity;
-        hiPrec[1] = 0.0;
+        hiPrec
+          ..re = double.infinity
+          ..im = 0.0;
       }
       return double.infinity;
     }
@@ -222,8 +225,9 @@ double exp(double x, [double extra = 0.0, List<double>? hiPrec]) {
 
   if (hiPrec != null) {
     // If requesting high precision
-    hiPrec[0] = tempA;
-    hiPrec[1] = tempC * extra * z + tempC * extra + tempC * z + tempB;
+    hiPrec
+      ..re = tempA
+      ..im = tempC * extra * z + tempC * extra + tempC * z + tempB;
   }
 
   return result;
@@ -256,7 +260,7 @@ double sinh(double x) {
       final t = exp(-0.5 * x);
       return (-0.5 * t) * t;
     } else {
-      return -0.5 * exp(-x);
+      return -0.5 * exp(0 - x);
     }
   }
 
@@ -272,11 +276,11 @@ double sinh(double x) {
   double result;
 
   if (x > 0.25) {
-    final hiPrec = List.filled(2, 0.0);
-    exp(x, 0.0, hiPrec);
+    final hiPrec = Precision();
+    exp(x, 0, hiPrec);
 
-    var ya = hiPrec[0] + hiPrec[1];
-    var yb = -(ya - hiPrec[0] - hiPrec[1]);
+    var ya = hiPrec.re + hiPrec.im;
+    var yb = -(ya - hiPrec.re - hiPrec.im);
 
     var temp = ya * hex40000000;
     final yaa = ya + temp - temp;
@@ -309,11 +313,11 @@ double sinh(double x) {
     result = ya + yb;
     result *= 0.5;
   } else {
-    final hiPrec = List.filled(2, 0.0);
+    final hiPrec = Precision();
     expm1(x, hiPrec);
 
-    var ya = hiPrec[0] + hiPrec[1];
-    var yb = -(ya - hiPrec[0] - hiPrec[1]);
+    var ya = hiPrec.re + hiPrec.im;
+    var yb = -(ya - hiPrec.re - hiPrec.im);
 
     /* Compute expm1(-x) = -expm1(x) / (expm1(x) + 1) */
     final denom = 1.0 + ya;
@@ -359,6 +363,7 @@ double sinh(double x) {
 /// [xb] extra bits for x (may be 0.0).
 /// [leftPlane] if true, result angle must be put in the left half plane.
 /// Returns `atan(xa + xb)` (or angle shifted by `PI` if leftPlane is true)
+// ignore: avoid_positional_boolean_parameters
 double atan(double xa, [double xb = 0.0, bool leftPlane = false]) {
   if (xa == 0.0) {
     // Matches +/- 0.0; return correct sign
@@ -491,8 +496,8 @@ double atan(double xa, [double xb = 0.0, bool leftPlane = false]) {
   if (leftPlane) {
     // Result is in the left plane
     final resultb = -(result - za - zb);
-    final pia = 1.5707963267948966 * 2;
-    final pib = 6.123233995736766E-17 * 2;
+    const pia = 1.5707963267948966 * 2;
+    const pib = 6.123233995736766E-17 * 2;
 
     za = pia - result;
     zb = -(za - pia + result);
@@ -509,7 +514,7 @@ double atan(double xa, [double xb = 0.0, bool leftPlane = false]) {
 }
 
 /// Compute `exp(x) - 1`.
-double expm1(double x, List<double> hiPrecOut) {
+double expm1(double x, Precision hiPrecOut) {
   if (x != x || x == 0.0) {
     // NaN or zero
     return x;
@@ -518,14 +523,14 @@ double expm1(double x, List<double> hiPrecOut) {
   if (x <= -1.0 || x >= 1.0) {
     // If not between +/- 1.0
     //return exp(x) - 1.0;
-    final hiPrec = List.filled(2, 0.0);
-    exp(x, 0.0, hiPrec);
+    final hiPrec = Precision();
+    exp(x, 0, hiPrec);
     if (x > 0.0) {
-      return -1.0 + hiPrec[0] + hiPrec[1];
+      return -1.0 + hiPrec.re + hiPrec.im;
     } else {
-      final ra = -1.0 + hiPrec[0];
-      var rb = -(ra + 1.0 - hiPrec[0]);
-      rb += hiPrec[1];
+      final ra = -1.0 + hiPrec.re;
+      var rb = -(ra + 1.0 - hiPrec.re);
+      rb += hiPrec.im;
       return ra + rb;
     }
   }
@@ -644,11 +649,9 @@ double expm1(double x, List<double> hiPrecOut) {
     yb = -rb;
   }
 
-  // TODO(@kranfix): remove?
-  //if (hiPrecOut != null) {
-  //  hiPrecOut[0] = ya;
-  //  hiPrecOut[1] = yb;
-  //}
+  hiPrecOut
+    ..re = ya
+    ..im = yb;
 
   return ya + yb;
 }
@@ -715,11 +718,11 @@ double atan2(double y, double x) {
 
   if (x == double.infinity) {
     if (y > 0 || 1 / y > 0) {
-      return 0.0;
+      return 0;
     }
 
     if (y < 0 || 1 / y < 0) {
-      return -0.0;
+      return -0;
     }
   }
 
@@ -749,14 +752,14 @@ double atan2(double y, double x) {
   final r = y / x;
   if (r.isInfinite) {
     // bypass calculations that can create NaN
-    return atan(r, 0.0, x < 0);
+    return atan(r, 0, x < 0);
   }
 
-  var ra = r; // TODO(rwl): doubleHighPart(r);
+  var ra = r; // TODO(kranfix): doubleHighPart(r);
   var rb = r - ra;
 
   // Split x
-  final xa = x; // TODO(rwl): doubleHighPart(x);
+  final xa = x; // TODO(kranfix): doubleHighPart(x);
   final xb = x - xa;
 
   rb += (y - ra * xa - ra * xb - rb * xa - rb * xb) / x;
@@ -767,7 +770,7 @@ double atan2(double y, double x) {
 
   if (ra == 0) {
     // Fix up the sign so atan works correctly
-    ra = copySign(0.0, y);
+    ra = copySign(0, y);
   }
 
   // Call atan
@@ -795,4 +798,19 @@ double copySign(double magnitude, double sign) {
     return magnitude;
   }
   return -magnitude; // flip sign
+}
+
+/// Precision of a math calculation
+// TODO(kranfix): Make Precision immutable
+class Precision {
+  /// Precision of a math calculation
+  Precision([this.re = 0, this.im = 0])
+      : assert(re >= 0.0, 'real precision must be non-negative'),
+        assert(im >= 0.0, 'imaginary precision must be non-negative');
+
+  /// Precision of the real part
+  double re;
+
+  /// Precision of the imaginary part
+  double im;
 }
